@@ -1,0 +1,876 @@
+Mar 15 14:06:16 srv754827 systemd[1]: Started myproject.service - Gunicorn instance to serve myproject.
+Mar 15 14:06:16 srv754827 gunicorn[1675]: [2025-03-15 14:06:16 +0000] [1675] [INFO] Starting gunicorn 23.0.0
+Mar 15 14:06:16 srv754827 gunicorn[1675]: [2025-03-15 14:06:16 +0000] [1675] [INFO] Listening at: http://0.0.0.0:8000 (1675)
+Mar 15 14:06:16 srv754827 gunicorn[1675]: [2025-03-15 14:06:16 +0000] [1675] [INFO] Using worker: sync
+Mar 15 14:06:16 srv754827 gunicorn[1721]: [2025-03-15 14:06:16 +0000] [1721] [INFO] Booting worker with pid: 1721
+Mar 15 14:06:16 srv754827 gunicorn[1722]: [2025-03-15 14:06:16 +0000] [1722] [INFO] Booting worker with pid: 1722
+Mar 15 14:06:16 srv754827 gunicorn[1723]: [2025-03-15 14:06:16 +0000] [1723] [INFO] Booting worker with pid: 1723
+Mar 15 14:06:17 srv754827 gunicorn[1723]: mkdir -p failed for path /var/www/.config/matplotlib: [Errno 13] Permission denied: '/var/www/.config'
+Mar 15 14:06:17 srv754827 gunicorn[1723]: Matplotlib created a temporary cache directory at /tmp/matplotlib-fug2n57r because there was an issue with the default path (/var/www/.config/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Mar 15 14:06:17 srv754827 gunicorn[1722]: mkdir -p failed for path /var/www/.config/matplotlib: [Errno 13] Permission denied: '/var/www/.config'
+Mar 15 14:06:17 srv754827 gunicorn[1722]: Matplotlib created a temporary cache directory at /tmp/matplotlib-_q7_falg because there was an issue with the default path (/var/www/.config/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Mar 15 14:06:17 srv754827 gunicorn[1721]: mkdir -p failed for path /var/www/.config/matplotlib: [Errno 13] Permission denied: '/var/www/.config'
+Mar 15 14:06:17 srv754827 gunicorn[1721]: Matplotlib created a temporary cache directory at /tmp/matplotlib-t2cxepyc because there was an issue with the default path (/var/www/.config/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Mar 15 14:08:08 srv754827 gunicorn[1721]: [2025-03-15 14:08:08 +0000] [1721] [INFO] Worker exiting (pid: 1721)
+Mar 15 14:08:08 srv754827 systemd[1]: Stopping myproject.service - Gunicorn instance to serve myproject...
+Mar 15 14:08:08 srv754827 gunicorn[1675]: [2025-03-15 14:08:08 +0000] [1675] [INFO] Handling signal: term
+Mar 15 14:08:08 srv754827 gunicorn[1723]: [2025-03-15 14:08:08 +0000] [1723] [INFO] Worker exiting (pid: 1723)
+Mar 15 14:08:08 srv754827 gunicorn[1722]: [2025-03-15 14:08:08 +0000] [1722] [INFO] Worker exiting (pid: 1722)
+Mar 15 14:08:09 srv754827 gunicorn[1675]: [2025-03-15 14:08:09 +0000] [1675] [INFO] Shutting down: Master
+Mar 15 14:08:09 srv754827 systemd[1]: myproject.service: Deactivated successfully.
+Mar 15 14:08:09 srv754827 systemd[1]: Stopped myproject.service - Gunicorn instance to serve myproject.
+Mar 15 14:08:09 srv754827 systemd[1]: myproject.service: Consumed 8.890s CPU time, 406.2M memory peak, 0B memory swap peak.
+Mar 15 14:08:09 srv754827 systemd[1]: Started myproject.service - Gunicorn instance to serve myproject.
+Mar 15 14:08:09 srv754827 gunicorn[1763]: [2025-03-15 14:08:09 +0000] [1763] [INFO] Starting gunicorn 23.0.0
+Mar 15 14:08:09 srv754827 gunicorn[1763]: [2025-03-15 14:08:09 +0000] [1763] [INFO] Listening at: http://0.0.0.0:8000 (1763)
+Mar 15 14:08:09 srv754827 gunicorn[1763]: [2025-03-15 14:08:09 +0000] [1763] [INFO] Using worker: sync
+Mar 15 14:08:09 srv754827 gunicorn[1769]: [2025-03-15 14:08:09 +0000] [1769] [INFO] Booting worker with pid: 1769
+Mar 15 14:08:09 srv754827 gunicorn[1770]: [2025-03-15 14:08:09 +0000] [1770] [INFO] Booting worker with pid: 1770
+Mar 15 14:08:09 srv754827 gunicorn[1771]: [2025-03-15 14:08:09 +0000] [1771] [INFO] Booting worker with pid: 1771
+Mar 15 14:08:10 srv754827 gunicorn[1770]: mkdir -p failed for path /var/www/.cache/matplotlib: [Errno 13] Permission denied: '/var/www/.cache'
+Mar 15 14:08:10 srv754827 gunicorn[1770]: Matplotlib created a temporary cache directory at /tmp/matplotlib-s1gl8hla because there was an issue with the default path (/var/www/.cache/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Mar 15 14:08:10 srv754827 gunicorn[1769]: mkdir -p failed for path /var/www/.cache/matplotlib: [Errno 13] Permission denied: '/var/www/.cache'
+Mar 15 14:08:10 srv754827 gunicorn[1769]: Matplotlib created a temporary cache directory at /tmp/matplotlib-yr59zjkt because there was an issue with the default path (/var/www/.cache/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Mar 15 14:08:10 srv754827 gunicorn[1771]: mkdir -p failed for path /var/www/.cache/matplotlib: [Errno 13] Permission denied: '/var/www/.cache'
+Mar 15 14:08:10 srv754827 gunicorn[1771]: Matplotlib created a temporary cache directory at /tmp/matplotlib-nzook_v8 because there was an issue with the default path (/var/www/.cache/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Mar 15 14:09:36 srv754827 gunicorn[1763]: [2025-03-15 14:09:36 +0000] [1763] [INFO] Handling signal: term
+Mar 15 14:09:36 srv754827 systemd[1]: Stopping myproject.service - Gunicorn instance to serve myproject...
+Mar 15 14:09:36 srv754827 gunicorn[1771]: [2025-03-15 14:09:36 +0000] [1771] [INFO] Worker exiting (pid: 1771)
+Mar 15 14:09:36 srv754827 gunicorn[1769]: [2025-03-15 14:09:36 +0000] [1769] [INFO] Worker exiting (pid: 1769)
+Mar 15 14:09:36 srv754827 gunicorn[1770]: [2025-03-15 14:09:36 +0000] [1770] [INFO] Worker exiting (pid: 1770)
+Mar 15 14:09:36 srv754827 gunicorn[1763]: [2025-03-15 14:09:36 +0000] [1763] [INFO] Shutting down: Master
+Mar 15 14:09:36 srv754827 systemd[1]: myproject.service: Deactivated successfully.
+Mar 15 14:09:36 srv754827 systemd[1]: Stopped myproject.service - Gunicorn instance to serve myproject.
+Mar 15 14:09:36 srv754827 systemd[1]: myproject.service: Consumed 6.107s CPU time, 401.3M memory peak, 0B memory swap peak.
+Mar 15 14:09:36 srv754827 systemd[1]: Started myproject.service - Gunicorn instance to serve myproject.
+Mar 15 14:09:36 srv754827 gunicorn[1802]: [2025-03-15 14:09:36 +0000] [1802] [INFO] Starting gunicorn 23.0.0
+Mar 15 14:09:36 srv754827 gunicorn[1802]: [2025-03-15 14:09:36 +0000] [1802] [INFO] Listening at: http://0.0.0.0:8000 (1802)
+Mar 15 14:09:36 srv754827 gunicorn[1802]: [2025-03-15 14:09:36 +0000] [1802] [INFO] Using worker: sync
+Mar 15 14:09:36 srv754827 gunicorn[1803]: [2025-03-15 14:09:36 +0000] [1803] [INFO] Booting worker with pid: 1803
+Mar 15 14:09:36 srv754827 gunicorn[1805]: [2025-03-15 14:09:36 +0000] [1805] [INFO] Booting worker with pid: 1805
+Mar 15 14:09:36 srv754827 gunicorn[1806]: [2025-03-15 14:09:36 +0000] [1806] [INFO] Booting worker with pid: 1806
+Mar 15 14:11:10 srv754827 gunicorn[1805]: 2025-03-15 14:11:10,242 - ERROR - Exception on /login [POST]
+Mar 15 14:11:10 srv754827 gunicorn[1805]: Traceback (most recent call last):
+Mar 15 14:11:10 srv754827 gunicorn[1805]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+Mar 15 14:11:10 srv754827 gunicorn[1805]:     response = self.full_dispatch_request()
+Mar 15 14:11:10 srv754827 gunicorn[1805]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:11:10 srv754827 gunicorn[1805]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+Mar 15 14:11:10 srv754827 gunicorn[1805]:     rv = self.handle_user_exception(e)
+Mar 15 14:11:10 srv754827 gunicorn[1805]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:11:10 srv754827 gunicorn[1805]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+Mar 15 14:11:10 srv754827 gunicorn[1805]:     rv = self.dispatch_request()
+Mar 15 14:11:10 srv754827 gunicorn[1805]:          ^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:11:10 srv754827 gunicorn[1805]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+Mar 15 14:11:10 srv754827 gunicorn[1805]:     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+Mar 15 14:11:10 srv754827 gunicorn[1805]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:11:10 srv754827 gunicorn[1805]:   File "/var/www/myproject/app.py", line 1857, in login
+Mar 15 14:11:10 srv754827 gunicorn[1805]:     cursor.close()
+Mar 15 14:11:10 srv754827 gunicorn[1805]:     ^^^^^^
+Mar 15 14:11:10 srv754827 gunicorn[1805]: UnboundLocalError: cannot access local variable 'cursor' where it is not associated with a value
+Mar 15 14:11:45 srv754827 gunicorn[1806]: 2025-03-15 14:11:45,819 - ERROR - Exception on /login [POST]
+Mar 15 14:11:45 srv754827 gunicorn[1806]: Traceback (most recent call last):
+Mar 15 14:11:45 srv754827 gunicorn[1806]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+Mar 15 14:11:45 srv754827 gunicorn[1806]:     response = self.full_dispatch_request()
+Mar 15 14:11:45 srv754827 gunicorn[1806]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:11:45 srv754827 gunicorn[1806]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+Mar 15 14:11:45 srv754827 gunicorn[1806]:     rv = self.handle_user_exception(e)
+Mar 15 14:11:45 srv754827 gunicorn[1806]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:11:45 srv754827 gunicorn[1806]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+Mar 15 14:11:45 srv754827 gunicorn[1806]:     rv = self.dispatch_request()
+Mar 15 14:11:45 srv754827 gunicorn[1806]:          ^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:11:45 srv754827 gunicorn[1806]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+Mar 15 14:11:45 srv754827 gunicorn[1806]:     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+Mar 15 14:11:45 srv754827 gunicorn[1806]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:11:45 srv754827 gunicorn[1806]:   File "/var/www/myproject/app.py", line 1857, in login
+Mar 15 14:11:45 srv754827 gunicorn[1806]:     cursor.close()
+Mar 15 14:11:45 srv754827 gunicorn[1806]:     ^^^^^^
+Mar 15 14:11:45 srv754827 gunicorn[1806]: UnboundLocalError: cannot access local variable 'cursor' where it is not associated with a value
+Mar 15 14:11:58 srv754827 gunicorn[1803]: 2025-03-15 14:11:58,431 - ERROR - Exception on /login [POST]
+Mar 15 14:11:58 srv754827 gunicorn[1803]: Traceback (most recent call last):
+Mar 15 14:11:58 srv754827 gunicorn[1803]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+Mar 15 14:11:58 srv754827 gunicorn[1803]:     response = self.full_dispatch_request()
+Mar 15 14:11:58 srv754827 gunicorn[1803]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:11:58 srv754827 gunicorn[1803]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+Mar 15 14:11:58 srv754827 gunicorn[1803]:     rv = self.handle_user_exception(e)
+Mar 15 14:11:58 srv754827 gunicorn[1803]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:11:58 srv754827 gunicorn[1803]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+Mar 15 14:11:58 srv754827 gunicorn[1803]:     rv = self.dispatch_request()
+Mar 15 14:11:58 srv754827 gunicorn[1803]:          ^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:11:58 srv754827 gunicorn[1803]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+Mar 15 14:11:58 srv754827 gunicorn[1803]:     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+Mar 15 14:11:58 srv754827 gunicorn[1803]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:11:58 srv754827 gunicorn[1803]:   File "/var/www/myproject/app.py", line 1857, in login
+Mar 15 14:11:58 srv754827 gunicorn[1803]:     cursor.close()
+Mar 15 14:11:58 srv754827 gunicorn[1803]:     ^^^^^^
+Mar 15 14:11:58 srv754827 gunicorn[1803]: UnboundLocalError: cannot access local variable 'cursor' where it is not associated with a value
+Mar 15 14:12:34 srv754827 gunicorn[1806]: 2025-03-15 14:12:34,833 - ERROR - Exception on /login [POST]
+Mar 15 14:12:34 srv754827 gunicorn[1806]: Traceback (most recent call last):
+Mar 15 14:12:34 srv754827 gunicorn[1806]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+Mar 15 14:12:34 srv754827 gunicorn[1806]:     response = self.full_dispatch_request()
+Mar 15 14:12:34 srv754827 gunicorn[1806]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:12:34 srv754827 gunicorn[1806]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+Mar 15 14:12:34 srv754827 gunicorn[1806]:     rv = self.handle_user_exception(e)
+Mar 15 14:12:34 srv754827 gunicorn[1806]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:12:34 srv754827 gunicorn[1806]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+Mar 15 14:12:34 srv754827 gunicorn[1806]:     rv = self.dispatch_request()
+Mar 15 14:12:34 srv754827 gunicorn[1806]:          ^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:12:34 srv754827 gunicorn[1806]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+Mar 15 14:12:34 srv754827 gunicorn[1806]:     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+Mar 15 14:12:34 srv754827 gunicorn[1806]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:12:34 srv754827 gunicorn[1806]:   File "/var/www/myproject/app.py", line 1857, in login
+Mar 15 14:12:34 srv754827 gunicorn[1806]:     cursor.close()
+Mar 15 14:12:34 srv754827 gunicorn[1806]:     ^^^^^^
+Mar 15 14:12:34 srv754827 gunicorn[1806]: UnboundLocalError: cannot access local variable 'cursor' where it is not associated with a value
+Mar 15 14:51:32 srv754827 systemd[1]: Stopping myproject.service - Gunicorn instance to serve myproject...
+Mar 15 14:51:32 srv754827 gunicorn[1805]: [2025-03-15 14:51:32 +0000] [1805] [INFO] Worker exiting (pid: 1805)
+Mar 15 14:51:32 srv754827 gunicorn[1806]: [2025-03-15 14:51:32 +0000] [1806] [INFO] Worker exiting (pid: 1806)
+Mar 15 14:51:32 srv754827 gunicorn[1802]: [2025-03-15 14:51:32 +0000] [1802] [INFO] Handling signal: term
+Mar 15 14:51:32 srv754827 gunicorn[1803]: [2025-03-15 14:51:32 +0000] [1803] [INFO] Worker exiting (pid: 1803)
+Mar 15 14:51:32 srv754827 gunicorn[1802]: [2025-03-15 14:51:32 +0000] [1802] [ERROR] Worker (pid:1806) was sent SIGTERM!
+Mar 15 14:51:33 srv754827 gunicorn[1802]: [2025-03-15 14:51:33 +0000] [1802] [INFO] Shutting down: Master
+Mar 15 14:51:33 srv754827 systemd[1]: myproject.service: Deactivated successfully.
+Mar 15 14:51:33 srv754827 systemd[1]: Stopped myproject.service - Gunicorn instance to serve myproject.
+Mar 15 14:51:33 srv754827 systemd[1]: myproject.service: Consumed 5.574s CPU time, 408.9M memory peak, 0B memory swap peak.
+Mar 15 14:51:33 srv754827 systemd[1]: Started myproject.service - Gunicorn instance to serve myproject.
+Mar 15 14:51:33 srv754827 gunicorn[4197]: [2025-03-15 14:51:33 +0000] [4197] [INFO] Starting gunicorn 23.0.0
+Mar 15 14:51:33 srv754827 gunicorn[4197]: [2025-03-15 14:51:33 +0000] [4197] [INFO] Listening at: http://0.0.0.0:8000 (4197)
+Mar 15 14:51:33 srv754827 gunicorn[4197]: [2025-03-15 14:51:33 +0000] [4197] [INFO] Using worker: sync
+Mar 15 14:51:33 srv754827 gunicorn[4200]: [2025-03-15 14:51:33 +0000] [4200] [INFO] Booting worker with pid: 4200
+Mar 15 14:51:33 srv754827 gunicorn[4201]: [2025-03-15 14:51:33 +0000] [4201] [INFO] Booting worker with pid: 4201
+Mar 15 14:51:33 srv754827 gunicorn[4202]: [2025-03-15 14:51:33 +0000] [4202] [INFO] Booting worker with pid: 4202
+Mar 15 14:52:15 srv754827 gunicorn[4202]: 2025-03-15 14:52:15,553 - ERROR - Exception on /login [POST]
+Mar 15 14:52:15 srv754827 gunicorn[4202]: Traceback (most recent call last):
+Mar 15 14:52:15 srv754827 gunicorn[4202]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+Mar 15 14:52:15 srv754827 gunicorn[4202]:     response = self.full_dispatch_request()
+Mar 15 14:52:15 srv754827 gunicorn[4202]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:52:15 srv754827 gunicorn[4202]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+Mar 15 14:52:15 srv754827 gunicorn[4202]:     rv = self.handle_user_exception(e)
+Mar 15 14:52:15 srv754827 gunicorn[4202]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:52:15 srv754827 gunicorn[4202]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+Mar 15 14:52:15 srv754827 gunicorn[4202]:     rv = self.dispatch_request()
+Mar 15 14:52:15 srv754827 gunicorn[4202]:          ^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:52:15 srv754827 gunicorn[4202]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+Mar 15 14:52:15 srv754827 gunicorn[4202]:     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+Mar 15 14:52:15 srv754827 gunicorn[4202]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:52:15 srv754827 gunicorn[4202]:   File "/var/www/myproject/app.py", line 1857, in login
+Mar 15 14:52:15 srv754827 gunicorn[4202]:     cursor.close()
+Mar 15 14:52:15 srv754827 gunicorn[4202]:     ^^^^^^
+Mar 15 14:52:15 srv754827 gunicorn[4202]: UnboundLocalError: cannot access local variable 'cursor' where it is not associated with a value
+Mar 15 14:54:32 srv754827 gunicorn[4197]: [2025-03-15 14:54:32 +0000] [4197] [INFO] Handling signal: term
+Mar 15 14:54:32 srv754827 systemd[1]: Stopping myproject.service - Gunicorn instance to serve myproject...
+Mar 15 14:54:32 srv754827 gunicorn[4200]: [2025-03-15 14:54:32 +0000] [4200] [INFO] Worker exiting (pid: 4200)
+Mar 15 14:54:32 srv754827 gunicorn[4201]: [2025-03-15 14:54:32 +0000] [4201] [INFO] Worker exiting (pid: 4201)
+Mar 15 14:54:32 srv754827 gunicorn[4202]: [2025-03-15 14:54:32 +0000] [4202] [INFO] Worker exiting (pid: 4202)
+Mar 15 14:54:32 srv754827 gunicorn[4197]: [2025-03-15 14:54:32 +0000] [4197] [INFO] Shutting down: Master
+Mar 15 14:54:32 srv754827 systemd[1]: myproject.service: Deactivated successfully.
+Mar 15 14:54:32 srv754827 systemd[1]: Stopped myproject.service - Gunicorn instance to serve myproject.
+Mar 15 14:54:32 srv754827 systemd[1]: myproject.service: Consumed 5.708s CPU time.
+Mar 15 14:54:32 srv754827 systemd[1]: Started myproject.service - Gunicorn instance to serve myproject.
+Mar 15 14:54:32 srv754827 gunicorn[4245]: [2025-03-15 14:54:32 +0000] [4245] [INFO] Starting gunicorn 23.0.0
+Mar 15 14:54:32 srv754827 gunicorn[4245]: [2025-03-15 14:54:32 +0000] [4245] [INFO] Listening at: http://0.0.0.0:8000 (4245)
+Mar 15 14:54:32 srv754827 gunicorn[4245]: [2025-03-15 14:54:32 +0000] [4245] [INFO] Using worker: sync
+Mar 15 14:54:32 srv754827 gunicorn[4246]: [2025-03-15 14:54:32 +0000] [4246] [INFO] Booting worker with pid: 4246
+Mar 15 14:54:32 srv754827 gunicorn[4247]: [2025-03-15 14:54:32 +0000] [4247] [INFO] Booting worker with pid: 4247
+Mar 15 14:54:32 srv754827 gunicorn[4248]: [2025-03-15 14:54:32 +0000] [4248] [INFO] Booting worker with pid: 4248
+Mar 15 14:57:57 srv754827 gunicorn[4247]: 2025-03-15 14:57:57,275 - ERROR - Exception on /login [POST]
+Mar 15 14:57:57 srv754827 gunicorn[4247]: Traceback (most recent call last):
+Mar 15 14:57:57 srv754827 gunicorn[4247]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+Mar 15 14:57:57 srv754827 gunicorn[4247]:     response = self.full_dispatch_request()
+Mar 15 14:57:57 srv754827 gunicorn[4247]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:57:57 srv754827 gunicorn[4247]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+Mar 15 14:57:57 srv754827 gunicorn[4247]:     rv = self.handle_user_exception(e)
+Mar 15 14:57:57 srv754827 gunicorn[4247]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:57:57 srv754827 gunicorn[4247]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+Mar 15 14:57:57 srv754827 gunicorn[4247]:     rv = self.dispatch_request()
+Mar 15 14:57:57 srv754827 gunicorn[4247]:          ^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:57:57 srv754827 gunicorn[4247]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+Mar 15 14:57:57 srv754827 gunicorn[4247]:     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+Mar 15 14:57:57 srv754827 gunicorn[4247]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:57:57 srv754827 gunicorn[4247]:   File "/var/www/myproject/app.py", line 1857, in login
+Mar 15 14:57:57 srv754827 gunicorn[4247]:     cursor.close()
+Mar 15 14:57:57 srv754827 gunicorn[4247]:     ^^^^^^
+Mar 15 14:57:57 srv754827 gunicorn[4247]: UnboundLocalError: cannot access local variable 'cursor' where it is not associated with a value
+Mar 15 14:58:09 srv754827 gunicorn[4246]: 2025-03-15 14:58:09,222 - ERROR - Exception on /login [POST]
+Mar 15 14:58:09 srv754827 gunicorn[4246]: Traceback (most recent call last):
+Mar 15 14:58:09 srv754827 gunicorn[4246]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+Mar 15 14:58:09 srv754827 gunicorn[4246]:     response = self.full_dispatch_request()
+Mar 15 14:58:09 srv754827 gunicorn[4246]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:58:09 srv754827 gunicorn[4246]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+Mar 15 14:58:09 srv754827 gunicorn[4246]:     rv = self.handle_user_exception(e)
+Mar 15 14:58:09 srv754827 gunicorn[4246]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:58:09 srv754827 gunicorn[4246]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+Mar 15 14:58:09 srv754827 gunicorn[4246]:     rv = self.dispatch_request()
+Mar 15 14:58:09 srv754827 gunicorn[4246]:          ^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:58:09 srv754827 gunicorn[4246]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+Mar 15 14:58:09 srv754827 gunicorn[4246]:     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+Mar 15 14:58:09 srv754827 gunicorn[4246]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 14:58:09 srv754827 gunicorn[4246]:   File "/var/www/myproject/app.py", line 1857, in login
+Mar 15 14:58:09 srv754827 gunicorn[4246]:     cursor.close()
+Mar 15 14:58:09 srv754827 gunicorn[4246]:     ^^^^^^
+Mar 15 14:58:09 srv754827 gunicorn[4246]: UnboundLocalError: cannot access local variable 'cursor' where it is not associated with a value
+Mar 15 15:10:57 srv754827 systemd[1]: Stopping myproject.service - Gunicorn instance to serve myproject...
+Mar 15 15:10:57 srv754827 gunicorn[4245]: [2025-03-15 15:10:57 +0000] [4245] [INFO] Handling signal: term
+Mar 15 15:10:57 srv754827 gunicorn[4248]: [2025-03-15 15:10:57 +0000] [4248] [INFO] Worker exiting (pid: 4248)
+Mar 15 15:10:57 srv754827 gunicorn[4246]: [2025-03-15 15:10:57 +0000] [4246] [INFO] Worker exiting (pid: 4246)
+Mar 15 15:10:57 srv754827 gunicorn[4247]: [2025-03-15 15:10:57 +0000] [4247] [INFO] Worker exiting (pid: 4247)
+Mar 15 15:10:58 srv754827 gunicorn[4245]: [2025-03-15 15:10:58 +0000] [4245] [INFO] Shutting down: Master
+Mar 15 15:10:58 srv754827 systemd[1]: myproject.service: Deactivated successfully.
+Mar 15 15:10:58 srv754827 systemd[1]: Stopped myproject.service - Gunicorn instance to serve myproject.
+Mar 15 15:10:58 srv754827 systemd[1]: myproject.service: Consumed 5.709s CPU time, 402.5M memory peak, 0B memory swap peak.
+Mar 15 15:10:58 srv754827 systemd[1]: Started myproject.service - Gunicorn instance to serve myproject.
+Mar 15 15:10:58 srv754827 gunicorn[4298]: [2025-03-15 15:10:58 +0000] [4298] [INFO] Starting gunicorn 23.0.0
+Mar 15 15:10:58 srv754827 gunicorn[4298]: [2025-03-15 15:10:58 +0000] [4298] [INFO] Listening at: http://0.0.0.0:8000 (4298)
+Mar 15 15:10:58 srv754827 gunicorn[4298]: [2025-03-15 15:10:58 +0000] [4298] [INFO] Using worker: sync
+Mar 15 15:10:58 srv754827 gunicorn[4300]: [2025-03-15 15:10:58 +0000] [4300] [INFO] Booting worker with pid: 4300
+Mar 15 15:10:58 srv754827 gunicorn[4301]: [2025-03-15 15:10:58 +0000] [4301] [INFO] Booting worker with pid: 4301
+Mar 15 15:10:58 srv754827 gunicorn[4302]: [2025-03-15 15:10:58 +0000] [4302] [INFO] Booting worker with pid: 4302
+[0;1;39m-- Boot 266089b1fc9046f0b837cc595d95333a --[0m
+Mar 15 15:12:19 srv754827 systemd[1]: Started myproject.service - Gunicorn instance to serve myproject.
+Mar 15 15:12:20 srv754827 gunicorn[686]: [2025-03-15 15:12:20 +0000] [686] [INFO] Starting gunicorn 23.0.0
+Mar 15 15:12:20 srv754827 gunicorn[686]: [2025-03-15 15:12:20 +0000] [686] [INFO] Listening at: http://0.0.0.0:8000 (686)
+Mar 15 15:12:20 srv754827 gunicorn[686]: [2025-03-15 15:12:20 +0000] [686] [INFO] Using worker: sync
+Mar 15 15:12:20 srv754827 gunicorn[832]: [2025-03-15 15:12:20 +0000] [832] [INFO] Booting worker with pid: 832
+Mar 15 15:12:20 srv754827 gunicorn[841]: [2025-03-15 15:12:20 +0000] [841] [INFO] Booting worker with pid: 841
+Mar 15 15:12:20 srv754827 gunicorn[845]: [2025-03-15 15:12:20 +0000] [845] [INFO] Booting worker with pid: 845
+Mar 15 15:12:38 srv754827 gunicorn[845]: 2025-03-15 15:12:38,461 - ERROR - Exception on /login [POST]
+Mar 15 15:12:38 srv754827 gunicorn[845]: Traceback (most recent call last):
+Mar 15 15:12:38 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+Mar 15 15:12:38 srv754827 gunicorn[845]:     response = self.full_dispatch_request()
+Mar 15 15:12:38 srv754827 gunicorn[845]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:12:38 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+Mar 15 15:12:38 srv754827 gunicorn[845]:     rv = self.handle_user_exception(e)
+Mar 15 15:12:38 srv754827 gunicorn[845]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:12:38 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+Mar 15 15:12:38 srv754827 gunicorn[845]:     rv = self.dispatch_request()
+Mar 15 15:12:38 srv754827 gunicorn[845]:          ^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:12:38 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+Mar 15 15:12:38 srv754827 gunicorn[845]:     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+Mar 15 15:12:38 srv754827 gunicorn[845]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:12:38 srv754827 gunicorn[845]:   File "/var/www/myproject/app.py", line 1857, in login
+Mar 15 15:12:38 srv754827 gunicorn[845]:     cursor.close()
+Mar 15 15:12:38 srv754827 gunicorn[845]:     ^^^^^^
+Mar 15 15:12:38 srv754827 gunicorn[845]: UnboundLocalError: cannot access local variable 'cursor' where it is not associated with a value
+Mar 15 15:13:22 srv754827 gunicorn[841]: 2025-03-15 15:13:22,366 - ERROR - Exception on /login [POST]
+Mar 15 15:13:22 srv754827 gunicorn[841]: Traceback (most recent call last):
+Mar 15 15:13:22 srv754827 gunicorn[841]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+Mar 15 15:13:22 srv754827 gunicorn[841]:     response = self.full_dispatch_request()
+Mar 15 15:13:22 srv754827 gunicorn[841]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:13:22 srv754827 gunicorn[841]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+Mar 15 15:13:22 srv754827 gunicorn[841]:     rv = self.handle_user_exception(e)
+Mar 15 15:13:22 srv754827 gunicorn[841]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:13:22 srv754827 gunicorn[841]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+Mar 15 15:13:22 srv754827 gunicorn[841]:     rv = self.dispatch_request()
+Mar 15 15:13:22 srv754827 gunicorn[841]:          ^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:13:22 srv754827 gunicorn[841]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+Mar 15 15:13:22 srv754827 gunicorn[841]:     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+Mar 15 15:13:22 srv754827 gunicorn[841]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:13:22 srv754827 gunicorn[841]:   File "/var/www/myproject/app.py", line 1857, in login
+Mar 15 15:13:22 srv754827 gunicorn[841]:     cursor.close()
+Mar 15 15:13:22 srv754827 gunicorn[841]:     ^^^^^^
+Mar 15 15:13:22 srv754827 gunicorn[841]: UnboundLocalError: cannot access local variable 'cursor' where it is not associated with a value
+Mar 15 15:14:43 srv754827 gunicorn[845]: 2025-03-15 15:14:43,498 - ERROR - Exception on /login [POST]
+Mar 15 15:14:43 srv754827 gunicorn[845]: Traceback (most recent call last):
+Mar 15 15:14:43 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+Mar 15 15:14:43 srv754827 gunicorn[845]:     response = self.full_dispatch_request()
+Mar 15 15:14:43 srv754827 gunicorn[845]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:14:43 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+Mar 15 15:14:43 srv754827 gunicorn[845]:     rv = self.handle_user_exception(e)
+Mar 15 15:14:43 srv754827 gunicorn[845]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:14:43 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+Mar 15 15:14:43 srv754827 gunicorn[845]:     rv = self.dispatch_request()
+Mar 15 15:14:43 srv754827 gunicorn[845]:          ^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:14:43 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+Mar 15 15:14:43 srv754827 gunicorn[845]:     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+Mar 15 15:14:43 srv754827 gunicorn[845]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:14:43 srv754827 gunicorn[845]:   File "/var/www/myproject/app.py", line 1857, in login
+Mar 15 15:14:43 srv754827 gunicorn[845]:     cursor.close()
+Mar 15 15:14:43 srv754827 gunicorn[845]:     ^^^^^^
+Mar 15 15:14:43 srv754827 gunicorn[845]: UnboundLocalError: cannot access local variable 'cursor' where it is not associated with a value
+Mar 15 15:15:15 srv754827 gunicorn[845]: 2025-03-15 15:15:15,211 - ERROR - Exception on /login [POST]
+Mar 15 15:15:15 srv754827 gunicorn[845]: Traceback (most recent call last):
+Mar 15 15:15:15 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+Mar 15 15:15:15 srv754827 gunicorn[845]:     response = self.full_dispatch_request()
+Mar 15 15:15:15 srv754827 gunicorn[845]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:15:15 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+Mar 15 15:15:15 srv754827 gunicorn[845]:     rv = self.handle_user_exception(e)
+Mar 15 15:15:15 srv754827 gunicorn[845]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:15:15 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+Mar 15 15:15:15 srv754827 gunicorn[845]:     rv = self.dispatch_request()
+Mar 15 15:15:15 srv754827 gunicorn[845]:          ^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:15:15 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+Mar 15 15:15:15 srv754827 gunicorn[845]:     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+Mar 15 15:15:15 srv754827 gunicorn[845]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:15:15 srv754827 gunicorn[845]:   File "/var/www/myproject/app.py", line 1857, in login
+Mar 15 15:15:15 srv754827 gunicorn[845]:     cursor.close()
+Mar 15 15:15:15 srv754827 gunicorn[845]:     ^^^^^^
+Mar 15 15:15:15 srv754827 gunicorn[845]: UnboundLocalError: cannot access local variable 'cursor' where it is not associated with a value
+Mar 15 15:15:47 srv754827 gunicorn[845]: 2025-03-15 15:15:47,945 - ERROR - Exception on /login [POST]
+Mar 15 15:15:47 srv754827 gunicorn[845]: Traceback (most recent call last):
+Mar 15 15:15:47 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+Mar 15 15:15:47 srv754827 gunicorn[845]:     response = self.full_dispatch_request()
+Mar 15 15:15:47 srv754827 gunicorn[845]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:15:47 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+Mar 15 15:15:47 srv754827 gunicorn[845]:     rv = self.handle_user_exception(e)
+Mar 15 15:15:47 srv754827 gunicorn[845]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:15:47 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+Mar 15 15:15:47 srv754827 gunicorn[845]:     rv = self.dispatch_request()
+Mar 15 15:15:47 srv754827 gunicorn[845]:          ^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:15:47 srv754827 gunicorn[845]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+Mar 15 15:15:47 srv754827 gunicorn[845]:     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+Mar 15 15:15:47 srv754827 gunicorn[845]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:15:47 srv754827 gunicorn[845]:   File "/var/www/myproject/app.py", line 1857, in login
+Mar 15 15:15:47 srv754827 gunicorn[845]:     cursor.close()
+Mar 15 15:15:47 srv754827 gunicorn[845]:     ^^^^^^
+Mar 15 15:15:47 srv754827 gunicorn[845]: UnboundLocalError: cannot access local variable 'cursor' where it is not associated with a value
+Mar 15 15:19:13 srv754827 gunicorn[832]: 2025-03-15 15:19:13,453 - ERROR - Exception on /login [POST]
+Mar 15 15:19:13 srv754827 gunicorn[832]: Traceback (most recent call last):
+Mar 15 15:19:13 srv754827 gunicorn[832]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+Mar 15 15:19:13 srv754827 gunicorn[832]:     response = self.full_dispatch_request()
+Mar 15 15:19:13 srv754827 gunicorn[832]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:19:13 srv754827 gunicorn[832]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+Mar 15 15:19:13 srv754827 gunicorn[832]:     rv = self.handle_user_exception(e)
+Mar 15 15:19:13 srv754827 gunicorn[832]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:19:13 srv754827 gunicorn[832]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+Mar 15 15:19:13 srv754827 gunicorn[832]:     rv = self.dispatch_request()
+Mar 15 15:19:13 srv754827 gunicorn[832]:          ^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:19:13 srv754827 gunicorn[832]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+Mar 15 15:19:13 srv754827 gunicorn[832]:     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+Mar 15 15:19:13 srv754827 gunicorn[832]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:19:13 srv754827 gunicorn[832]:   File "/var/www/myproject/app.py", line 1857, in login
+Mar 15 15:19:13 srv754827 gunicorn[832]:     cursor.close()
+Mar 15 15:19:13 srv754827 gunicorn[832]:     ^^^^^^
+Mar 15 15:19:13 srv754827 gunicorn[832]: UnboundLocalError: cannot access local variable 'cursor' where it is not associated with a value
+Mar 15 15:46:11 srv754827 gunicorn[686]: [2025-03-15 15:46:11 +0000] [686] [INFO] Handling signal: term
+Mar 15 15:46:11 srv754827 systemd[1]: Stopping myproject.service - Gunicorn instance to serve myproject...
+Mar 15 15:46:11 srv754827 gunicorn[832]: [2025-03-15 15:46:11 +0000] [832] [INFO] Worker exiting (pid: 832)
+Mar 15 15:46:11 srv754827 gunicorn[845]: [2025-03-15 15:46:11 +0000] [845] [INFO] Worker exiting (pid: 845)
+Mar 15 15:46:11 srv754827 gunicorn[841]: [2025-03-15 15:46:11 +0000] [841] [INFO] Worker exiting (pid: 841)
+Mar 15 15:46:13 srv754827 gunicorn[686]: [2025-03-15 15:46:13 +0000] [686] [INFO] Shutting down: Master
+Mar 15 15:46:13 srv754827 systemd[1]: myproject.service: Deactivated successfully.
+Mar 15 15:46:13 srv754827 systemd[1]: Stopped myproject.service - Gunicorn instance to serve myproject.
+Mar 15 15:46:13 srv754827 systemd[1]: myproject.service: Consumed 7.622s CPU time.
+Mar 15 15:46:13 srv754827 systemd[1]: Started myproject.service - Gunicorn instance to serve myproject.
+Mar 15 15:46:13 srv754827 gunicorn[1778]: [2025-03-15 15:46:13 +0000] [1778] [INFO] Starting gunicorn 23.0.0
+Mar 15 15:46:13 srv754827 gunicorn[1778]: [2025-03-15 15:46:13 +0000] [1778] [INFO] Listening at: http://0.0.0.0:8000 (1778)
+Mar 15 15:46:13 srv754827 gunicorn[1778]: [2025-03-15 15:46:13 +0000] [1778] [INFO] Using worker: sync
+Mar 15 15:46:13 srv754827 gunicorn[1779]: [2025-03-15 15:46:13 +0000] [1779] [INFO] Booting worker with pid: 1779
+Mar 15 15:46:13 srv754827 gunicorn[1780]: [2025-03-15 15:46:13 +0000] [1780] [INFO] Booting worker with pid: 1780
+Mar 15 15:46:13 srv754827 gunicorn[1779]: [2025-03-15 15:46:13 +0000] [1779] [ERROR] Exception in worker process
+Mar 15 15:46:13 srv754827 gunicorn[1779]: Traceback (most recent call last):
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 608, in spawn_worker
+Mar 15 15:46:13 srv754827 gunicorn[1779]:     worker.init_process()
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 135, in init_process
+Mar 15 15:46:13 srv754827 gunicorn[1779]:     self.load_wsgi()
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 147, in load_wsgi
+Mar 15 15:46:13 srv754827 gunicorn[1779]:     self.wsgi = self.app.wsgi()
+Mar 15 15:46:13 srv754827 gunicorn[1779]:                 ^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 66, in wsgi
+Mar 15 15:46:13 srv754827 gunicorn[1779]:     self.callable = self.load()
+Mar 15 15:46:13 srv754827 gunicorn[1779]:                     ^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
+Mar 15 15:46:13 srv754827 gunicorn[1779]:     return self.load_wsgiapp()
+Mar 15 15:46:13 srv754827 gunicorn[1779]:            ^^^^^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
+Mar 15 15:46:13 srv754827 gunicorn[1779]:     return util.import_app(self.app_uri)
+Mar 15 15:46:13 srv754827 gunicorn[1779]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/util.py", line 370, in import_app
+Mar 15 15:46:13 srv754827 gunicorn[1779]:     mod = importlib.import_module(module)
+Mar 15 15:46:13 srv754827 gunicorn[1779]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+Mar 15 15:46:13 srv754827 gunicorn[1779]:     return _bootstrap._gcd_import(name[level:], package, level)
+Mar 15 15:46:13 srv754827 gunicorn[1779]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "<frozen importlib._bootstrap_external>", line 1129, in get_code
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "<frozen importlib._bootstrap_external>", line 1059, in source_to_code
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+Mar 15 15:46:13 srv754827 gunicorn[1779]:   File "/var/www/myproject/app.py", line 3213
+Mar 15 15:46:13 srv754827 gunicorn[1779]:     return jsonify({uccess': True, 'data': new_record})
+Mar 15 15:46:13 srv754827 gunicorn[1779]:                                         ^
+Mar 15 15:46:13 srv754827 gunicorn[1779]: SyntaxError: unterminated string literal (detected at line 3213)
+Mar 15 15:46:13 srv754827 gunicorn[1779]: [2025-03-15 15:46:13 +0000] [1779] [INFO] Worker exiting (pid: 1779)
+Mar 15 15:46:13 srv754827 gunicorn[1781]: [2025-03-15 15:46:13 +0000] [1781] [INFO] Booting worker with pid: 1781
+Mar 15 15:46:13 srv754827 gunicorn[1778]: [2025-03-15 15:46:13 +0000] [1778] [ERROR] Worker (pid:1779) exited with code 3
+Mar 15 15:46:13 srv754827 gunicorn[1780]: [2025-03-15 15:46:13 +0000] [1780] [ERROR] Exception in worker process
+Mar 15 15:46:13 srv754827 gunicorn[1780]: Traceback (most recent call last):
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 608, in spawn_worker
+Mar 15 15:46:13 srv754827 gunicorn[1780]:     worker.init_process()
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 135, in init_process
+Mar 15 15:46:13 srv754827 gunicorn[1780]:     self.load_wsgi()
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 147, in load_wsgi
+Mar 15 15:46:13 srv754827 gunicorn[1780]:     self.wsgi = self.app.wsgi()
+Mar 15 15:46:13 srv754827 gunicorn[1780]:                 ^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 66, in wsgi
+Mar 15 15:46:13 srv754827 gunicorn[1780]:     self.callable = self.load()
+Mar 15 15:46:13 srv754827 gunicorn[1780]:                     ^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
+Mar 15 15:46:13 srv754827 gunicorn[1780]:     return self.load_wsgiapp()
+Mar 15 15:46:13 srv754827 gunicorn[1780]:            ^^^^^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
+Mar 15 15:46:13 srv754827 gunicorn[1780]:     return util.import_app(self.app_uri)
+Mar 15 15:46:13 srv754827 gunicorn[1780]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/util.py", line 370, in import_app
+Mar 15 15:46:13 srv754827 gunicorn[1780]:     mod = importlib.import_module(module)
+Mar 15 15:46:13 srv754827 gunicorn[1780]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+Mar 15 15:46:13 srv754827 gunicorn[1780]:     return _bootstrap._gcd_import(name[level:], package, level)
+Mar 15 15:46:13 srv754827 gunicorn[1780]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "<frozen importlib._bootstrap_external>", line 1129, in get_code
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "<frozen importlib._bootstrap_external>", line 1059, in source_to_code
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+Mar 15 15:46:13 srv754827 gunicorn[1780]:   File "/var/www/myproject/app.py", line 3213
+Mar 15 15:46:13 srv754827 gunicorn[1780]:     return jsonify({uccess': True, 'data': new_record})
+Mar 15 15:46:13 srv754827 gunicorn[1780]:                                         ^
+Mar 15 15:46:13 srv754827 gunicorn[1780]: SyntaxError: unterminated string literal (detected at line 3213)
+Mar 15 15:46:13 srv754827 gunicorn[1780]: [2025-03-15 15:46:13 +0000] [1780] [INFO] Worker exiting (pid: 1780)
+Mar 15 15:46:13 srv754827 gunicorn[1778]: [2025-03-15 15:46:13 +0000] [1778] [ERROR] Worker (pid:1780) exited with code 3
+Mar 15 15:46:13 srv754827 gunicorn[1778]: Traceback (most recent call last):
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 201, in run
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     self.manage_workers()
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 570, in manage_workers
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     self.spawn_workers()
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 642, in spawn_workers
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     time.sleep(0.1 * random.random())
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 241, in handle_chld
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     self.reap_workers()
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 529, in reap_workers
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+Mar 15 15:46:13 srv754827 gunicorn[1778]: gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+Mar 15 15:46:13 srv754827 gunicorn[1778]: During handling of the above exception, another exception occurred:
+Mar 15 15:46:13 srv754827 gunicorn[1778]: Traceback (most recent call last):
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/bin/gunicorn", line 8, in <module>
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     sys.exit(run())
+Mar 15 15:46:13 srv754827 gunicorn[1778]:              ^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 66, in run
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]", prog=prog).run()
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 235, in run
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     super().run()
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 71, in run
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     Arbiter(self).run()
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 228, in run
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     self.halt(reason=inst.reason, exit_status=inst.exit_status)
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 341, in halt
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     self.stop()
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 395, in stop
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     time.sleep(0.1)
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 241, in handle_chld
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     self.reap_workers()
+Mar 15 15:46:13 srv754827 gunicorn[1778]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 529, in reap_workers
+Mar 15 15:46:13 srv754827 gunicorn[1778]:     raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+Mar 15 15:46:13 srv754827 gunicorn[1778]: gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+Mar 15 15:46:13 srv754827 systemd[1]: [0;1;39m[0;1;31m[0;1;39mmyproject.service: Main process exited, code=exited, status=1/FAILURE[0m
+Mar 15 15:46:13 srv754827 gunicorn[1781]: [2025-03-15 15:46:13 +0000] [1781] [ERROR] Exception in worker process
+Mar 15 15:46:13 srv754827 gunicorn[1781]: Traceback (most recent call last):
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 608, in spawn_worker
+Mar 15 15:46:13 srv754827 gunicorn[1781]:     worker.init_process()
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 135, in init_process
+Mar 15 15:46:13 srv754827 gunicorn[1781]:     self.load_wsgi()
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 147, in load_wsgi
+Mar 15 15:46:13 srv754827 gunicorn[1781]:     self.wsgi = self.app.wsgi()
+Mar 15 15:46:13 srv754827 gunicorn[1781]:                 ^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 66, in wsgi
+Mar 15 15:46:13 srv754827 gunicorn[1781]:     self.callable = self.load()
+Mar 15 15:46:13 srv754827 gunicorn[1781]:                     ^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
+Mar 15 15:46:13 srv754827 gunicorn[1781]:     return self.load_wsgiapp()
+Mar 15 15:46:13 srv754827 gunicorn[1781]:            ^^^^^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
+Mar 15 15:46:13 srv754827 gunicorn[1781]:     return util.import_app(self.app_uri)
+Mar 15 15:46:13 srv754827 gunicorn[1781]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/util.py", line 370, in import_app
+Mar 15 15:46:13 srv754827 gunicorn[1781]:     mod = importlib.import_module(module)
+Mar 15 15:46:13 srv754827 gunicorn[1781]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+Mar 15 15:46:13 srv754827 gunicorn[1781]:     return _bootstrap._gcd_import(name[level:], package, level)
+Mar 15 15:46:13 srv754827 gunicorn[1781]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "<frozen importlib._bootstrap_external>", line 1129, in get_code
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "<frozen importlib._bootstrap_external>", line 1059, in source_to_code
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+Mar 15 15:46:13 srv754827 gunicorn[1781]:   File "/var/www/myproject/app.py", line 3213
+Mar 15 15:46:13 srv754827 gunicorn[1781]:     return jsonify({uccess': True, 'data': new_record})
+Mar 15 15:46:13 srv754827 gunicorn[1781]:                                         ^
+Mar 15 15:46:13 srv754827 gunicorn[1781]: SyntaxError: unterminated string literal (detected at line 3213)
+Mar 15 15:46:13 srv754827 gunicorn[1781]: [2025-03-15 15:46:13 +0000] [1781] [INFO] Worker exiting (pid: 1781)
+Mar 15 15:46:13 srv754827 systemd[1]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185mmyproject.service: Failed with result 'exit-code'.[0m
+Mar 15 15:54:58 srv754827 systemd[1]: Started myproject.service - Gunicorn instance to serve myproject.
+Mar 15 15:54:58 srv754827 gunicorn[1902]: [2025-03-15 15:54:58 +0000] [1902] [INFO] Starting gunicorn 23.0.0
+Mar 15 15:54:58 srv754827 gunicorn[1902]: [2025-03-15 15:54:58 +0000] [1902] [INFO] Listening at: http://0.0.0.0:8000 (1902)
+Mar 15 15:54:58 srv754827 gunicorn[1902]: [2025-03-15 15:54:58 +0000] [1902] [INFO] Using worker: sync
+Mar 15 15:54:58 srv754827 gunicorn[1903]: [2025-03-15 15:54:58 +0000] [1903] [INFO] Booting worker with pid: 1903
+Mar 15 15:54:58 srv754827 gunicorn[1903]: [2025-03-15 15:54:58 +0000] [1903] [ERROR] Exception in worker process
+Mar 15 15:54:58 srv754827 gunicorn[1903]: Traceback (most recent call last):
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 608, in spawn_worker
+Mar 15 15:54:58 srv754827 gunicorn[1903]:     worker.init_process()
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 135, in init_process
+Mar 15 15:54:58 srv754827 gunicorn[1903]:     self.load_wsgi()
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 147, in load_wsgi
+Mar 15 15:54:58 srv754827 gunicorn[1903]:     self.wsgi = self.app.wsgi()
+Mar 15 15:54:58 srv754827 gunicorn[1903]:                 ^^^^^^^^^^^^^^^
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 66, in wsgi
+Mar 15 15:54:58 srv754827 gunicorn[1903]:     self.callable = self.load()
+Mar 15 15:54:58 srv754827 gunicorn[1903]:                     ^^^^^^^^^^^
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
+Mar 15 15:54:58 srv754827 gunicorn[1903]:     return self.load_wsgiapp()
+Mar 15 15:54:58 srv754827 gunicorn[1903]:            ^^^^^^^^^^^^^^^^^^^
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
+Mar 15 15:54:58 srv754827 gunicorn[1903]:     return util.import_app(self.app_uri)
+Mar 15 15:54:58 srv754827 gunicorn[1903]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/util.py", line 370, in import_app
+Mar 15 15:54:58 srv754827 gunicorn[1903]:     mod = importlib.import_module(module)
+Mar 15 15:54:58 srv754827 gunicorn[1903]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+Mar 15 15:54:58 srv754827 gunicorn[1903]:     return _bootstrap._gcd_import(name[level:], package, level)
+Mar 15 15:54:58 srv754827 gunicorn[1903]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "<frozen importlib._bootstrap_external>", line 1129, in get_code
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "<frozen importlib._bootstrap_external>", line 1059, in source_to_code
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+Mar 15 15:54:58 srv754827 gunicorn[1903]:   File "/var/www/myproject/app.py", line 3213
+Mar 15 15:54:58 srv754827 gunicorn[1903]:     return jsonify({uccess': True, 'data': new_record})
+Mar 15 15:54:58 srv754827 gunicorn[1903]:                                         ^
+Mar 15 15:54:58 srv754827 gunicorn[1903]: SyntaxError: unterminated string literal (detected at line 3213)
+Mar 15 15:54:58 srv754827 gunicorn[1903]: [2025-03-15 15:54:58 +0000] [1903] [INFO] Worker exiting (pid: 1903)
+Mar 15 15:54:58 srv754827 gunicorn[1902]: [2025-03-15 15:54:58 +0000] [1902] [ERROR] Worker (pid:1903) exited with code 3
+Mar 15 15:54:58 srv754827 gunicorn[1902]: [2025-03-15 15:54:58 +0000] [1902] [ERROR] Shutting down: Master
+Mar 15 15:54:58 srv754827 gunicorn[1902]: [2025-03-15 15:54:58 +0000] [1902] [ERROR] Reason: Worker failed to boot.
+Mar 15 15:54:58 srv754827 systemd[1]: [0;1;39m[0;1;31m[0;1;39mmyproject.service: Main process exited, code=exited, status=3/NOTIMPLEMENTED[0m
+Mar 15 15:54:58 srv754827 systemd[1]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185mmyproject.service: Failed with result 'exit-code'.[0m
+Mar 15 15:56:26 srv754827 systemd[1]: Started myproject.service - Gunicorn instance to serve myproject.
+Mar 15 15:56:26 srv754827 gunicorn[1918]: [2025-03-15 15:56:26 +0000] [1918] [INFO] Starting gunicorn 23.0.0
+Mar 15 15:56:26 srv754827 gunicorn[1918]: [2025-03-15 15:56:26 +0000] [1918] [INFO] Listening at: http://0.0.0.0:8000 (1918)
+Mar 15 15:56:26 srv754827 gunicorn[1918]: [2025-03-15 15:56:26 +0000] [1918] [INFO] Using worker: sync
+Mar 15 15:56:26 srv754827 gunicorn[1919]: [2025-03-15 15:56:26 +0000] [1919] [INFO] Booting worker with pid: 1919
+Mar 15 15:56:26 srv754827 gunicorn[1920]: [2025-03-15 15:56:26 +0000] [1920] [INFO] Booting worker with pid: 1920
+Mar 15 15:56:26 srv754827 gunicorn[1919]: [2025-03-15 15:56:26 +0000] [1919] [ERROR] Exception in worker process
+Mar 15 15:56:26 srv754827 gunicorn[1919]: Traceback (most recent call last):
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 608, in spawn_worker
+Mar 15 15:56:26 srv754827 gunicorn[1919]:     worker.init_process()
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 135, in init_process
+Mar 15 15:56:26 srv754827 gunicorn[1919]:     self.load_wsgi()
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 147, in load_wsgi
+Mar 15 15:56:26 srv754827 gunicorn[1919]:     self.wsgi = self.app.wsgi()
+Mar 15 15:56:26 srv754827 gunicorn[1919]:                 ^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 66, in wsgi
+Mar 15 15:56:26 srv754827 gunicorn[1919]:     self.callable = self.load()
+Mar 15 15:56:26 srv754827 gunicorn[1919]:                     ^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
+Mar 15 15:56:26 srv754827 gunicorn[1919]:     return self.load_wsgiapp()
+Mar 15 15:56:26 srv754827 gunicorn[1919]:            ^^^^^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
+Mar 15 15:56:26 srv754827 gunicorn[1919]:     return util.import_app(self.app_uri)
+Mar 15 15:56:26 srv754827 gunicorn[1919]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/util.py", line 370, in import_app
+Mar 15 15:56:26 srv754827 gunicorn[1919]:     mod = importlib.import_module(module)
+Mar 15 15:56:26 srv754827 gunicorn[1919]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+Mar 15 15:56:26 srv754827 gunicorn[1919]:     return _bootstrap._gcd_import(name[level:], package, level)
+Mar 15 15:56:26 srv754827 gunicorn[1919]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "<frozen importlib._bootstrap_external>", line 1129, in get_code
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "<frozen importlib._bootstrap_external>", line 1059, in source_to_code
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+Mar 15 15:56:26 srv754827 gunicorn[1919]:   File "/var/www/myproject/app.py", line 3213
+Mar 15 15:56:26 srv754827 gunicorn[1919]:     return jsonify({uccess': True, 'data': new_record})
+Mar 15 15:56:26 srv754827 gunicorn[1919]:                                         ^
+Mar 15 15:56:26 srv754827 gunicorn[1919]: SyntaxError: unterminated string literal (detected at line 3213)
+Mar 15 15:56:26 srv754827 gunicorn[1919]: [2025-03-15 15:56:26 +0000] [1919] [INFO] Worker exiting (pid: 1919)
+Mar 15 15:56:26 srv754827 gunicorn[1920]: [2025-03-15 15:56:26 +0000] [1920] [ERROR] Exception in worker process
+Mar 15 15:56:26 srv754827 gunicorn[1920]: Traceback (most recent call last):
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 608, in spawn_worker
+Mar 15 15:56:26 srv754827 gunicorn[1920]:     worker.init_process()
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 135, in init_process
+Mar 15 15:56:26 srv754827 gunicorn[1920]:     self.load_wsgi()
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 147, in load_wsgi
+Mar 15 15:56:26 srv754827 gunicorn[1920]:     self.wsgi = self.app.wsgi()
+Mar 15 15:56:26 srv754827 gunicorn[1920]:                 ^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 66, in wsgi
+Mar 15 15:56:26 srv754827 gunicorn[1920]:     self.callable = self.load()
+Mar 15 15:56:26 srv754827 gunicorn[1920]:                     ^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
+Mar 15 15:56:26 srv754827 gunicorn[1920]:     return self.load_wsgiapp()
+Mar 15 15:56:26 srv754827 gunicorn[1920]:            ^^^^^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
+Mar 15 15:56:26 srv754827 gunicorn[1920]:     return util.import_app(self.app_uri)
+Mar 15 15:56:26 srv754827 gunicorn[1920]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/util.py", line 370, in import_app
+Mar 15 15:56:26 srv754827 gunicorn[1920]:     mod = importlib.import_module(module)
+Mar 15 15:56:26 srv754827 gunicorn[1920]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+Mar 15 15:56:26 srv754827 gunicorn[1920]:     return _bootstrap._gcd_import(name[level:], package, level)
+Mar 15 15:56:26 srv754827 gunicorn[1920]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "<frozen importlib._bootstrap_external>", line 1129, in get_code
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "<frozen importlib._bootstrap_external>", line 1059, in source_to_code
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+Mar 15 15:56:26 srv754827 gunicorn[1920]:   File "/var/www/myproject/app.py", line 3213
+Mar 15 15:56:26 srv754827 gunicorn[1920]:     return jsonify({uccess': True, 'data': new_record})
+Mar 15 15:56:26 srv754827 gunicorn[1920]:                                         ^
+Mar 15 15:56:26 srv754827 gunicorn[1920]: SyntaxError: unterminated string literal (detected at line 3213)
+Mar 15 15:56:26 srv754827 gunicorn[1920]: [2025-03-15 15:56:26 +0000] [1920] [INFO] Worker exiting (pid: 1920)
+Mar 15 15:56:26 srv754827 gunicorn[1918]: [2025-03-15 15:56:26 +0000] [1918] [ERROR] Worker (pid:1919) exited with code 3
+Mar 15 15:56:26 srv754827 gunicorn[1921]: [2025-03-15 15:56:26 +0000] [1921] [INFO] Booting worker with pid: 1921
+Mar 15 15:56:26 srv754827 gunicorn[1918]: [2025-03-15 15:56:26 +0000] [1918] [ERROR] Worker (pid:1920) was sent SIGTERM!
+Mar 15 15:56:26 srv754827 gunicorn[1921]: [2025-03-15 15:56:26 +0000] [1921] [ERROR] Exception in worker process
+Mar 15 15:56:26 srv754827 gunicorn[1921]: Traceback (most recent call last):
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 608, in spawn_worker
+Mar 15 15:56:26 srv754827 gunicorn[1921]:     worker.init_process()
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 135, in init_process
+Mar 15 15:56:26 srv754827 gunicorn[1921]:     self.load_wsgi()
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 147, in load_wsgi
+Mar 15 15:56:26 srv754827 gunicorn[1921]:     self.wsgi = self.app.wsgi()
+Mar 15 15:56:26 srv754827 gunicorn[1921]:                 ^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 66, in wsgi
+Mar 15 15:56:26 srv754827 gunicorn[1921]:     self.callable = self.load()
+Mar 15 15:56:26 srv754827 gunicorn[1921]:                     ^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
+Mar 15 15:56:26 srv754827 gunicorn[1921]:     return self.load_wsgiapp()
+Mar 15 15:56:26 srv754827 gunicorn[1921]:            ^^^^^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
+Mar 15 15:56:26 srv754827 gunicorn[1921]:     return util.import_app(self.app_uri)
+Mar 15 15:56:26 srv754827 gunicorn[1921]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/util.py", line 370, in import_app
+Mar 15 15:56:26 srv754827 gunicorn[1921]:     mod = importlib.import_module(module)
+Mar 15 15:56:26 srv754827 gunicorn[1921]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+Mar 15 15:56:26 srv754827 gunicorn[1921]:     return _bootstrap._gcd_import(name[level:], package, level)
+Mar 15 15:56:26 srv754827 gunicorn[1921]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "<frozen importlib._bootstrap_external>", line 1129, in get_code
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "<frozen importlib._bootstrap_external>", line 1059, in source_to_code
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+Mar 15 15:56:26 srv754827 gunicorn[1921]:   File "/var/www/myproject/app.py", line 3213
+Mar 15 15:56:26 srv754827 gunicorn[1921]:     return jsonify({uccess': True, 'data': new_record})
+Mar 15 15:56:26 srv754827 gunicorn[1921]:                                         ^
+Mar 15 15:56:26 srv754827 gunicorn[1921]: SyntaxError: unterminated string literal (detected at line 3213)
+Mar 15 15:56:26 srv754827 gunicorn[1921]: [2025-03-15 15:56:26 +0000] [1921] [INFO] Worker exiting (pid: 1921)
+Mar 15 15:56:26 srv754827 gunicorn[1918]: [2025-03-15 15:56:26 +0000] [1918] [ERROR] Worker (pid:1921) exited with code 3
+Mar 15 15:56:26 srv754827 gunicorn[1918]: Traceback (most recent call last):
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 201, in run
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     self.manage_workers()
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 570, in manage_workers
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     self.spawn_workers()
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 642, in spawn_workers
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     time.sleep(0.1 * random.random())
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 241, in handle_chld
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     self.reap_workers()
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 529, in reap_workers
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+Mar 15 15:56:26 srv754827 gunicorn[1918]: gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+Mar 15 15:56:26 srv754827 gunicorn[1918]: During handling of the above exception, another exception occurred:
+Mar 15 15:56:26 srv754827 gunicorn[1918]: Traceback (most recent call last):
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/bin/gunicorn", line 8, in <module>
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     sys.exit(run())
+Mar 15 15:56:26 srv754827 gunicorn[1918]:              ^^^^^
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 66, in run
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]", prog=prog).run()
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 235, in run
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     super().run()
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 71, in run
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     Arbiter(self).run()
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 228, in run
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     self.halt(reason=inst.reason, exit_status=inst.exit_status)
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 341, in halt
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     self.stop()
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 395, in stop
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     time.sleep(0.1)
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 241, in handle_chld
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     self.reap_workers()
+Mar 15 15:56:26 srv754827 gunicorn[1918]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 529, in reap_workers
+Mar 15 15:56:26 srv754827 gunicorn[1918]:     raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+Mar 15 15:56:26 srv754827 gunicorn[1918]: gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+Mar 15 15:56:26 srv754827 systemd[1]: [0;1;39m[0;1;31m[0;1;39mmyproject.service: Main process exited, code=exited, status=1/FAILURE[0m
+Mar 15 15:56:26 srv754827 systemd[1]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185mmyproject.service: Failed with result 'exit-code'.[0m
+Mar 15 16:04:00 srv754827 systemd[1]: Started myproject.service - Gunicorn instance to serve myproject.
+Mar 15 16:04:00 srv754827 gunicorn[2030]: [2025-03-15 16:04:00 +0000] [2030] [INFO] Starting gunicorn 23.0.0
+Mar 15 16:04:00 srv754827 gunicorn[2030]: [2025-03-15 16:04:00 +0000] [2030] [INFO] Listening at: http://0.0.0.0:8000 (2030)
+Mar 15 16:04:00 srv754827 gunicorn[2030]: [2025-03-15 16:04:00 +0000] [2030] [INFO] Using worker: sync
+Mar 15 16:04:00 srv754827 gunicorn[2031]: [2025-03-15 16:04:00 +0000] [2031] [INFO] Booting worker with pid: 2031
+Mar 15 16:04:00 srv754827 gunicorn[2031]: [2025-03-15 16:04:00 +0000] [2031] [ERROR] Exception in worker process
+Mar 15 16:04:00 srv754827 gunicorn[2031]: Traceback (most recent call last):
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 608, in spawn_worker
+Mar 15 16:04:00 srv754827 gunicorn[2031]:     worker.init_process()
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 135, in init_process
+Mar 15 16:04:00 srv754827 gunicorn[2031]:     self.load_wsgi()
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 147, in load_wsgi
+Mar 15 16:04:00 srv754827 gunicorn[2031]:     self.wsgi = self.app.wsgi()
+Mar 15 16:04:00 srv754827 gunicorn[2031]:                 ^^^^^^^^^^^^^^^
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 66, in wsgi
+Mar 15 16:04:00 srv754827 gunicorn[2031]:     self.callable = self.load()
+Mar 15 16:04:00 srv754827 gunicorn[2031]:                     ^^^^^^^^^^^
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
+Mar 15 16:04:00 srv754827 gunicorn[2031]:     return self.load_wsgiapp()
+Mar 15 16:04:00 srv754827 gunicorn[2031]:            ^^^^^^^^^^^^^^^^^^^
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
+Mar 15 16:04:00 srv754827 gunicorn[2031]:     return util.import_app(self.app_uri)
+Mar 15 16:04:00 srv754827 gunicorn[2031]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/util.py", line 370, in import_app
+Mar 15 16:04:00 srv754827 gunicorn[2031]:     mod = importlib.import_module(module)
+Mar 15 16:04:00 srv754827 gunicorn[2031]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+Mar 15 16:04:00 srv754827 gunicorn[2031]:     return _bootstrap._gcd_import(name[level:], package, level)
+Mar 15 16:04:00 srv754827 gunicorn[2031]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "<frozen importlib._bootstrap_external>", line 1129, in get_code
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "<frozen importlib._bootstrap_external>", line 1059, in source_to_code
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+Mar 15 16:04:00 srv754827 gunicorn[2031]:   File "/var/www/myproject/app.py", line 3213
+Mar 15 16:04:00 srv754827 gunicorn[2031]:     return jsonify({uccess': True, 'data': new_record})
+Mar 15 16:04:00 srv754827 gunicorn[2031]:                                         ^
+Mar 15 16:04:00 srv754827 gunicorn[2031]: SyntaxError: unterminated string literal (detected at line 3213)
+Mar 15 16:04:00 srv754827 gunicorn[2031]: [2025-03-15 16:04:00 +0000] [2031] [INFO] Worker exiting (pid: 2031)
+Mar 15 16:04:00 srv754827 gunicorn[2030]: [2025-03-15 16:04:00 +0000] [2030] [ERROR] Worker (pid:2031) exited with code 3
+Mar 15 16:04:00 srv754827 gunicorn[2030]: [2025-03-15 16:04:00 +0000] [2030] [ERROR] Shutting down: Master
+Mar 15 16:04:00 srv754827 gunicorn[2030]: [2025-03-15 16:04:00 +0000] [2030] [ERROR] Reason: Worker failed to boot.
+Mar 15 16:04:00 srv754827 systemd[1]: [0;1;39m[0;1;31m[0;1;39mmyproject.service: Main process exited, code=exited, status=3/NOTIMPLEMENTED[0m
+Mar 15 16:04:00 srv754827 systemd[1]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185mmyproject.service: Failed with result 'exit-code'.[0m
+Mar 15 16:04:21 srv754827 systemd[1]: Started myproject.service - Gunicorn instance to serve myproject.
+Mar 15 16:04:21 srv754827 gunicorn[2055]: [2025-03-15 16:04:21 +0000] [2055] [INFO] Starting gunicorn 23.0.0
+Mar 15 16:04:21 srv754827 gunicorn[2055]: [2025-03-15 16:04:21 +0000] [2055] [INFO] Listening at: http://0.0.0.0:8000 (2055)
+Mar 15 16:04:21 srv754827 gunicorn[2055]: [2025-03-15 16:04:21 +0000] [2055] [INFO] Using worker: sync
+Mar 15 16:04:21 srv754827 gunicorn[2056]: [2025-03-15 16:04:21 +0000] [2056] [INFO] Booting worker with pid: 2056
+Mar 15 16:04:21 srv754827 gunicorn[2056]: [2025-03-15 16:04:21 +0000] [2056] [ERROR] Exception in worker process
+Mar 15 16:04:21 srv754827 gunicorn[2056]: Traceback (most recent call last):
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 608, in spawn_worker
+Mar 15 16:04:21 srv754827 gunicorn[2056]:     worker.init_process()
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 135, in init_process
+Mar 15 16:04:21 srv754827 gunicorn[2056]:     self.load_wsgi()
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 147, in load_wsgi
+Mar 15 16:04:21 srv754827 gunicorn[2056]:     self.wsgi = self.app.wsgi()
+Mar 15 16:04:21 srv754827 gunicorn[2056]:                 ^^^^^^^^^^^^^^^
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 66, in wsgi
+Mar 15 16:04:21 srv754827 gunicorn[2056]:     self.callable = self.load()
+Mar 15 16:04:21 srv754827 gunicorn[2056]:                     ^^^^^^^^^^^
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
+Mar 15 16:04:21 srv754827 gunicorn[2056]:     return self.load_wsgiapp()
+Mar 15 16:04:21 srv754827 gunicorn[2056]:            ^^^^^^^^^^^^^^^^^^^
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
+Mar 15 16:04:21 srv754827 gunicorn[2056]:     return util.import_app(self.app_uri)
+Mar 15 16:04:21 srv754827 gunicorn[2056]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/util.py", line 370, in import_app
+Mar 15 16:04:21 srv754827 gunicorn[2056]:     mod = importlib.import_module(module)
+Mar 15 16:04:21 srv754827 gunicorn[2056]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+Mar 15 16:04:21 srv754827 gunicorn[2056]:     return _bootstrap._gcd_import(name[level:], package, level)
+Mar 15 16:04:21 srv754827 gunicorn[2056]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "<frozen importlib._bootstrap_external>", line 1129, in get_code
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "<frozen importlib._bootstrap_external>", line 1059, in source_to_code
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+Mar 15 16:04:21 srv754827 gunicorn[2056]:   File "/var/www/myproject/app.py", line 3213
+Mar 15 16:04:21 srv754827 gunicorn[2056]:     return jsonify({uccess': True, 'data': new_record})
+Mar 15 16:04:21 srv754827 gunicorn[2056]:                                         ^
+Mar 15 16:04:21 srv754827 gunicorn[2056]: SyntaxError: unterminated string literal (detected at line 3213)
+Mar 15 16:04:21 srv754827 gunicorn[2056]: [2025-03-15 16:04:21 +0000] [2056] [INFO] Worker exiting (pid: 2056)
+Mar 15 16:04:21 srv754827 gunicorn[2057]: [2025-03-15 16:04:21 +0000] [2057] [INFO] Booting worker with pid: 2057
+Mar 15 16:04:21 srv754827 gunicorn[2055]: [2025-03-15 16:04:21 +0000] [2055] [ERROR] Worker (pid:2056) exited with code 3
+Mar 15 16:04:21 srv754827 gunicorn[2057]: [2025-03-15 16:04:21 +0000] [2057] [ERROR] Exception in worker process
+Mar 15 16:04:21 srv754827 gunicorn[2057]: Traceback (most recent call last):
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 608, in spawn_worker
+Mar 15 16:04:21 srv754827 gunicorn[2057]:     worker.init_process()
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 135, in init_process
+Mar 15 16:04:21 srv754827 gunicorn[2057]:     self.load_wsgi()
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 147, in load_wsgi
+Mar 15 16:04:21 srv754827 gunicorn[2057]:     self.wsgi = self.app.wsgi()
+Mar 15 16:04:21 srv754827 gunicorn[2057]:                 ^^^^^^^^^^^^^^^
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 66, in wsgi
+Mar 15 16:04:21 srv754827 gunicorn[2057]:     self.callable = self.load()
+Mar 15 16:04:21 srv754827 gunicorn[2057]:                     ^^^^^^^^^^^
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
+Mar 15 16:04:21 srv754827 gunicorn[2057]:     return self.load_wsgiapp()
+Mar 15 16:04:21 srv754827 gunicorn[2057]:            ^^^^^^^^^^^^^^^^^^^
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
+Mar 15 16:04:21 srv754827 gunicorn[2057]:     return util.import_app(self.app_uri)
+Mar 15 16:04:21 srv754827 gunicorn[2057]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/util.py", line 370, in import_app
+Mar 15 16:04:21 srv754827 gunicorn[2057]:     mod = importlib.import_module(module)
+Mar 15 16:04:21 srv754827 gunicorn[2057]:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+Mar 15 16:04:21 srv754827 gunicorn[2057]:     return _bootstrap._gcd_import(name[level:], package, level)
+Mar 15 16:04:21 srv754827 gunicorn[2057]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "<frozen importlib._bootstrap_external>", line 1129, in get_code
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "<frozen importlib._bootstrap_external>", line 1059, in source_to_code
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+Mar 15 16:04:21 srv754827 gunicorn[2057]:   File "/var/www/myproject/app.py", line 3213
+Mar 15 16:04:21 srv754827 gunicorn[2057]:     return jsonify({uccess': True, 'data': new_record})
+Mar 15 16:04:21 srv754827 gunicorn[2057]:                                         ^
+Mar 15 16:04:21 srv754827 gunicorn[2057]: SyntaxError: unterminated string literal (detected at line 3213)
+Mar 15 16:04:21 srv754827 gunicorn[2057]: [2025-03-15 16:04:21 +0000] [2057] [INFO] Worker exiting (pid: 2057)
+Mar 15 16:04:22 srv754827 gunicorn[2055]: [2025-03-15 16:04:22 +0000] [2055] [ERROR] Worker (pid:2057) exited with code 3
+Mar 15 16:04:22 srv754827 gunicorn[2055]: Traceback (most recent call last):
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 201, in run
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     self.manage_workers()
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 570, in manage_workers
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     self.spawn_workers()
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 642, in spawn_workers
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     time.sleep(0.1 * random.random())
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 241, in handle_chld
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     self.reap_workers()
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 529, in reap_workers
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+Mar 15 16:04:22 srv754827 gunicorn[2055]: gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+Mar 15 16:04:22 srv754827 gunicorn[2055]: During handling of the above exception, another exception occurred:
+Mar 15 16:04:22 srv754827 gunicorn[2055]: Traceback (most recent call last):
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/bin/gunicorn", line 8, in <module>
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     sys.exit(run())
+Mar 15 16:04:22 srv754827 gunicorn[2055]:              ^^^^^
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 66, in run
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]", prog=prog).run()
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 235, in run
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     super().run()
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 71, in run
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     Arbiter(self).run()
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 228, in run
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     self.halt(reason=inst.reason, exit_status=inst.exit_status)
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 341, in halt
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     self.stop()
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 395, in stop
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     time.sleep(0.1)
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 241, in handle_chld
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     self.reap_workers()
+Mar 15 16:04:22 srv754827 gunicorn[2055]:   File "/var/www/myproject/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 529, in reap_workers
+Mar 15 16:04:22 srv754827 gunicorn[2055]:     raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+Mar 15 16:04:22 srv754827 gunicorn[2055]: gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+Mar 15 16:04:22 srv754827 systemd[1]: [0;1;39m[0;1;31m[0;1;39mmyproject.service: Main process exited, code=exited, status=1/FAILURE[0m
+Mar 15 16:04:22 srv754827 systemd[1]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185mmyproject.service: Failed with result 'exit-code'.[0m

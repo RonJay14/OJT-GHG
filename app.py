@@ -9,7 +9,7 @@ from fpdf import FPDF
 import traceback
 from flask import send_file
 from flask import request
-from datetime import datetime
+from datetime import datetime, timedelta  # Add this import at the top
 from flask_bcrypt import Bcrypt
 import math
 from flask import jsonify
@@ -22,11 +22,17 @@ from reportlab.lib.styles import getSampleStyleSheet
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Use a strong secret key in production!
+# Add these session configurations
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 # MySQL Configuration
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''  # Empty password as specified
+app.config['MYSQL_USER'] = 'ghguser'
+app.config['MYSQL_PASSWORD'] = 'Str0ng@Pass2025'  # Empty password as specified
 app.config['MYSQL_DB'] = 'ghg_database'
 
 # Helper function to establish MySQL connection
@@ -41,8 +47,8 @@ def get_db_connection():
 
 db_config = {
     'host': 'localhost',
-    'user': 'root',
-    'password': '',  # Replace with your actual MySQL password if it's not empty
+    'user': 'ghguser',
+    'password': 'Str0ng@Pass2025',  # Replace with your actual MySQL password if it's not empty
     'database': 'ghg_database'
 }
 
@@ -59,6 +65,9 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    cursor = None
+    conn = None
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -70,15 +79,22 @@ def login():
             # Query to check if the username exists
             query = "SELECT * FROM tblsignin WHERE username = %s"
             cursor.execute(query, (username,))
-            user = cursor.fetchone()
+            user = cursor.fetchone()  # Make sure to fetch the results
 
             if user and password == user['password']:  # Correct password
+                # Clear any existing session data
+                session.clear()
+                
+                # Set session data
                 session['loggedIn'] = True
                 session['username'] = user['username']
                 session['office'] = user['office']
                 session['campus'] = user['campus']
+                
+                # Make the session permanent with the configured lifetime
+                session.permanent = True
 
-             # Assign the campus logo dynamically
+                # Assign the campus logo dynamically
                 campus_logo_map = {
                     "Alangilan": "alangilan.png",
                     "ARASOF-Nasugbu": "arasof-nasugbu.png",
@@ -112,8 +128,14 @@ def login():
             flash(f"Database Error: {e}")
 
         finally:
-            cursor.close()
-            conn.close()
+            if cursor:
+                try:
+                    cursor.fetchall()  # Fetch any remaining results before closing
+                except:
+                    pass
+                cursor.close()
+            if conn:
+                conn.close()
 
     return render_template('login.html')  # Render the login page
 
@@ -727,7 +749,7 @@ def forecast():
             for i in range(len(forecast_values)):
                 smoothed_value = (
                     smoothing_factor * forecast_values[i] +
-                    (1 - smoothing_factor) * (sum(data) / len(data))  # Use average instead of last value
+                  (1 - smoothing_factor) * (sum(data) / len(data))  # Use average instead of last value
                 )
                 smoothed_forecast.append(max(0, smoothed_value))
 
@@ -743,9 +765,9 @@ def forecast():
 
     
     # Forecast parameters
-    periods = 18  # Extended forecast for 18 months
+    perds = 18  # Extended forecast for 18 months
     smoothing_factor = 0.5  # Higher smoothing to balance historical data
-    freq = 'M'  # Default to monthly frequency
+    fr = 'M'  # Default to monthly frequency
 
     # Generate forecasts for all categories
     forecast_data = {
@@ -1767,8 +1789,8 @@ app.secret_key = 'your_secret_key'  # Use a strong secret key in production!
 
 # MySQL Configuration
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''  # Empty password as specified
+app.config['MYSQL_USER'] = 'ghguser'
+app.config['MYSQL_PASSWORD'] = 'Str0ng@Pass2025'  # Empty password as specified
 app.config['MYSQL_DB'] = 'ghg_database'
 
 # Helper function to establish MySQL connection
@@ -1783,8 +1805,8 @@ def get_db_connection():
 
 db_config = {
     'host': 'localhost',
-    'user': 'root',
-    'password': '',  # Replace with your actual MySQL password if it's not empty
+    'user': 'ghguser',
+    'password': 'Str0ng@Pass2025',  # Replace with your actual MySQL password if it's not empty
     'database': 'ghg_database'
 }
 
@@ -1801,6 +1823,9 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    cursor = None
+    conn = None
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -1812,15 +1837,22 @@ def login():
             # Query to check if the username exists
             query = "SELECT * FROM tblsignin WHERE username = %s"
             cursor.execute(query, (username,))
-            user = cursor.fetchone()
+            user = cursor.fetchone()  # Make sure to fetch the results
 
             if user and password == user['password']:  # Correct password
+                # Clear any existing session data
+                session.clear()
+                
+                # Set session data
                 session['loggedIn'] = True
                 session['username'] = user['username']
                 session['office'] = user['office']
                 session['campus'] = user['campus']
+                
+                # Make the session permanent with the configured lifetime
+                session.permanent = True
 
-             # Assign the campus logo dynamically
+                # Assign the campus logo dynamically
                 campus_logo_map = {
                     "Alangilan": "alangilan.png",
                     "ARASOF-Nasugbu": "arasof-nasugbu.png",
@@ -1854,8 +1886,14 @@ def login():
             flash(f"Database Error: {e}")
 
         finally:
-            cursor.close()
-            conn.close()
+            if cursor:
+                try:
+                    cursor.fetchall()  # Fetch any remaining results before closing
+                except:
+                    pass
+                cursor.close()
+            if conn:
+                conn.close()
 
     return render_template('login.html')  # Render the login page
 
@@ -3184,7 +3222,7 @@ def emu_fuel():
 
             new_record = {
                 'campus': campus,
-                'date': date,
+                'da': date,
                 'driver': driver,
                 'type': type,
                 'vehicle_equipment': vehicle_equipment,
@@ -3212,7 +3250,7 @@ def emu_fuel():
         category_filter = request.args.get('category', '')
         fuel_type_filter = request.args.get('fuelType', '')
 
-        # Prepare SQL query for fetching data
+       # Prepare SQL query for fetching data
         placeholders = ', '.join(['%s'] * len(associated_campuses))
         sql = f"SELECT * FROM fuel_emissions WHERE campus IN ({placeholders})"
         params = associated_campuses
@@ -9290,7 +9328,7 @@ def fetch_waste_unseg_data(page=1, per_page=20, campus=None, year=None, month=No
     Returns:
         tuple: A list of filtered data and the total record count.
     """
-    # Ensure the user is logged in and has a valid session
+    # Ensure ther is logged in and has a valid session
     if 'campus' not in session:
         raise ValueError("Session does not contain a valid campus. User is not logged in.")
 
@@ -9311,14 +9349,14 @@ def fetch_waste_unseg_data(page=1, per_page=20, campus=None, year=None, month=No
     # Apply campus filter: default to user's campus if not explicitly provided
     if campus:
         if campus != user_campus and campus != "All":
-            raise ValueError("Access denied: User can only access data for their campus.")
+            raise ValueError("Access denied: User can only ac data for their campus.")
         if campus != "All":
             base_query += " AND Campus = %s"
             total_query += " AND Campus = %s"
             params.append(campus)
     else:
         # Default to session's campus
-        base_query += " AND Campus = %s"
+        base_que= " AND Campus = %s"
         total_query += " AND Campus = %s"
         params.append(user_campus)
 
@@ -10253,7 +10291,7 @@ def sdo_flight_emissions_excel():
         buffer,
         download_name="flight_emissions_report.xlsx",
         as_attachment=True,
-        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        mimetype='applicatiod.openxmlformats-officedocument.spreadsheetml.sheet'
     )
 
 @app.route('/sdo_accommodation_emissions_report')
@@ -10276,13 +10314,10 @@ def sdo_accommodation_emissions_report():
     # Pagination setup
     per_page = 20  # Records per page
     current_page = request.args.get('page', 1, type=int)
-
     # Get filter values from request args
     campus_filter = request.args.get('campus', '')
     office_filter = request.args.get('office', '')
-    year_filter = request.args.get('year', '')
-
-    # Database connection
+    year_filter = request.args.get('year', '') # Database connection
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)  # Fetch rows as dictionaries
 
@@ -11117,13 +11152,6 @@ def flight():
                      VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
             cursor.execute(sql, (campus, office, year, traveller_name, travel_purpose, travel_date, domestic_international, 
                                  origin, destination, flight_class, oneway_roundtrip, ghg_emission_kg_co2e, ghg_emission_t_co2e))
-            # Log the activity
-            username = session.get('username', 'Unknown')
-            action = f"Added flight record for {campus} - {year}"
-            cursor.execute("""INSERT INTO activity_log 
-                          (username, campus, action, report_name)
-                          VALUES (%s, %s, %s, %s)""",
-                       (username, campus, action, "Flight Record"))
             conn.commit()
 
             flash("Flight record inserted successfully!", "success")
@@ -11961,7 +11989,7 @@ def poanalytics():
         "lpg_forecast": forecast_data["lpg_forecast"]["prophet"]["forecast"],
     })
 
-    # Month labels
+     # Month labels
     labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] + ['January', 'February']
 
     return render_template(
@@ -11999,7 +12027,7 @@ def pro_report():
         cursor = conn.cursor(dictionary=True)
 
         # Query data from tblfoodwaste with pagination
-        cursor.execute("SELECT COUNT(*) AS count FROM tblfoodwaste WHERE Campus = %s", (campus,))
+        cursor.execute("SELEUNT(*) AS count FROM tblfoodwaste WHERE Campus = %s", (campus,))
         total_items_food_waste = cursor.fetchone()['count']
         total_pages_food_waste = (total_items_food_waste + items_per_page - 1) // items_per_page  # Ceiling division
         offset_food_waste = (current_page_food_waste - 1) * items_per_page
@@ -12675,12 +12703,11 @@ def user_dashboard():
 # Route for logout
 @app.route('/logout')
 def logout():
-    session.pop('loggedIn', None)
-    session.pop('username', None)
-    flash('You have been logged out.', 'info')
+    # Clear the session
+    session.clear()
+    # Redirect to login page
     return redirect(url_for('login'))
 
 # Run the application
 if __name__ == '__main__':
     app.run(debug=True)
-    
