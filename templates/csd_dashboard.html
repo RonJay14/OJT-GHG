@@ -331,7 +331,7 @@
 <body class="sb-nav-fixed">
     <!-- Navbar at the top -->
     <nav class="sb-topnav navbar navbar-expand navbar-dark"
-        style="padding-left: 45px; height: 80px; padding-bottom: 15px; padding-top: 10px;">
+        style="padding-left: 45px; height: 80px; padding-bottom: 20px; padding-top: 20px;">
         <img src="{{ url_for('static', filename='images/campuses/' + session['campus']|lower + '.png') }}"
             alt="Campus Logo" height="75" class="me-2">
         <!-- Navbar brand -->
@@ -888,16 +888,36 @@
                             <div class="cardt emi bg-dark text-white h-100">
                                 <div class="card-bodyt">
                                     <div class="card-title">Total Emission</div>
-                                    <div>
-                                        <strong>Total CO₂ Emission:</strong>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <strong>Total CO₂ Emission:</strong>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-4">
+                                                    <span style="font-size: 1.5em; font-weight: bold; color: white;">
+                                                        {{ "{:,.2f}".format(current_emission_data['electricity'] +
+                                                        current_emission_data['fuel'] + current_emission_data['waste_segregated'] +
+                                                        current_emission_data['waste_unsegregated'] + current_emission_data['water']
+                                                        + current_emission_data['treated_water'] + current_emission_data['lpg'] +
+                                                        current_emission_data['food_waste'] + current_emission_data['accommodation']
+                                                        + current_emission_data['flight']) }} kg
+                                                    </span>
+                                                </div>
+                                                <div class="ms-4 ps-4" style="border-left: 2px solid rgba(255,255,255,0.2);">
+                                                    <strong style="color: rgb(255, 255, 255);">Equivalent to</strong>
+                                                    <span style="font-size: 1.5em; font-weight: bold; color: white; display: block;">
+                                                        {{ "{:,.2f}".format((current_emission_data['electricity'] +
+                                                        current_emission_data['fuel'] + current_emission_data['waste_segregated'] +
+                                                        current_emission_data['waste_unsegregated'] + current_emission_data['water']
+                                                        + current_emission_data['treated_water'] + current_emission_data['lpg'] +
+                                                        current_emission_data['food_waste'] + current_emission_data['accommodation']
+                                                        + current_emission_data['flight']) / 1000) }} t CO₂e
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <span style="font-size: 1.5em; font-weight: bold; color: white;">
-                                        {{ "{:,.2f}".format(current_emission_data['electricity'] +
-                                        current_emission_data['fuel'] + current_emission_data['waste_segregated'] +
-                                        current_emission_data['waste_unsegregated'] + current_emission_data['water']
-                                        + current_emission_data['treated_water'] + current_emission_data['lpg'] +
-                                        current_emission_data['food_waste'] + current_emission_data['accommodation']
-                                        + current_emission_data['flight']) }} Kg </span>
                                 </div>
                             </div>
                         </div>
@@ -906,13 +926,13 @@
                         <div class="col-md-6 w1">
                             <div class="cardt tree bg-success text-white h-100">
                                 <div class="card-bodyt">
-                                    <div class="card-title">Tree Offset</div>
+                                    <div class="card-title">Carbon Offset</div>
                                     <div>
-                                        <strong>Total Tree Offset for {{ selected_year }}:</strong>
+                                        <strong>Total Carbon Offset for offsetting for {{ selected_year }}:</strong>
 
                                     </div>
                                     <span style="font-size: 1.5em; font-weight: bold; color: white;">
-                                        {{ "{:,.2f}".format(current_emission_data['tree_offset']) }} Trees
+                                        {{ "{:,}".format(current_emission_data['tree_offset']) }} Trees
                                     </span>
                                 </div>
                             </div>
@@ -1054,6 +1074,7 @@
                         }
                     </style>
 
+<!--DUPLICATED--------------------------------------------------------------------------------------------------->
 
                     <div class="boxConDiv">
                         <div class="box2" onclick="expandBox(this)">
@@ -1100,13 +1121,13 @@
                                                                 d="M32 64C32 28.7 60.7 0 96 0L256 0c35.3 0 64 28.7 64 64l0 192 8 0c48.6 0 88 39.4 88 88l0 32c0 13.3 10.7 24 24 24s24-10.7 24-24l0-154c-27.6-7.1-48-32.2-48-62l0-64L384 64c-8.8-8.8-8.8-23.2 0-32s23.2-8.8 32 0l77.3 77.3c12 12 18.7 28.3 18.7 45.3l0 13.5 0 24 0 32 0 152c0 39.8-32.2 72-72 72s-72-32.2-72-72l0-32c0-22.1-17.9-40-40-40l-8 0 0 144c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 512c-17.7 0-32-14.3-32-32s14.3-32 32-32L32 64zM96 80l0 96c0 8.8 7.2 16 16 16l128 0c8.8 0 16-7.2 16-16l0-96c0-8.8-7.2-16-16-16L112 64c-8.8 0-16 7.2-16 16z"
                                                                 stroke="currentColor" stroke-width="1.5" />
                                                         </svg>
-                                                        {{ "{:,.2f}".format(current_emission_data['fuel']) }} Kg
+                                                        {{ "{:,.2f}".format(current_emission_data['fuel']) }} kg
                                                     </span>
                                                 </div>
                                                 <div class="mt-3    ">
                                                     <strong class="bot-card">Fuel Records:</strong>
                                                     <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                                        {{ total_fuel_records }}
+                                                        {{ total_records['fuel'] }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -1135,7 +1156,7 @@
                                                             <path
                                                                 d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15" />
                                                         </svg>
-                                                        {{ "{:,.2f}".format(current_emission_data['lpg']) }} Kg
+                                                        {{ "{:,.2f}".format(current_emission_data['lpg']) }} kg
                                                     </span>
                                                 </div>
                                                 <div class="mt-3">
@@ -1198,14 +1219,14 @@
                                                                 d="M4.819 2A2.5 2.5 0 0 0 2.52 3.515l-.792 1.848a.8.8 0 0 1-.38.404c-.5.25-.855.715-.965 1.262L.05 8.708a2.5 2.5 0 0 0-.049.49v.413c0 .814.39 1.543 1 1.997V13.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1.338c1.292.048 2.745.088 4 .088s2.708-.04 4-.088V13.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1.892c.61-.454 1-1.183 1-1.997v-.413q0-.248-.049-.49l-.335-1.68a1.8 1.8 0 0 0-.964-1.261.8.8 0 0 1-.381-.404l-.792-1.848A2.5 2.5 0 0 0 11.181 2H4.82ZM3.44 3.91A1.5 1.5 0 0 1 4.82 3h6.362a1.5 1.5 0 0 1 1.379.91l.792 1.847a1.8 1.8 0 0 0 .853.904c.222.112.381.32.43.564l.336 1.679q.03.146.029.294v.413a1.48 1.48 0 0 1-1.408 1.484c-1.555.07-3.786.155-5.592.155s-4.037-.084-5.592-.155A1.48 1.48 0 0 1 1 9.611v-.413q0-.148.03-.294l.335-1.68a.8.8 0 0 1 .43-.563c.383-.19.685-.511.853-.904z"
                                                                 stroke="currentColor" stroke-width="1.5" />
                                                         </svg>
-                                                        {{ "{:,.2f}".format(current_emission_data['electricity']) }} Kg
+                                                        {{ "{:,.2f}".format(current_emission_data['electricity']) }} kg
                                                     </span>
                                                 </div>
 
                                                 <div class="mt-3">
                                                     <strong class="bot-card">Electricity Records:</strong>
-                                                    <span style="font-size: 1rem; font-weight: bold; color: white; ">
-                                                        {{ total_electricity_records }}
+                                                    <span style="font-size: 1rem; font-weight: bold; color: white;">
+                                                        {{ total_records['electricity'] }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -1298,15 +1319,16 @@
                                                                 d="M4.553 7.776c.82-1.641 1.717-2.753 2.093-3.13l.708.708c-.29.29-1.128 1.311-1.907 2.87z"
                                                                 stroke="currentColor" stroke-width="1.5" />
                                                         </svg>
-                                                        {{ "{:,.2f}".format(current_emission_data['water']) }} Kg
+                                                        {{ "{:,.2f}".format(current_emission_data['water']) }} kg
                                                     </span>
                                                 </div>
                                                 <div class="mt-3">
 
                                                     <strong class="bot-card">Water Records:</strong>
-                                                    <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                                        {{ total_water_records }}
-                                                    </span>
+                                                    <!-- Water Records -->
+                                                <span style="font-size: 1rem; font-weight: bold; color: white;">
+                                                    {{ total_records['water'] }}
+                                                </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -1341,7 +1363,7 @@
                                                 <div class="mt-3">
                                                     <strong class="bot-card">Treated Water Records:</strong>
                                                     <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                                        {{ total_treated_water_records }}
+                                                        {{ total_records['treated_water'] }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -1372,13 +1394,13 @@
                                                         </svg>
                                                         {{ "{:,.2f}".format(current_emission_data['waste_segregated'])
                                                         }}
-                                                        Kg
+                                                        kg
                                                     </span>
                                                 </div>
                                                 <div class="mt-3">
                                                     <strong class="bot-card">Waste Segregated Records:</strong>
                                                     <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                                        {{ total_waste_segregated_records }}
+                                                        {{ total_records['waste_segregated'] }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -1410,13 +1432,13 @@
                                                         </svg>
                                                         {{ "{:,.2f}".format(current_emission_data['waste_unsegregated'])
                                                         }}
-                                                        Kg
+                                                        kg
                                                     </span>
                                                 </div>
                                                 <div class="mt-3">
                                                     <strong class="bot-card">Waste Unsegregated Records:</strong>
                                                     <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                                        {{ total_waste_unsegregated_records }}
+                                                        {{ total_records['waste_unsegregated'] }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -1445,13 +1467,13 @@
                                                             <path
                                                                 d="M6.428 1.151C6.708.591 7.213 0 8 0s1.292.592 1.572 1.151C9.861 1.73 10 2.431 10 3v3.691l5.17 2.585a1.5 1.5 0 0 1 .83 1.342V12a.5.5 0 0 1-.582.493l-5.507-.918-.375 2.253 1.318 1.318A.5.5 0 0 1 10.5 16h-5a.5.5 0 0 1-.354-.854l1.319-1.318-.376-2.253-5.507.918A.5.5 0 0 1 0 12v-1.382a1.5 1.5 0 0 1 .83-1.342L6 6.691V3c0-.568.14-1.271.428-1.849m.894.448C7.111 2.02 7 2.569 7 3v4a.5.5 0 0 1-.276.447l-5.448 2.724a.5.5 0 0 0-.276.447v.792l5.418-.903a.5.5 0 0 1 .575.41l.5 3a.5.5 0 0 1-.14.437L6.708 15h2.586l-.647-.646a.5.5 0 0 1-.14-.436l.5-3a.5.5 0 0 1 .576-.411L15 11.41v-.792a.5.5 0 0 0-.276-.447L9.276 7.447A.5.5 0 0 1 9 7V3c0-.432-.11-.979-.322-1.401C8.458 1.159 8.213 1 8 1s-.458.158-.678.599" />
                                                         </svg>
-                                                        {{ "{:,.2f}".format(current_emission_data['flight']) }} Kg
+                                                        {{ "{:,.2f}".format(current_emission_data['flight']) }} kg
                                                     </span>
                                                 </div>
                                                 <div class="mt-3">
                                                     <strong class="bot-card"> Accommodation Records:</strong>
                                                     <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                                        {{ total_accommodation_records }}
+                                                        {{ total_records['flight'] }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -1484,14 +1506,13 @@
                                                                 d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0" />
                                                         </svg>
                                                         {{ "{:,.2f}".format(current_emission_data['accommodation']) }}
-                                                        Kg
+                                                        kg
                                                     </span>
                                                 </div>
                                                 <div class="mt-3">
-                                                    <strong class="bot-card"> Flight Records:</strong>
-                                                    <span
-                                                        style="font-size: 1rem; font-weight: bold; color: rgb(255, 255, 255);">
-                                                        {{ total_flight_records }}
+                                                    <strong class="bot-card"> Accommodation Records:</strong>
+                                                    <span style="font-size: 1rem; font-weight: bold; color: white;">
+                                                        {{ total_records['accommodation'] }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -1524,14 +1545,13 @@
                                                                 d="m4.4.8-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 3.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 3.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 3 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 4.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 6.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 6.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 6 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 7.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.252.382l-.019.025-.005.008-.002.002A.5.5 0 0 1 9.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 9.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 9 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 10.4.8" />
                                                         </svg>
 
-                                                        {{ "{:,.2f}".format(current_emission_data['food_waste']) }} Kg
+                                                        {{ "{:,.2f}".format(current_emission_data['food_waste']) }} kg
                                                     </span>
                                                 </div>
                                                 <div class="mt-3">
                                                     <strong class="bot-card"> Food Records:</strong>
-                                                    <span
-                                                        style="font-size: 1rem; font-weight: bold; color: rgb(255, 255, 255)">
-                                                        {{ total_food_records }}
+                                                    <span style="font-size: 1rem; font-weight: bold; color: white;">
+                                                        {{ total_records['food_waste'] }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -1541,7 +1561,7 @@
                             </div>
                         </div>
                     </div>
-
+<!--DUPLICATED--------------------------------------------------------------------------------------------------->
                     <script>
                         function expandBox(element) {
                             document.querySelectorAll('.box2').forEach(box => {
@@ -1625,13 +1645,13 @@
                                                     d="M32 64C32 28.7 60.7 0 96 0L256 0c35.3 0 64 28.7 64 64l0 192 8 0c48.6 0 88 39.4 88 88l0 32c0 13.3 10.7 24 24 24s24-10.7 24-24l0-154c-27.6-7.1-48-32.2-48-62l0-64L384 64c-8.8-8.8-8.8-23.2 0-32s23.2-8.8 32 0l77.3 77.3c12 12 18.7 28.3 18.7 45.3l0 13.5 0 24 0 32 0 152c0 39.8-32.2 72-72 72s-72-32.2-72-72l0-32c0-22.1-17.9-40-40-40l-8 0 0 144c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 512c-17.7 0-32-14.3-32-32s14.3-32 32-32L32 64zM96 80l0 96c0 8.8 7.2 16 16 16l128 0c8.8 0 16-7.2 16-16l0-96c0-8.8-7.2-16-16-16L112 64c-8.8 0-16 7.2-16 16z"
                                                     stroke="currentColor" stroke-width="1.5" />
                                             </svg>
-                                            {{ "{:,.2f}".format(current_emission_data['fuel']) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data['fuel']) }} kg
                                         </span>
                                     </div>
                                     <div class="mt-3    ">
                                         <strong class="bot-card">Fuel Records:</strong>
                                         <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                            {{ total_fuel_records }}
+                                            {{ total_records['fuel'] }}
                                         </span>
                                     </div>
                                 </div>
@@ -1659,14 +1679,14 @@
                                                 <path
                                                     d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15" />
                                             </svg>
-                                            {{ "{:,.2f}".format(current_emission_data['lpg']) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data['lpg']) }} kg
                                         </span>
                                     </div>
                                     <div class="mt-3">
                                         <strong class="bot-card"> LPG Records:</strong>
                                         <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                            {{ total_lpg_records }}
-                                        </span>
+                                            {{ total_records['lpg'] }}
+                                        </span>                                        
                                     </div>
                                 </div>
                             </div>
@@ -1698,15 +1718,16 @@
                                                     d="M4.819 2A2.5 2.5 0 0 0 2.52 3.515l-.792 1.848a.8.8 0 0 1-.38.404c-.5.25-.855.715-.965 1.262L.05 8.708a2.5 2.5 0 0 0-.049.49v.413c0 .814.39 1.543 1 1.997V13.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1.338c1.292.048 2.745.088 4 .088s2.708-.04 4-.088V13.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1.892c.61-.454 1-1.183 1-1.997v-.413q0-.248-.049-.49l-.335-1.68a1.8 1.8 0 0 0-.964-1.261.8.8 0 0 1-.381-.404l-.792-1.848A2.5 2.5 0 0 0 11.181 2H4.82ZM3.44 3.91A1.5 1.5 0 0 1 4.82 3h6.362a1.5 1.5 0 0 1 1.379.91l.792 1.847a1.8 1.8 0 0 0 .853.904c.222.112.381.32.43.564l.336 1.679q.03.146.029.294v.413a1.48 1.48 0 0 1-1.408 1.484c-1.555.07-3.786.155-5.592.155s-4.037-.084-5.592-.155A1.48 1.48 0 0 1 1 9.611v-.413q0-.148.03-.294l.335-1.68a.8.8 0 0 1 .43-.563c.383-.19.685-.511.853-.904z"
                                                     stroke="currentColor" stroke-width="1.5" />
                                             </svg>
-                                            {{ "{:,.2f}".format(current_emission_data['electricity']) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data['electricity']) }} kg
                                         </span>
                                     </div>
 
                                     <div class="mt-3">
                                         <strong class="bot-card">Electricity Records:</strong>
-                                        <span style="font-size: 1rem; font-weight: bold; color: white; ">
-                                            {{ total_electricity_records }}
+                                        <span style="font-size: 1rem; font-weight: bold; color: white;">
+                                            {{ total_records['electricity'] }}
                                         </span>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -1737,14 +1758,14 @@
                                                     d="M4.553 7.776c.82-1.641 1.717-2.753 2.093-3.13l.708.708c-.29.29-1.128 1.311-1.907 2.87z"
                                                     stroke="currentColor" stroke-width="1.5" />
                                             </svg>
-                                            {{ "{:,.2f}".format(current_emission_data['water']) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data['water']) }} kg
                                         </span>
                                     </div>
                                     <div class="mt-3">
 
                                         <strong class="bot-card">Water Records:</strong>
                                         <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                            {{ total_water_records }}
+                                            {{ total_records['water'] }}
                                         </span>
                                     </div>
                                 </div>
@@ -1771,13 +1792,13 @@
                                                     d="M.036 3.314a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0L.314 3.964a.5.5 0 0 1-.278-.65m0 3a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0L.314 6.964a.5.5 0 0 1-.278-.65m0 3a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0L.314 9.964a.5.5 0 0 1-.278-.65m0 3a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.757-.703a.5.5 0 0 1-.278-.65"
                                                     stroke="currentColor" stroke-width="0.2" />
                                             </svg>
-                                            {{ "{:,.2f}".format(current_emission_data['treated_water']) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data['treated_water']) }} kg
                                         </span>
                                     </div>
                                     <div class="mt-3">
                                         <strong class="bot-card">Treated Water Records:</strong>
                                         <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                            {{ total_treated_water_records }}
+                                            {{ total_records['treated_water'] }}
                                         </span>
                                     </div>
                                 </div>
@@ -1805,13 +1826,13 @@
                                             </svg>
                                             {{ "{:,.2f}".format(current_emission_data['waste_segregated'])
                                             }}
-                                            Kg
+                                            kg
                                         </span>
                                     </div>
                                     <div class="mt-3">
                                         <strong class="bot-card">Waste Segregated Records:</strong>
                                         <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                            {{ total_waste_segregated_records }}
+                                            {{ total_records['waste_segregated'] }}
                                         </span>
                                     </div>
                                 </div>
@@ -1841,13 +1862,13 @@
                                             </svg>
                                             {{ "{:,.2f}".format(current_emission_data['waste_unsegregated'])
                                             }}
-                                            Kg
+                                            kg
                                         </span>
                                     </div>
                                     <div class="mt-3">
                                         <strong class="bot-card">Waste Unsegregated Records:</strong>
                                         <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                            {{ total_waste_unsegregated_records }}
+                                            {{ total_records['waste_unsegregated'] }}
                                         </span>
                                     </div>
                                 </div>
@@ -1873,13 +1894,13 @@
                                                 <path
                                                     d="M6.428 1.151C6.708.591 7.213 0 8 0s1.292.592 1.572 1.151C9.861 1.73 10 2.431 10 3v3.691l5.17 2.585a1.5 1.5 0 0 1 .83 1.342V12a.5.5 0 0 1-.582.493l-5.507-.918-.375 2.253 1.318 1.318A.5.5 0 0 1 10.5 16h-5a.5.5 0 0 1-.354-.854l1.319-1.318-.376-2.253-5.507.918A.5.5 0 0 1 0 12v-1.382a1.5 1.5 0 0 1 .83-1.342L6 6.691V3c0-.568.14-1.271.428-1.849m.894.448C7.111 2.02 7 2.569 7 3v4a.5.5 0 0 1-.276.447l-5.448 2.724a.5.5 0 0 0-.276.447v.792l5.418-.903a.5.5 0 0 1 .575.41l.5 3a.5.5 0 0 1-.14.437L6.708 15h2.586l-.647-.646a.5.5 0 0 1-.14-.436l.5-3a.5.5 0 0 1 .576-.411L15 11.41v-.792a.5.5 0 0 0-.276-.447L9.276 7.447A.5.5 0 0 1 9 7V3c0-.432-.11-.979-.322-1.401C8.458 1.159 8.213 1 8 1s-.458.158-.678.599" />
                                             </svg>
-                                            {{ "{:,.2f}".format(current_emission_data['flight']) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data['flight']) }} kg
                                         </span>
                                     </div>
                                     <div class="mt-3">
                                         <strong class="bot-card"> Accommodation Records:</strong>
                                         <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                            {{ total_accommodation_records }}
+                                            {{ total_records['flight'] }}
                                         </span>
                                     </div>
                                 </div>
@@ -1908,13 +1929,13 @@
                                                 <path
                                                     d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0" />
                                             </svg>
-                                            {{ "{:,.2f}".format(current_emission_data['accommodation']) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data['accommodation']) }} kg
                                         </span>
                                     </div>
                                     <div class="mt-3">
-                                        <strong class="bot-card"> Flight Records:</strong>
-                                        <span style="font-size: 1rem; font-weight: bold; color: rgb(255, 255, 255);">
-                                            {{ total_flight_records }}
+                                        <strong class="bot-card"> Accommodation Records:</strong>
+                                        <span style="font-size: 1rem; font-weight: bold; color: white;">
+                                            {{ total_records['accommodation'] }}
                                         </span>
                                     </div>
                                 </div>
@@ -1943,13 +1964,13 @@
                                                     d="m4.4.8-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 3.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 3.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 3 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 4.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 6.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 6.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 6 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 7.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.252.382l-.019.025-.005.008-.002.002A.5.5 0 0 1 9.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 9.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 9 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 10.4.8" />
                                             </svg>
 
-                                            {{ "{:,.2f}".format(current_emission_data['food_waste']) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data['food_waste']) }} kg
                                         </span>
                                     </div>
                                     <div class="mt-3">
                                         <strong class="bot-card"> Food Records:</strong>
-                                        <span style="font-size: 1rem; font-weight: bold; color: rgb(255, 255, 255)">
-                                            {{ total_food_records }}
+                                        <span style="font-size: 1rem; font-weight: bold; color: white;">
+                                            {{ total_records['food_waste'] }}
                                         </span>
                                     </div>
                                 </div>
@@ -2039,7 +2060,7 @@
                         link.classList.add("active");
                     }
                 });
-            });x
+            });
         </script>
         <script>
             document.addEventListener("DOMContentLoaded", function () {

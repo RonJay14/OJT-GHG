@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
+from flask_socketio import SocketIO
 import mysql.connector
 from mysql.connector import Error
 import numpy as np
@@ -18,8 +19,10 @@ from decimal import Decimal
 from reportlab.lib.pagesizes import landscape, A4
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle  # Add this line to import necessary classes
-
 app = Flask(__name__)
+
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = 'your_secret_key'  # Use a strong secret key in production!
 # Add these session configurations
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -59,8 +62,6 @@ def calculate_accommodation_emission(factor, occupied_rooms, nights_per_room):
 @app.route('/')
 def index():
     return render_template('homepage.html')  # Serve the homepage
-
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -182,6 +183,49 @@ def change_password():
 
     return render_template('change_password.html', alert_message=alert_message)
 
+'''@app.route('/log_activity', methods=['POST'])
+def log_activity():
+    if 'loggedIn' not in session:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    try:
+        # Get data from request
+        data = request.json
+        username = session.get('username')
+        campus = session.get('campus')
+        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
+        # Connect to database
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Insert into activity_log table
+        query = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name, timestamp) 
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        
+        cursor.execute(query, (
+            username,
+            campus,
+            data['action'],
+            data['report_type'],
+            current_time
+        ))
+        
+        conn.commit()
+        return jsonify({'success': True})
+        
+    except mysql.connector.Error as e:
+        print(f"Database error: {e}")
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+'''
 
 @app.route('/report', methods=['GET'])
 def report():
@@ -2360,9 +2404,9 @@ def csd_dashboard():
                     cursor.execute(query, (selected_campus, selected_year))
             total_records[category] = cursor.fetchone().get('total_records', 0)
 
-        # Debugging Output
-        print(f"Total Records: {total_records}")  # Check all total records
-
+        # ✅ DEBUG: Log the record totals passed to the template
+        print("DEBUG: Total Records ->", total_records)
+        
     except mysql.connector.Error as e:
         flash(f"Database Error: {e}", "danger")
     finally:
@@ -9064,36 +9108,52 @@ def external_dashboard():
         flash("You must be logged in to access this page.", "warning")
         return redirect(url_for('login'))
 
-    # Get the campus from the session
     campus = session.get('campus')
     if not campus:
         flash("Invalid session. Please log in again.", "danger")
         return redirect(url_for('login'))
 
-    # Define the current year and selected year
     current_year = datetime.now().year
-    selected_year = int(request.args.get('year', current_year))
+
+    # Fetch available years from DB
+    available_years = []
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT DISTINCT Year as year FROM tblflight 
+            UNION 
+            SELECT DISTINCT YearTransact as year FROM tblaccommodation 
+            ORDER BY year DESC
+        """)
+        available_years = [row[0] for row in cursor.fetchall()]
+    except mysql.connector.Error as e:
+        flash(f"Database error: {e}", "error")
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+    if not available_years:
+        available_years = [current_year]
+
+    selected_year = int(request.args.get('year', available_years[0]))
 
     # Initialize data structures
-    flight_data = [0] * 5  # Data for 2020-2024
-    accommodation_data = [0] * 5  # Data for 2020-2024
+    flight_data = [0] * 5  # Historical: 2020–2024
+    accommodation_data = [0] * 5
     current_emission_data = {"flight": 0, "accommodation": 0}
-    previous_emission_data = {"flight": 0, "accommodation": 0}  # Add previous emission data
-
-    # Initialize total records
+    previous_emission_data = {"flight": 0, "accommodation": 0}
     total_flight_records = 0
     total_accommodation_records = 0
 
     try:
-        # Establish database connection
         conn = get_db_connection()
-        if conn is None:
-            raise Exception("Could not establish database connection.")
-
         cursor = conn.cursor(dictionary=True)
 
-        # Queries for fetching current and previous year data
-        queries = [
+        # Historical data (2020–2024)
+        historical_queries = [
             (
                 "SELECT Year, SUM(GHGEmissionKGC02e) AS total_emission "
                 "FROM tblflight "
@@ -9106,14 +9166,13 @@ def external_dashboard():
                 "SELECT YearTransact AS Year, SUM(GHGEmissionKGC02e) AS total_emission "
                 "FROM tblaccommodation "
                 "WHERE Campus = %s AND YearTransact BETWEEN 2020 AND 2024 "
-                "GROUP BY YearTransact ORDER BY YearTransact ASC",
+                "GROUP BY YearTransact ORDER BY YearTransact",
                 accommodation_data,
                 "accommodation"
             )
         ]
 
-        # Execute queries and populate data
-        for query, data_list, category in queries:
+        for query, data_list, category in historical_queries:
             cursor.execute(query, (campus,))
             for row in cursor.fetchall():
                 year_index = row['Year'] - 2020
@@ -9121,38 +9180,55 @@ def external_dashboard():
                     emission_value = float(row['total_emission'])
                     data_list[year_index] = emission_value
                     current_emission_data[category] += emission_value
-                    if year_index < 4:  # Add previous year data (up to 2023)
+                    if year_index < 4:  # Up to 2023
                         previous_emission_data[category] += emission_value
 
-        # Count total records for flight
-        cursor.execute(
-            "SELECT COUNT(*) AS total_records FROM ghg_database.tblflight WHERE campus = %s;",
-            (campus,)
-        )
-        total_flight_records = cursor.fetchone().get('total_records', 0)
+        # Selected year totals
+        selected_year_queries = [
+            (
+                "SELECT Year, COALESCE(SUM(GHGEmissionKGC02e), 0) AS total_emission "
+                "FROM tblflight WHERE campus = %s AND Year = %s",
+                "flight"
+            ),
+            (
+                "SELECT YearTransact AS Year, COALESCE(SUM(GHGEmissionKGC02e), 0) AS total_emission "
+                "FROM tblaccommodation WHERE Campus = %s AND YearTransact = %s",
+                "accommodation"
+            )
+        ]
 
-        # Count total records for accommodation
+        for query, category in selected_year_queries:
+            cursor.execute(query, (campus, selected_year))
+            result = cursor.fetchone()
+            if result:
+                current_emission_data[category] = max(float(result['total_emission']), 0)
+
+        # Count records FOR SELECTED YEAR
         cursor.execute(
-            "SELECT COUNT(*) AS total_records FROM ghg_database.tblaccommodation WHERE campus = %s;",
-            (campus,)
+            "SELECT COUNT(*) AS total_records FROM tblflight WHERE campus = %s AND Year = %s",
+            (campus, selected_year)
         )
-        total_accommodation_records = cursor.fetchone().get('total_records', 0)
+        total_flight_records = cursor.fetchone()['total_records']
+
+        cursor.execute(
+            "SELECT COUNT(*) AS total_records FROM tblaccommodation WHERE campus = %s AND YearTransact = %s",
+            (campus, selected_year)
+        )
+        total_accommodation_records = cursor.fetchone()['total_records']
 
     except mysql.connector.Error as e:
         app.logger.error(f"Database error for campus {campus}: {e}")
         flash("There was a problem fetching the data. Please try again later.", "danger")
     finally:
-        # Close the database connection
-        if cursor:
+        if 'cursor' in locals():
             cursor.close()
-        if conn:
+        if 'conn' in locals():
             conn.close()
 
-    # Forecast function using Prophet, with one future year forecast
+    # Forecasting with Prophet
     def forecast_prophet(data, periods):
         if all(v == 0 for v in data):
             return [0] * periods, 0
-
         try:
             df = pd.DataFrame({'ds': pd.date_range(start='2020-01-01', periods=len(data), freq='Y'), 'y': data})
             df = df[df['y'] > 0]
@@ -9165,51 +9241,44 @@ def external_dashboard():
             flash(f"Forecast Error: {e}", "danger")
             return [0] * periods, 0
 
-    # Forecast data with R² scores, including one future year (2025)
-    forecast_periods = 6  # Forecast up to 2025 (5 historical + 1 future)
     forecast_data = {
         "flight_forecast": {
             "prophet": {
-                "forecast": forecast_prophet(flight_data, periods=forecast_periods)[0],
+                "forecast": forecast_prophet(flight_data, periods=6)[0],
                 "r2_score": forecast_prophet(flight_data, periods=5)[1],
             }
         },
         "accommodation_forecast": {
             "prophet": {
-                "forecast": forecast_prophet(accommodation_data, periods=forecast_periods)[0],
+                "forecast": forecast_prophet(accommodation_data, periods=6)[0],
                 "r2_score": forecast_prophet(accommodation_data, periods=5)[1],
             }
-        },
+        }
     }
 
-    # Emit real-time data for line graphs
+    # Emit real-time updates
     socketio.emit('update_emissions', {
         "flight": flight_data,
         "accommodation": accommodation_data
     })
-
-    # Emit forecast data for real-time updates
     socketio.emit('update_forecast', {
         "flight_forecast": forecast_data["flight_forecast"]["prophet"]["forecast"],
-        "accommodation_forecast": forecast_data["accommodation_forecast"]["prophet"]["forecast"],
+        "accommodation_forecast": forecast_data["accommodation_forecast"]["prophet"]["forecast"]
     })
-
-    # Print R² scores for validation
-    for key, value in forecast_data.items():
-        print(f"{key.replace('_forecast', '').title()} Prophet R² Score:", value["prophet"]["r2_score"])
 
     return render_template(
         'external_dashboard.html',
         campus=campus,
+        available_years=available_years,  # Now passed to template
+        selected_year=selected_year,
+        current_year=current_year,
         flight_data=flight_data,
         accommodation_data=accommodation_data,
         forecast_data=forecast_data,
         current_emission_data=current_emission_data,
-        previous_emission_data=previous_emission_data,  # Include previous emission data
-        selected_year=selected_year,
-        current_year=current_year,
-        total_flight_records=total_flight_records,          # Total flight records
-        total_accommodation_records=total_accommodation_records  # Total accommodation records
+        previous_emission_data=previous_emission_data,
+        total_flight_records=total_flight_records,
+        total_accommodation_records=total_accommodation_records
     )
 
 
@@ -9898,7 +9967,6 @@ def delete_accommodation(id):
     
 
 
-# Procurement dashboard route
 @app.route('/procurement_dashboard', methods=['GET', 'POST'])
 def procurement_dashboard():
     # Ensure the user is logged in and session contains campus
@@ -9985,17 +10053,17 @@ def procurement_dashboard():
                 if emission_value is not None:
                     data_totals[category] += float(emission_value)
 
-        # Count total records for food waste
+        # Count total records for food waste for selected year
         cursor.execute(
-            "SELECT COUNT(*) AS total_records FROM ghg_database.tblfoodwaste WHERE campus = %s;",
-            (campus,)
+            "SELECT COUNT(*) AS total_records FROM ghg_database.tblfoodwaste WHERE campus = %s AND YearTransaction = %s;",
+            (campus, selected_year)
         )
         total_food_waste_records = cursor.fetchone().get('total_records', 0)
 
-        # Count total records for LPG
+        # Count total records for LPG for selected year
         cursor.execute(
-            "SELECT COUNT(*) AS total_records FROM ghg_database.tbllpg WHERE campus = %s;",
-            (campus,)
+            "SELECT COUNT(*) AS total_records FROM ghg_database.tbllpg WHERE campus = %s AND YearTransact = %s;",
+            (campus, selected_year)
         )
         total_lpg_records = cursor.fetchone().get('total_records', 0)
 
@@ -10022,17 +10090,14 @@ def procurement_dashboard():
         food_waste_data=food_waste_data,
         lpg_data=lpg_data,
         current_emission_data=current_emission_data,
-        previous_emission_data=previous_emission_data,  # Include previous data
+        previous_emission_data=previous_emission_data,
         selected_year=selected_year,
         current_year=current_year,
         campus=campus,
         labels=labels,
-        total_food_waste_records=total_food_waste_records,  # Total food waste records
-        total_lpg_records=total_lpg_records                 # Total LPG records
+        total_food_waste_records=total_food_waste_records,
+        total_lpg_records=total_lpg_records
     )
-
-
-
 
 @app.route('/poanalytics', methods=['GET'])
 def poanalytics():

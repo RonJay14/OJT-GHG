@@ -320,7 +320,7 @@
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark"
-        style="padding-left: 45px; height: 80px; padding-bottom: 15px; padding-top: 10px;">
+        style="padding-left: 45px; height: 80px; padding-bottom: 20px; padding-top: 20px;">
         <!-- Campus Logo -->
         <img src="{{ url_for('static', filename='images/campuses/' + session['campus']|lower + '.png') }}"
             alt="Campus Logo" height="75" class="me-2">
@@ -849,13 +849,37 @@
                             <div class="cardt emi bg-dark text-white h-100">
                                 <div class="card-bodyt">
                                     <div class="card-title">Total Emission</div>
-                                    <div>
-                                        <strong>Total CO₂ Emission:</strong>
-                                        <span style="font-size: 1.5em; font-weight: bold; color: white;">
-                                            {{ "{:,.2f}".format(current_emission_data['electricity'] +
-                                            current_emission_data['fuel'] + current_emission_data['waste_segregated'] +
-                                            current_emission_data['waste_unsegregated'] + current_emission_data['water']
-                                            + current_emission_data['treated_water']) }} Kg </span>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <strong>Total CO₂ Emission:</strong>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-4">
+                                                    <span style="font-size: 1.5em; font-weight: bold; color: white;">
+                                                        {{ "{:,.2f}".format(current_emission_data['electricity'] +
+                                                        current_emission_data['fuel'] +
+                                                        current_emission_data['waste_segregated'] +
+                                                        current_emission_data['waste_unsegregated'] +
+                                                        current_emission_data['water']
+                                                        + current_emission_data['treated_water']) }} kg
+                                                    </span>
+                                                </div>
+                                                <div class="ms-4 ps-4"
+                                                    style="border-left: 2px solid rgba(255,255,255,0.2);">
+                                                    <strong style="color: rgb(255, 255, 255);">Equivalent to</strong>
+                                                    <span
+                                                        style="font-size: 1.5em; font-weight: bold; color: white; display: block;">
+                                                        {{ "{:,.2f}".format((current_emission_data['electricity'] +
+                                                        current_emission_data['fuel'] +
+                                                        current_emission_data['waste_segregated'] +
+                                                        current_emission_data['waste_unsegregated'] +
+                                                        current_emission_data['water']
+                                                        + current_emission_data['treated_water']) / 1000) }} tons
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1037,7 +1061,7 @@
                                                                 d="M32 64C32 28.7 60.7 0 96 0L256 0c35.3 0 64 28.7 64 64l0 192 8 0c48.6 0 88 39.4 88 88l0 32c0 13.3 10.7 24 24 24s24-10.7 24-24l0-154c-27.6-7.1-48-32.2-48-62l0-64L384 64c-8.8-8.8-8.8-23.2 0-32s23.2-8.8 32 0l77.3 77.3c12 12 18.7 28.3 18.7 45.3l0 13.5 0 24 0 32 0 152c0 39.8-32.2 72-72 72s-72-32.2-72-72l0-32c0-22.1-17.9-40-40-40l-8 0 0 144c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 512c-17.7 0-32-14.3-32-32s14.3-32 32-32L32 64zM96 80l0 96c0 8.8 7.2 16 16 16l128 0c8.8 0 16-7.2 16-16l0-96c0-8.8-7.2-16-16-16L112 64c-8.8 0-16 7.2-16 16z"
                                                                 stroke="currentColor" stroke-width="1.5" />
                                                         </svg>
-                                                        {{ "{:,.2f}".format(current_emission_data.fuel) }} Kg
+                                                        {{ "{:,.2f}".format(current_emission_data.fuel) }} kg
                                                     </span>
                                                 </div>
                                                 <div class="mt-3    ">
@@ -1101,7 +1125,7 @@
                                                                 d="M4.819 2A2.5 2.5 0 0 0 2.52 3.515l-.792 1.848a.8.8 0 0 1-.38.404c-.5.25-.855.715-.965 1.262L.05 8.708a2.5 2.5 0 0 0-.049.49v.413c0 .814.39 1.543 1 1.997V13.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1.338c1.292.048 2.745.088 4 .088s2.708-.04 4-.088V13.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1.892c.61-.454 1-1.183 1-1.997v-.413q0-.248-.049-.49l-.335-1.68a1.8 1.8 0 0 0-.964-1.261.8.8 0 0 1-.381-.404l-.792-1.848A2.5 2.5 0 0 0 11.181 2H4.82ZM3.44 3.91A1.5 1.5 0 0 1 4.82 3h6.362a1.5 1.5 0 0 1 1.379.91l.792 1.847a1.8 1.8 0 0 0 .853.904c.222.112.381.32.43.564l.336 1.679q.03.146.029.294v.413a1.48 1.48 0 0 1-1.408 1.484c-1.555.07-3.786.155-5.592.155s-4.037-.084-5.592-.155A1.48 1.48 0 0 1 1 9.611v-.413q0-.148.03-.294l.335-1.68a.8.8 0 0 1 .43-.563c.383-.19.685-.511.853-.904z"
                                                                 stroke="currentColor" stroke-width="1.5" />
                                                         </svg>
-                                                        {{ "{:,.2f}".format(current_emission_data.electricity) }} Kg
+                                                        {{ "{:,.2f}".format(current_emission_data.electricity) }} kg
                                                     </span>
                                                 </div>
 
@@ -1181,7 +1205,7 @@
                                                                 d="M4.553 7.776c.82-1.641 1.717-2.753 2.093-3.13l.708.708c-.29.29-1.128 1.311-1.907 2.87z"
                                                                 stroke="currentColor" stroke-width="1.5" />
                                                         </svg>
-                                                        {{ "{:,.2f}".format(current_emission_data.water) }} Kg
+                                                        {{ "{:,.2f}".format(current_emission_data.water) }} kg
                                                     </span>
                                                 </div>
                                                 <div class="mt-3">
@@ -1218,7 +1242,7 @@
                                                                 d="M.036 3.314a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0L.314 3.964a.5.5 0 0 1-.278-.65m0 3a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.757-.703a.5.5 0 0 1-.278-.65"
                                                                 stroke="currentColor" stroke-width="0.2" />
                                                         </svg>
-                                                        {{ "{:,.2f}".format(current_emission_data.treated_water) }} Kg
+                                                        {{ "{:,.2f}".format(current_emission_data.treated_water) }} kg
                                                     </span>
                                                 </div>
                                                 <div class="mt-3">
@@ -1253,7 +1277,7 @@
                                                                 d="M9.302 1.256a1.5 1.5 0 0 0-2.604 0l-1.704 2.98a.5.5 0 0 0 .869.497l1.703-2.981a.5.5 0 0 1 .868 0l2.54 4.444-1.256-.337a.5.5 0 1 0-.26.966l2.415.647a.5.5 0 0 0 .613-.353l.647-2.415a.5.5 0 1 0-.966-.259l-.333 1.242zM2.973 7.773l-1.255.337a.5.5 0 1 1-.26-.966l2.416-.647a.5.5 0 0 1 .612.353l.647 2.415a.5.5 0 0 1-.966.259l-.333-1.242-2.545 4.454a.5.5 0 0 0 .434.748H5a.5.5 0 0 1 0 1H1.723A1.5 1.5 0 0 1 .421 12.24zm10.89 1.463a.5.5 0 1 0-.868.496l1.716 3.004a.5.5 0 0 1-.434.748h-5.57l.647-.646a.5.5 0 1 0-.708-.707l-1.5 1.5a.5.5 0 0 0 0 .707l1.5 1.5a.5.5 0 1 0 .708-.707l-.647-.647h5.57a1.5 1.5 0 0 0 1.302-2.244z" />
                                                         </svg>
                                                         {{ "{:,.2f}".format(current_emission_data.waste_segregated) }}
-                                                        Kg
+                                                        kg
 
                                                     </span>
                                                 </div>
@@ -1291,7 +1315,7 @@
                                                                 d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
                                                         </svg>
                                                         {{ "{:,.2f}".format(current_emission_data.waste_unsegregated) }}
-                                                        Kg
+                                                        kg
 
                                                     </span>
                                                 </div>
@@ -1396,7 +1420,7 @@
                                                     d="M32 64C32 28.7 60.7 0 96 0L256 0c35.3 0 64 28.7 64 64l0 192 8 0c48.6 0 88 39.4 88 88l0 32c0 13.3 10.7 24 24 24s24-10.7 24-24l0-154c-27.6-7.1-48-32.2-48-62l0-64L384 64c-8.8-8.8-8.8-23.2 0-32s23.2-8.8 32 0l77.3 77.3c12 12 18.7 28.3 18.7 45.3l0 13.5 0 24 0 32 0 152c0 39.8-32.2 72-72 72s-72-32.2-72-72l0-32c0-22.1-17.9-40-40-40l-8 0 0 144c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 512c-17.7 0-32-14.3-32-32s14.3-32 32-32L32 64zM96 80l0 96c0 8.8 7.2 16 16 16l128 0c8.8 0 16-7.2 16-16l0-96c0-8.8-7.2-16-16-16L112 64c-8.8 0-16 7.2-16 16z"
                                                     stroke="currentColor" stroke-width="1.5" />
                                             </svg>
-                                            {{ "{:,.2f}".format(current_emission_data.fuel) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data.fuel) }} kg
                                         </span>
                                     </div>
                                     <div class="mt-3    ">
@@ -1435,7 +1459,7 @@
                                                     d="M4.819 2A2.5 2.5 0 0 0 2.52 3.515l-.792 1.848a.8.8 0 0 1-.38.404c-.5.25-.855.715-.965 1.262L.05 8.708a2.5 2.5 0 0 0-.049.49v.413c0 .814.39 1.543 1 1.997V13.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1.338c1.292.048 2.745.088 4 .088s2.708-.04 4-.088V13.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1.892c.61-.454 1-1.183 1-1.997v-.413q0-.248-.049-.49l-.335-1.68a1.8 1.8 0 0 0-.964-1.261.8.8 0 0 1-.381-.404l-.792-1.848A2.5 2.5 0 0 0 11.181 2H4.82ZM3.44 3.91A1.5 1.5 0 0 1 4.82 3h6.362a1.5 1.5 0 0 1 1.379.91l.792 1.847a1.8 1.8 0 0 0 .853.904c.222.112.381.32.43.564l.336 1.679q.03.146.029.294v.413a1.48 1.48 0 0 1-1.408 1.484c-1.555.07-3.786.155-5.592.155s-4.037-.084-5.592-.155A1.48 1.48 0 0 1 1 9.611v-.413q0-.148.03-.294l.335-1.68a.8.8 0 0 1 .43-.563c.383-.19.685-.511.853-.904z"
                                                     stroke="currentColor" stroke-width="1.5" />
                                             </svg>
-                                            {{ "{:,.2f}".format(current_emission_data.electricity) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data.electricity) }} kg
                                         </span>
                                     </div>
 
@@ -1476,7 +1500,7 @@
                                                     d="M4.553 7.776c.82-1.641 1.717-2.753 2.093-3.13l.708.708c-.29.29-1.128 1.311-1.907 2.87z"
                                                     stroke="currentColor" stroke-width="1.5" />
                                             </svg>
-                                            {{ "{:,.2f}".format(current_emission_data.water) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data.water) }} kg
                                         </span>
                                     </div>
                                     <div class="mt-3">
@@ -1511,7 +1535,7 @@
                                                     d="M.036 3.314a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0L.314 3.964a.5.5 0 0 1-.278-.65m0 3a.5.5 0 0 1 .65-.278l1.757.703a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.014-.406a2.5 2.5 0 0 1 1.857 0l1.015.406a1.5 1.5 0 0 0 1.114 0l1.757-.703a.5.5 0 1 1 .372.928l-1.758.703a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.014-.406a1.5 1.5 0 0 0-1.114 0l-1.015.406a2.5 2.5 0 0 1-1.857 0l-1.757-.703a.5.5 0 0 1-.278-.65"
                                                     stroke="currentColor" stroke-width="0.2" />
                                             </svg>
-                                            {{ "{:,.2f}".format(current_emission_data.treated_water) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data.treated_water) }} kg
                                         </span>
                                     </div>
                                     <div class="mt-3">
@@ -1543,7 +1567,7 @@
                                                 <path
                                                     d="M9.302 1.256a1.5 1.5 0 0 0-2.604 0l-1.704 2.98a.5.5 0 0 0 .869.497l1.703-2.981a.5.5 0 0 1 .868 0l2.54 4.444-1.256-.337a.5.5 0 1 0-.26.966l2.415.647a.5.5 0 0 0 .613-.353l.647-2.415a.5.5 0 1 0-.966-.259l-.333 1.242zM2.973 7.773l-1.255.337a.5.5 0 1 1-.26-.966l2.416-.647a.5.5 0 0 1 .612.353l.647 2.415a.5.5 0 0 1-.966.259l-.333-1.242-2.545 4.454a.5.5 0 0 0 .434.748H5a.5.5 0 0 1 0 1H1.723A1.5 1.5 0 0 1 .421 12.24zm10.89 1.463a.5.5 0 1 0-.868.496l1.716 3.004a.5.5 0 0 1-.434.748h-5.57l.647-.646a.5.5 0 1 0-.708-.707l-1.5 1.5a.5.5 0 0 0 0 .707l1.5 1.5a.5.5 0 1 0 .708-.707l-.647-.647h5.57a1.5 1.5 0 0 0 1.302-2.244z" />
                                             </svg>
-                                            {{ "{:,.2f}".format(current_emission_data.waste_segregated) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data.waste_segregated) }} kg
 
                                         </span>
                                     </div>
@@ -1579,7 +1603,7 @@
                                                 <path
                                                     d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
                                             </svg>
-                                            {{ "{:,.2f}".format(current_emission_data.waste_unsegregated) }} Kg
+                                            {{ "{:,.2f}".format(current_emission_data.waste_unsegregated) }} kg
 
                                         </span>
                                     </div>
