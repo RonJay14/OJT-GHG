@@ -15,6 +15,8 @@
     <!-- ✅ Custom CSS -->
     <link href="{{ url_for('static', filename='css/emucss.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/reports.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         .modal {
@@ -44,8 +46,15 @@
         }
 
         @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .close {
@@ -298,22 +307,32 @@
                                 <!-- Download Report Button -->
                                 <div class="download-category row">
                                     <div class="dropdown col-sm">
-                                        <button class="btn dropdown-toggle px-4 py-2" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-color: #2c3f54;">
+                                        <button class="btn dropdown-toggle px-4 py-2" type="button" id="actionDropdown"
+                                            data-bs-toggle="dropdown" aria-expanded="false"
+                                            style="border-color: #2c3f54;">
                                             <i class="fas fa-ellipsis-h"></i> Actions
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="actionDropdown">
-                                            <li><a class="dropdown-item" href="#" onclick="openCalculatorModal(); return false;">Calculate</a></li>
-                                            <li><a class="dropdown-item" href="#" onclick="printFlightReport(); return false;">Print Report</a></li>
+                                            <li><a class="dropdown-item" href="#"
+                                                    onclick="openCalculatorModal(); return false;">Calculate</a></li>
+                                            <li><a class="dropdown-item" href="#"
+                                                    onclick="printFlightReport(); return false;">Print Report</a></li>
                                         </ul>
                                     </div>
                                     <div class="dropdown col-sm">
-                                        <button class="btn dropdown-toggle px-4 py-2" type="button" id="downloadDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-color: #2c3f54;">
+                                        <button class="btn dropdown-toggle px-4 py-2" type="button"
+                                            id="downloadDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                            style="border-color: #2c3f54;">
                                             <i class="fas fa-download"></i> Downloads
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#" onclick="downloadFlightPDF()"><i class="far fa-file-pdf"></i> Download PDF</a></li>
-                                            <li><a class="dropdown-item" href="#" onclick="downloadFlightExcel()"><i class="far fa-file-excel"></i> Download Excel</a></li>
-                                            <li><a class="dropdown-item" href="#" onclick="downloadFlightEmissionsCSV()"><i class="far fa-file-csv"></i> Download CSV</a></li>
+                                            <li><a class="dropdown-item" href="#" onclick="downloadFlightPDF()"><i
+                                                        class="far fa-file-pdf"></i> Download PDF</a></li>
+                                            <li><a class="dropdown-item" href="#" onclick="downloadFlightExcel()"><i
+                                                        class="far fa-file-excel"></i> Download Excel</a></li>
+                                            <li><a class="dropdown-item" href="#"
+                                                    onclick="downloadFlightEmissionsCSV()"><i
+                                                        class="far fa-file-csv"></i> Download CSV</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -351,6 +370,7 @@
                                                     <th>One Way/Round Trip</th>
                                                     <th>kg CO₂e</th>
                                                     <th>t CO₂e</th>
+                                                    <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -368,7 +388,231 @@
                                                     <td>{{ flight.OnewayRoundTrip }}</td>
                                                     <td>{{ flight.GHGEmissionKGC02e }}</td>
                                                     <td>{{ flight.GHGEmissionTC02e }}</td>
+                                                    <td>
+                                                        <div class="d-flex gap-2 justify-content-center">
+                                                            <button type="button" 
+                                                                    class="btn btn-link p-0" 
+                                                                    data-bs-toggle="modal" 
+                                                                    data-bs-target="#editModal{{ flight['ID'] }}">
+                                                                <i class="fas fa-edit text-primary"></i>
+                                                            </button>
+                                                            
+                                                            <form class="delete-form d-inline m-0" data-id="{{ flight['ID'] }}">
+                                                                <button type="submit" class="btn btn-link p-0">
+                                                                    <i class="fas fa-trash text-danger"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                    
+                                                    <!-- Add this CSS to your <style> section -->
+                                                    <style>
+                                                        .btn-link {
+                                                            text-decoration: none;
+                                                            border: none;
+                                                            background: transparent;
+                                                        }
+                                                        
+                                                        .btn-link:hover {
+                                                            opacity: 0.8;
+                                                        }
+                                                        
+                                                        .btn-link:focus {
+                                                            box-shadow: none;
+                                                        }
+                                                        
+                                                        .fa-edit {
+                                                            font-size: 1rem;
+                                                        }
+                                                        
+                                                        .fa-trash {
+                                                            font-size: 1rem;
+                                                        }
+                                                        
+                                                        .gap-2 {
+                                                            gap: 0.75rem !important;
+                                                        }
+                                                    </style>
                                                 </tr>
+                                                <!-- Edit Modal -->
+                                                <div class="modal fade" id="editModal{{ flight['ID'] }}" tabindex="-1">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h2 class="modal-title">Edit Flight Record</h2>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form
+                                                                    action="{{ url_for('edit_emission_flight_record', id=flight['ID']) }}"
+                                                                    method="POST" class="edit-flight-form">
+                                                                    <!-- Campus (readonly) -->
+                                                                    <div class="form-group">
+                                                                        <label for="campus">Campus:</label>
+                                                                        <input type="text" id="campus" name="campus"
+                                                                            class="form-control"
+                                                                            value="{{ flight['Campus'] }}" readonly>
+                                                                    </div>
+
+                                                                    <!-- Office -->
+                                                                    <div class="form-group">
+                                                                        <label for="office">Office:</label>
+                                                                        <select id="office" name="office" required
+                                                                            class="form-control">
+                                                                            {% for office in ["Procurement", "Auxiliary
+                                                                            Services",
+                                                                            "RGO", "IAU", "QAM", "SDO", "PDO", "EA",
+                                                                            "ICT", "CAS",
+                                                                            "CABE", "CICS", "CET", "CTE", "CE", "CA"] %}
+                                                                            <option value="{{ office }}" {% if
+                                                                                flight['Office']==office %}selected{%
+                                                                                endif %}>{{
+                                                                                office }}</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <!-- Year -->
+                                                                    <div class="form-group">
+                                                                        <label for="year">Year:</label>
+                                                                        <select id="year" name="year" required
+                                                                            class="form-control">
+                                                                            {% for y in range(2025, 2013, -1) %}
+                                                                            <option value="{{ y }}" {% if
+                                                                                flight['Year']==y %}selected{% endif %}>
+                                                                                {{ y }}</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <!-- Traveller Name -->
+                                                                    <div class="form-group">
+                                                                        <label for="travellerName">Traveller
+                                                                            Name:</label>
+                                                                        <input type="text" id="travellerName"
+                                                                            name="travellerName" required
+                                                                            class="form-control"
+                                                                            value="{{ flight['TravellerName'] }}">
+                                                                    </div>
+
+                                                                    <!-- Travel Purpose -->
+                                                                    <div class="form-group">
+                                                                        <label for="travelPurpose">Travel
+                                                                            Purpose:</label>
+                                                                        <input type="text" id="travelPurpose"
+                                                                            name="travelPurpose" required
+                                                                            class="form-control"
+                                                                            value="{{ flight['TravelPurpose'] }}">
+                                                                    </div>
+
+                                                                    <!-- Travel Date -->
+                                                                    <div class="form-group">
+                                                                        <label for="travelDate">Travel Date:</label>
+                                                                        <input type="date" id="travelDate"
+                                                                            name="travelDate" required
+                                                                            class="form-control"
+                                                                            value="{{ flight['TravelDate'] }}">
+                                                                    </div>
+
+                                                                    <!-- Flight Type -->
+                                                                    <div class="form-group">
+                                                                        <label for="domesticInternational">Flight
+                                                                            Type:</label>
+                                                                        <select id="domesticInternational"
+                                                                            name="domesticInternational" required
+                                                                            class="form-control"
+                                                                            onchange="calculateFlightEmissions({{ flight['ID'] }})">
+                                                                            <option value="Domestic" {% if
+                                                                                flight['DomesticInternational']=='Domestic'
+                                                                                %}selected{% endif %}>Domestic</option>
+                                                                            <option value="International" {% if
+                                                                                flight['DomesticInternational']=='International'
+                                                                                %}selected{% endif %}>International
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <!-- Origin -->
+                                                                    <div class="form-group">
+                                                                        <label for="origin">Origin:</label>
+                                                                        <input type="text" id="origin" name="origin"
+                                                                            required class="form-control"
+                                                                            value="{{ flight['Origin'] }}">
+                                                                    </div>
+
+                                                                    <!-- Destination -->
+                                                                    <div class="form-group">
+                                                                        <label for="destination">Destination:</label>
+                                                                        <input type="text" id="destination"
+                                                                            name="destination" required
+                                                                            class="form-control"
+                                                                            value="{{ flight['Destination'] }}">
+                                                                    </div>
+
+                                                                    <!-- Class -->
+                                                                    <div class="form-group">
+                                                                        <label for="class">Class:</label>
+                                                                        <select id="class" name="class" required
+                                                                            class="form-control"
+                                                                            onchange="calculateFlightEmissions({{ flight['ID'] }})">
+                                                                            <option value="Economy" {% if
+                                                                                flight['Class']=='Economy' %}selected{%
+                                                                                endif %}>Economy</option>
+                                                                            <option value="Business Class" {% if
+                                                                                flight['Class']=='Business Class'
+                                                                                %}selected{% endif %}>Business Class
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <!-- Trip Type -->
+                                                                    <div class="form-group">
+                                                                        <label for="onewayRoundTrip">Trip Type:</label>
+                                                                        <select id="onewayRoundTrip"
+                                                                            name="onewayRoundTrip" required
+                                                                            class="form-control"
+                                                                            onchange="calculateFlightEmissions({{ flight['ID'] }})">
+                                                                            <option value="One Way" {% if
+                                                                                flight['OnewayRoundTrip']=='One Way'
+                                                                                %}selected{% endif %}>One Way</option>
+                                                                            <option value="Round Trip" {% if
+                                                                                flight['OnewayRoundTrip']=='Round Trip'
+                                                                                %}selected{% endif %}>Round Trip
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <!-- Emissions -->
+                                                                    <div class="ghg-emission-container">
+                                                                        <div class="ghg-emission-field">
+                                                                            <label>GHG Emission (KG CO₂e):</label>
+                                                                            <input type="number" id="ghgEmissionKGC02e"
+                                                                                name="ghgEmissionKGC02e" readonly
+                                                                                class="form-control"
+                                                                                value="{{ flight['GHGEmissionKGC02e'] }}">
+                                                                        </div>
+                                                                        <div class="ghg-emission-field">
+                                                                            <label>GHG Emission (T CO₂e):</label>
+                                                                            <input type="number" id="ghgEmissionTC02e"
+                                                                                name="ghgEmissionTC02e" readonly
+                                                                                class="form-control"
+                                                                                value="{{ flight['GHGEmissionTC02e'] }}">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Close</button>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Save
+                                                                            Changes</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 {% endfor %}
                                             </tbody>
                                         </table>
@@ -431,11 +675,12 @@
                             <!-- ------------------------------------------------------------------------------------------------------ -->
                         </div>
                         <!-- Pagination -->
+                        <!-- Replace your existing pagination div with this -->
                         <div style="z-index: 4; position: relative;"
                             class="pagination-container d-flex justify-content-between align-items-center">
                             <!-- Previous Button -->
                             <a class="btn btn-dark {% if current_page == 1 %}disabled{% endif %}"
-                                href="{{ url_for('flight_emissions_report', page=current_page - 1, campus=request.args.get('campus'), category=request.args.get('category'), month=request.args.get('month'), quarter=request.args.get('quarter'), year=request.args.get('year')) }}">
+                                href="{{ url_for('flight_page_emissions_report', page=current_page - 1) if current_page > 1 else '#' }}">
                                 &lsaquo; Previous
                             </a>
 
@@ -446,7 +691,7 @@
 
                             <!-- Next Button -->
                             <a class="btn btn-dark {% if current_page == total_pages %}disabled{% endif %}"
-                                href="{{ url_for('flight_emissions_report', page=current_page + 1, campus=request.args.get('campus'), category=request.args.get('category'), month=request.args.get('month'), quarter=request.args.get('quarter'), year=request.args.get('year')) }}">
+                                href="{{ url_for('flight_page_emissions_report', page=current_page + 1) if current_page < total_pages else '#' }}">
                                 Next &rsaquo;
                             </a>
                         </div>
@@ -461,7 +706,7 @@
         </div>
     </div>
     <script>
-                function printFlightReport() {
+        function printFlightReport() {
             const urlParams = new URLSearchParams(window.location.search);
             const queryString = urlParams.toString();
 
@@ -707,7 +952,7 @@
         }
 
         // Close modal when clicking outside of it
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             var modal = document.getElementById('myModal');
             if (event.target == modal) {
                 modal.style.display = "none";
@@ -715,20 +960,20 @@
         }
 
         // Prevent campus selection from being changed
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const campusElement = document.getElementById("campus");
             if (campusElement) {
-                campusElement.addEventListener("mousedown", function(event) {
+                campusElement.addEventListener("mousedown", function (event) {
                     event.preventDefault();
                 });
             }
         });
 
         // Auto-calculate GHG emissions when form fields change
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('flightForm');
             const fields = ['domesticInternational', 'class', 'onewayRoundTrip'];
-            
+
             fields.forEach(field => {
                 const element = document.getElementById(field);
                 if (element) {
@@ -741,30 +986,30 @@
             const domesticInternational = document.getElementById('domesticInternational').value;
             const travelClass = document.getElementById('class').value;
             const tripType = document.getElementById('onewayRoundTrip').value;
-            
+
             let factor = 0;
-            
+
             // Set emission factors based on flight type and class
             if (domesticInternational === 'Domestic') {
                 factor = travelClass === 'Economy' ? 0.1597 : 0.2395;
             } else if (domesticInternational === 'International') {
                 factor = travelClass === 'Economy' ? 0.139 : 0.4026;
             }
-            
+
             // Double the factor for round trips
             if (tripType === 'Round Trip') {
                 factor *= 2;
             }
-            
+
             // Calculate emissions
             const kgCO2e = factor * 1000; // Convert to kg
             const tCO2e = factor;
-            
+
             // Update form fields
             document.getElementById('ghgEmissionKGC02e').value = kgCO2e.toFixed(4);
             document.getElementById('ghgEmissionTC02e').value = tCO2e.toFixed(4);
         }
-        
+
     </script>
     <!-- Add Calculator Modal -->
     <div id="myModal" class="modal" style="display: none; z-index: 5;">
@@ -778,18 +1023,30 @@
                             <label for="campus">Campus:</label>
                             <select id="campus" name="campus" class="form-control">
                                 <option value="" {% if not session.get('campus') %}selected{% endif %}></option>
-                                <option value="Alangilan" {% if session.get('campus')=='Alangilan' %}selected{% endif %}>Alangilan</option>
-                                <option value="ARASOF-Nasugbu" {% if session.get('campus')=='ARASOF-Nasugbu' %}selected{% endif %}>ARASOF-Nasugbu</option>
-                                <option value="Balayan" {% if session.get('campus')=='Balayan' %}selected{% endif %}>Balayan</option>
-                                <option value="Central" {% if session.get('campus')=='Central' %}selected{% endif %}>Central</option>
-                                <option value="JPLPC-Malvar" {% if session.get('campus')=='JPLPC-Malvar' %}selected{% endif %}>JPLPC-Malvar</option>
-                                <option value="Lemery" {% if session.get('campus')=='Lemery' %}selected{% endif %}>Lemery</option>
-                                <option value="Lipa" {% if session.get('campus')=='Lipa' %}selected{% endif %}>Lipa</option>
-                                <option value="Lobo" {% if session.get('campus')=='Lobo' %}selected{% endif %}>Lobo</option>
-                                <option value="Mabini" {% if session.get('campus')=='Mabini' %}selected{% endif %}>Mabini</option>
-                                <option value="Pablo Borbon" {% if session.get('campus')=='Pablo Borbon' %}selected{% endif %}>Pablo Borbon</option>
-                                <option value="Rosario" {% if session.get('campus')=='Rosario' %}selected{% endif %}>Rosario</option>
-                                <option value="San Juan" {% if session.get('campus')=='San Juan' %}selected{% endif %}>San Juan</option>
+                                <option value="Alangilan" {% if session.get('campus')=='Alangilan' %}selected{% endif
+                                    %}>Alangilan</option>
+                                <option value="ARASOF-Nasugbu" {% if session.get('campus')=='ARASOF-Nasugbu'
+                                    %}selected{% endif %}>ARASOF-Nasugbu</option>
+                                <option value="Balayan" {% if session.get('campus')=='Balayan' %}selected{% endif %}>
+                                    Balayan</option>
+                                <option value="Central" {% if session.get('campus')=='Central' %}selected{% endif %}>
+                                    Central</option>
+                                <option value="JPLPC-Malvar" {% if session.get('campus')=='JPLPC-Malvar' %}selected{%
+                                    endif %}>JPLPC-Malvar</option>
+                                <option value="Lemery" {% if session.get('campus')=='Lemery' %}selected{% endif %}>
+                                    Lemery</option>
+                                <option value="Lipa" {% if session.get('campus')=='Lipa' %}selected{% endif %}>Lipa
+                                </option>
+                                <option value="Lobo" {% if session.get('campus')=='Lobo' %}selected{% endif %}>Lobo
+                                </option>
+                                <option value="Mabini" {% if session.get('campus')=='Mabini' %}selected{% endif %}>
+                                    Mabini</option>
+                                <option value="Pablo Borbon" {% if session.get('campus')=='Pablo Borbon' %}selected{%
+                                    endif %}>Pablo Borbon</option>
+                                <option value="Rosario" {% if session.get('campus')=='Rosario' %}selected{% endif %}>
+                                    Rosario</option>
+                                <option value="San Juan" {% if session.get('campus')=='San Juan' %}selected{% endif %}>
+                                    San Juan</option>
                             </select>
                         </div>
 
@@ -874,7 +1131,8 @@
 
                         <div class="form-group">
                             <label for="domesticInternational">Domestic/International:</label>
-                            <select id="domesticInternational" name="domesticInternational" required class="form-control">
+                            <select id="domesticInternational" name="domesticInternational" required
+                                class="form-control">
                                 <option value=""></option>
                                 <option value="Domestic">Domestic</option>
                                 <option value="International">International</option>
@@ -911,11 +1169,13 @@
 
                         <div class="form-group">
                             <label for="ghgEmissionKGC02e">kg CO₂e:</label>
-                            <input type="text" id="ghgEmissionKGC02e" name="ghgEmissionKGC02e" required class="form-control">
+                            <input type="text" id="ghgEmissionKGC02e" name="ghgEmissionKGC02e" required
+                                class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="ghgEmissionTC02e">t CO₂e:</label>
-                            <input type="text" id="ghgEmissionTC02e" name="ghgEmissionTC02e" required class="form-control">
+                            <input type="text" id="ghgEmissionTC02e" name="ghgEmissionTC02e" required
+                                class="form-control">
                         </div>
 
                         <div class="form-group">
@@ -926,6 +1186,161 @@
             </div>
         </div>
     </div>
+    <script>
+        // Function to calculate flight emissions
+        function calculateFlightEmissions(modalId) {
+            const modal = document.getElementById(`editModal${modalId}`);
+            if (!modal) return;
+
+            const flightType = modal.querySelector('#domesticInternational').value;
+            const flightClass = modal.querySelector('#class').value;
+            const tripType = modal.querySelector('#onewayRoundTrip').value;
+
+            let factor = 0;
+
+            // Set emission factors based on flight type and class
+            if (flightType === 'Domestic') {
+                factor = flightClass === 'Economy' ? 0.1597 : 0.2395;
+            } else if (flightType === 'International') {
+                factor = flightClass === 'Economy' ? 0.139 : 0.4026;
+            }
+
+            // Double the factor for round trips
+            if (tripType === 'Round Trip') {
+                factor *= 2;
+            }
+
+            // Calculate emissions
+            const kgCO2e = factor * 1000; // Convert to kg
+            const tCO2e = factor;
+
+            // Update form fields
+            modal.querySelector('#ghgEmissionKGC02e').value = kgCO2e.toFixed(4);
+            modal.querySelector('#ghgEmissionTC02e').value = tCO2e.toFixed(4);
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Handle edit form submissions
+            document.querySelectorAll('form[action*="edit_emission_flight_record"]').forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    Swal.fire({
+                        title: 'Save Changes?',
+                        text: 'Are you sure you want to update this record?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, save changes'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const formData = new FormData(this);
+
+                            fetch(this.action, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                }
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            title: 'Success!',
+                                            text: 'Record updated successfully',
+                                            icon: 'success',
+                                            timer: 1500,
+                                            showConfirmButton: false
+                                        }).then(() => {
+                                            // Close the modal
+                                            const modal = this.closest('.modal');
+                                            const modalInstance = bootstrap.Modal.getInstance(modal);
+                                            if (modalInstance) {
+                                                modalInstance.hide();
+                                            }
+                                            // Reload the page
+                                            window.location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Error!',
+                                            text: data.message || 'Failed to update record',
+                                            icon: 'error'
+                                        });
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: 'An unexpected error occurred',
+                                        icon: 'error'
+                                    });
+                                });
+                        }
+                    });
+                });
+            });
+
+            // Handle delete form submissions
+            document.querySelectorAll('.delete-form').forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const id = this.dataset.id;
+
+                    Swal.fire({
+                        title: 'Delete Record?',
+                        text: 'This action cannot be undone!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch(`/delete_emission_flight_record/${id}`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                }
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            title: 'Deleted!',
+                                            text: 'Record has been deleted',
+                                            icon: 'success',
+                                            timer: 1500,
+                                            showConfirmButton: false
+                                        }).then(() => {
+                                            window.location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Error!',
+                                            text: data.message || 'Failed to delete record',
+                                            icon: 'error'
+                                        });
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: 'An unexpected error occurred',
+                                        icon: 'error'
+                                    });
+                                });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

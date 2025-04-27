@@ -55,6 +55,31 @@
         </ul>-->
     </nav>
 
+    <!-- Update Modal -->
+<div id="updateModal" class="modal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Record</h5>
+                <button type="button" class="close" aria-label="Close">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="updateForm">
+                    <div id="formFields" style="max-height: 400px; overflow-y: auto;">
+                        <!-- Dynamically generated fields will appear here -->
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+<script src="{{ url_for('static', filename='js/table_actions.js') }}"></script>
+
     <!-- Sidebar and Main Content Layout -->
     <div id="layoutSidenav">
         <!-- Sidebar -->
@@ -260,7 +285,7 @@
                                 <div class="scrollable-content" id="scrollableContent">
                                     <div class="table-wrapper">
                                         <!-- Electricity Report Table -->
-                                        <table class="table" id="electricityTable">
+                                        <table class="table" id="electricityTable" data-table-name="electricity_consumption">
                                             <thead>
                                                 <tr>
                                                     <th>Campus</th>
@@ -274,29 +299,40 @@
                                                     <th>Total Amount</th>
                                                     <th>Consumption</th>
                                                     <th>Price Per KWH</th>
-                                                    <th>KG CO₂ per KWH</th>
-                                                    <th>T CO₂ per KWH</th>
+                                                    <th>KG CO2 per KWH</th>
+                                                    <th>T CO2 per KWH</th>
                                                     <th>Tree Offset</th>
+                                                    <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="electricityData">
                                                 {% if data %}
                                                 {% for row in data %}
-                                                <tr>
-                                                    <td>{{ row['campus'] }}</td>
-                                                    <td>{{ row['category'] }}</td>
-                                                    <td>{{ row['month'] }}</td>
-                                                    <td>{{ row['quarter'] }}</td>
-                                                    <td>{{ row['year'] }}</td>
-                                                    <td>{{ row['prev_reading'] }}</td>
-                                                    <td>{{ row['current_reading'] }}</td>
-                                                    <td>{{ row['multiplier'] }}</td>
-                                                    <td>{{ row['total_amount'] }}</td>
-                                                    <td>{{ row['consumption'] }}</td>
-                                                    <td>{{ row['price_per_kwh'] }}</td>
-                                                    <td>{{ row['kg_co2_per_kwh'] }}</td>
-                                                    <td>{{ row['t_co2_per_kwh'] }}</td>
-                                                    <td>{{ row['tree_offset'] }}</td>
+                                                <tr data-id="{{ row['id'] }}">
+                                                    <td data-column="campus">{{ row['campus'] }}</td>
+                                                    <td data-column="category">{{ row['category'] }}</td>
+                                                    <td data-column="month">{{ row['month'] }}</td>
+                                                    <td data-column="quarter">{{ row['quarter'] }}</td>
+                                                    <td data-column="year">{{ row['year'] }}</td>
+                                                    <td data-column="prev_reading">{{ row['prev_reading'] }}</td>
+                                                    <td data-column="current_reading">{{ row['current_reading'] }}</td>
+                                                    <td data-column="multiplier">{{ row['multiplier'] }}</td>
+                                                    <td data-column="total_amount">{{ row['total_amount'] }}</td>
+                                                    <td data-column="consumption">{{ row['consumption'] }}</td>
+                                                    <td data-column="price_per_kwh">{{ row['price_per_kwh'] }}</td>
+                                                    <td data-column="kg_co2_per_kwh">{{ row['kg_co2_per_kwh'] }}</td>
+                                                    <td data-column="t_co2_per_kwh">{{ row['t_co2_per_kwh'] }}</td>
+                                                    <td data-column="tree_offset">{{ row['tree_offset'] }}</td>
+                                                    <td>
+                                                        <div style="display: flex; gap: 5px; justify-content: center; align-items: center; position: relative; z-index: 1;">
+                                                            <button class="btn btn-info btn-sm update-btn" title="Update">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            <button class="btn btn-danger btn-sm delete-btn" title="Delete">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                                 {% endfor %}
                                                 {% else %}
@@ -595,6 +631,9 @@
             });
         });
     </script>
+
+
+
 </body>
 
 </html>

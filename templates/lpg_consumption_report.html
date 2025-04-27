@@ -25,9 +25,54 @@
     <!-- ✅ PDF & HTML to PDF Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <!-- Add this style section in your head -->
+    <style>
+        /* Modal width and styling */
+        .modal-dialog {
+            max-width: 350px !important;
+            margin: 1.75rem auto;
+        }
 
+        .modal-content {
+            border-radius: 4px;
+            border: none;
+        }
 
+        .modal-header {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
 
+        .modal-body {
+            padding: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            height: 38px;
+            font-size: 14px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        /* Close button styling */
+        .btn-close {
+            background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+        }
+    </style>
 
 </head>
 
@@ -163,7 +208,7 @@
                                                 Juan"] %}
                                                 <li><a class="dropdown-item {% if campus == selected_campus %}active{% endif %}"
                                                         href="?campus={{ campus }}">{{ campus }}</a></li>
-                                            {% endfor %}
+                                                {% endfor %}
                                             </ul>
                                         </li>
 
@@ -173,13 +218,13 @@
                                             <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item {% if year == '' %}active{% endif %}"
                                                         href="?year=">All Years</a></li>
-                                                        {% for y in range(2025, 2013, -1) %}
-                                                        <li><a class="dropdown-item {% if year == y|string %}active{% endif %}"
+                                                {% for y in range(2025, 2013, -1) %}
+                                                <li><a class="dropdown-item {% if year == y|string %}active{% endif %}"
                                                         href="?year={{ y }}">{{ y }}</a></li>
                                                 {% endfor %}
                                             </ul>
                                         </li>
-        
+
                                         <!-- Month -->
                                         <li class="dropdown-submenu">
                                             <a class="dropdown-item dropdown-toggle" href="#">Month</a>
@@ -188,33 +233,33 @@
                                                         href="?month=">All Months</a></li>
                                                 {% for m in ["January", "February", "March", "April", "May", "June",
                                                 "July",
-                                            "August", "September", "October", "November", "December"] %}
+                                                "August", "September", "October", "November", "December"] %}
                                                 <li><a class="dropdown-item {% if month == m %}active{% endif %}"
                                                         href="?month={{ m }}">{{ m }}</a></li>
-                                            {% endfor %}
+                                                {% endfor %}
                                             </ul>
                                         </li>
 
-                                            <!-- Office -->
-                                            <li class="dropdown-submenu">
-                                                <a class="dropdown-item dropdown-toggle" href="#">Office</a>
-                                                <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item {% if office == '' %}active{% endif %}"
-                                                            href="?office=">All Offices</a></li>
-                                                    {% for office_name in ["IAU", "QAM", "SDO", "PDO", "EA", "RGO", "ICT",
-                                                    "CAS", "CABE",
-                                                    "CICS", "CET", "CTE", "CE", "CA", "TAO", "ORS", "SFAO", "GC",
-                                                    "OLS", "SOO", "SD", "OJT", "NSTP", "HRMO", "RMO", "PO", "BO",
-                                                    "CD", "AO", "PFMO", "EMU", "PSO", "GSO", "ESO", "RO", "OVCRDES",
-                                                    "OVCDEA", "OVCAA", "OVCAF"] %}
-                                                    <li><a class="dropdown-item {% if office == office_name %}active{% endif %}"
-                                                            href="?office={{ office_name }}">{{ office_name }}</a></li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </li>
-                                       
+                                        <!-- Office -->
+                                        <li class="dropdown-submenu">
+                                            <a class="dropdown-item dropdown-toggle" href="#">Office</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item {% if office == '' %}active{% endif %}"
+                                                        href="?office=">All Offices</a></li>
+                                                {% for office_name in ["IAU", "QAM", "SDO", "PDO", "EA", "RGO", "ICT",
+                                                "CAS", "CABE",
+                                                "CICS", "CET", "CTE", "CE", "CA", "TAO", "ORS", "SFAO", "GC",
+                                                "OLS", "SOO", "SD", "OJT", "NSTP", "HRMO", "RMO", "PO", "BO",
+                                                "CD", "AO", "PFMO", "EMU", "PSO", "GSO", "ESO", "RO", "OVCRDES",
+                                                "OVCDEA", "OVCAA", "OVCAF"] %}
+                                                <li><a class="dropdown-item {% if office == office_name %}active{% endif %}"
+                                                        href="?office={{ office_name }}">{{ office_name }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+
                                     </ul>
-                                    </div>
+                                </div>
 
                                 <!-- Download Report Button -->
                                 <div class="dropdown">
@@ -251,39 +296,152 @@
                                     <div class="table-wrapper">
                                         <!-- Electricity Report Table -->
                                         <table class="table" id="lpg_data">
-                                <thead>
-                                    <tr>
-                                        <th>Campus</th>
-                                        <th>Year</th>
-                                        <th>Month</th>
-                                        <th>Office</th>
-                                        <th>Concessionaire Type</th>
-                                        <th>Qty (no. of tanks)</th>
-                                        <th>Tank Weight</th>
-                                        <th>Tank Volume</th>
-                                        <th>Total Tank Volume</th>
-                                        <th>GHG Emission (KG CO₂e)</th>
-                                        <th>GHG Emission (T CO₂e)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for record in data %}
-                                    <tr>
-                                        <td>{{ record.Campus }}</td>
-                                        <td>{{ record.YearTransact }}</td>
-                                        <td>{{ record.Month }}</td>
-                                        <td>{{ record.Office }}</td>
-                                        <td>{{ record.ConcessionariesType }}</td>
-                                        <td>{{ record.TankQuantity }}</td>
-                                        <td>{{ record.TankWeight }}</td>
-                                        <td>{{ record.TankVolume }}</td>
-                                        <td>{{ record.TotalTankVolume }}</td>
-                                        <td>{{ record.GHGEmissionKGCO2e }}</td>
-                                        <td>{{ record.GHGEmissionTCO2e }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Campus</th>
+                                                    <th>Year</th>
+                                                    <th>Month</th>
+                                                    <th>Office</th>
+                                                    <th>Concessionaire Type</th>
+                                                    <th>Qty (no. of tanks)</th>
+                                                    <th>Tank Weight</th>
+                                                    <th>Tank Volume</th>
+                                                    <th>Total Tank Volume</th>
+                                                    <th>GHG Emission (KG CO₂e)</th>
+                                                    <th>GHG Emission (T CO₂e)</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for record in data %}
+                                                <tr>
+                                                    <td>{{ record.Campus }}</td>
+                                                    <td>{{ record.YearTransact }}</td>
+                                                    <td>{{ record.Month }}</td>
+                                                    <td>{{ record.Office }}</td>
+                                                    <td>{{ record.ConcessionariesType }}</td>
+                                                    <td>{{ record.TankQuantity }}</td>
+                                                    <td>{{ record.TankWeight }}</td>
+                                                    <td>{{ record.TankVolume }}</td>
+                                                    <td>{{ record.TotalTankVolume }}</td>
+                                                    <td>{{ record.GHGEmissionKGCO2e }}</td>
+                                                    <td>{{ record.GHGEmissionTCO2e }}</td>
+                                                    <td>
+                                                        <div class="d-flex justify-content-center gap-2">
+                                                            <!-- Edit Button -->
+                                                            <button type="button" class="btn btn-link p-0"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#editModal{{ record['id'] }}">
+                                                                <i class="fas fa-edit" style="color: #0d6efd;"></i>
+                                                            </button>
+
+                                                            <!-- Delete Form -->
+                                                            <form class="delete-form d-inline m-0"
+                                                                data-id="{{ record['id'] }}">
+                                                                <button type="submit" class="btn btn-link p-0">
+                                                                    <i class="fas fa-trash" style="color: #dc3545;"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                    <div class="modal fade" id="editModal{{ record['id'] }}"
+                                                        tabindex="-1" aria-labelledby="editModalLabel{{ record['id'] }}"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <form method="POST"
+                                                                    action="{{ url_for('edit_emission_lpg_record', id=record['id']) }}">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title"
+                                                                            id="editModalLabel{{ record['id'] }}">
+                                                                            Edit LPG Record
+                                                                        </h5>
+                                                                        <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+                                                                    </div>
+
+                                                                    <div class="modal-body">
+                                                                        <!-- Optional: Hidden input for record_id -->
+                                                                        <input type="hidden" name="record_id"
+                                                                            value="{{ record['id'] }}">
+
+                                                                        <div class="form-group mb-3">
+                                                                            <label
+                                                                                for="year{{ record['id'] }}">Year</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="year{{ record['id'] }}" name="year"
+                                                                                value="{{ record['YearTransact'] }}"
+                                                                                required>
+                                                                        </div>
+
+                                                                        <div class="form-group mb-3">
+                                                                            <label
+                                                                                for="month{{ record['id'] }}">Month</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="month{{ record['id'] }}"
+                                                                                name="month"
+                                                                                value="{{ record['Month'] }}" required>
+                                                                        </div>
+
+                                                                        <div class="form-group mb-3">
+                                                                            <label
+                                                                                for="office{{ record['id'] }}">Office</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="office{{ record['id'] }}"
+                                                                                name="office"
+                                                                                value="{{ record['Office'] }}" required>
+                                                                        </div>
+
+                                                                        <div class="form-group mb-3">
+                                                                            <label
+                                                                                for="concessionaire{{ record['id'] }}">Concessionaire</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="concessionaire{{ record['id'] }}"
+                                                                                name="concessionaires"
+                                                                                value="{{ record['ConcessionariesType'] }}"
+                                                                                required>
+                                                                        </div>
+
+                                                                        <div class="form-group mb-3">
+                                                                            <label for="qty{{ record['id'] }}">Quantity
+                                                                                (Tanks)</label>
+                                                                            <input type="number" step="any"
+                                                                                class="form-control"
+                                                                                id="qty{{ record['id'] }}" name="qty"
+                                                                                value="{{ record['TankQuantity'] }}"
+                                                                                required>
+                                                                        </div>
+
+                                                                        <div class="form-group mb-3">
+                                                                            <label
+                                                                                for="tankWeight{{ record['id'] }}">Tank
+                                                                                Weight</label>
+                                                                            <input type="number" step="any"
+                                                                                class="form-control"
+                                                                                id="tankWeight{{ record['id'] }}"
+                                                                                name="tankWeight"
+                                                                                value="{{ record['TankWeight'] }}"
+                                                                                required>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Close</button>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Save
+                                                                            changes</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -341,7 +499,7 @@
                                 });
                             </script>
                             <!-- ------------------------------------------------------------------------------------------------------ -->
-                    </div>
+                        </div>
                         <!-- Pagination -->
                         <div style="z-index: 4; position: relative;"
                             class="pagination-container d-flex justify-content-between align-items-center">
@@ -363,7 +521,7 @@
                             </a>
                         </div>
                     </div>
-                   
+
                     {% else %}
                     <p>No data available for this report.</p>
                     {% endif %}
@@ -486,6 +644,68 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.delete-form').forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    const id = this.getAttribute('data-id');
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "This action cannot be undone.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Create and submit hidden form
+                            const tempForm = document.createElement('form');
+                            tempForm.method = 'POST';
+                            tempForm.action = `/delete_emission_lpg_record/${id}`;
+                            document.body.appendChild(tempForm);
+                            tempForm.submit();
+                        }
+                    });
+                });
+            });
+        });
+
+    </script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    {% if category == 'edit_success' %}
+    <script>
+        Swal.fire({
+            title: 'Updated!',
+            text: 'The record has been updated successfully.',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    </script>
+    {% elif category == 'delete_success' %}
+    <script>
+        Swal.fire({
+            title: 'Deleted!',
+            text: 'The record was successfully deleted.',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    </script>
+    {% elif category == 'danger' %}
+    <script>
+        Swal.fire({
+            title: 'Error!',
+            text: '{{ message }}',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    </script>
+    {% endif %}
+    {% endfor %}
+    {% endwith %}
 
 </body>
 

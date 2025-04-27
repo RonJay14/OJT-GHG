@@ -26,6 +26,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 
+    <!-- Add this line for XLSX library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 </head>
 
@@ -52,7 +54,30 @@
             </li>
         </ul>-->
     </nav>
-
+    <!-- Update Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Record</h5>
+                    <button type="button" class="close" aria-label="Close">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateForm">
+                        <div id="formFields" style="max-height: 400px; overflow-y: auto;">
+                            <!-- Dynamically generated fields will appear here -->
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        
+    <script src="{{ url_for('static', filename='js/table_actions.js') }}"></script>
     <!-- Sidebar and Main Content Layout -->
     <div id="layoutSidenav">
         <!-- Sidebar -->
@@ -217,7 +242,7 @@
 
                                 <div class="scrollable-content" id="scrollableContent">
                                     <div class="table-wrapper">
-                                        <table class="table" id="fuel_emissions">
+                                        <table class="table" id="fuel_emissions" data-table-name="fuel_emissions">
                                             <thead>
                                                 <tr>
                                                     <th>Campus</th>
@@ -235,36 +260,36 @@
                                                     <th>N₂O Emission (kg CO₂-e)</th>
                                                     <th>Total Emission (kg CO₂-e)</th>
                                                     <th>Total Emission (t CO₂-e)</th>
+                                                    <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="fuel_emissions_data">
                                                 {% for report in data %}
-                                                <tr>
-                                                    <td data-label="Campus">{{ report['campus'] }}</td>
+                                                <tr data-id="{{ report['id'] }}">
+                                                    <td data-label="campus">{{ report['campus'] }}</td>
                                                     <td data-label="Date">{{ report['date'] }}</td>
                                                     <td data-label="Driver">{{ report['driver'] }}</td>
                                                     <td data-label="Type">{{ report['type'] }}</td>
-                                                    <td data-label="Vehicle Type">{{ report['vehicle_equipment'] }}</td>
-                                                    <td data-label="Plate Number">{{ report['plate_no'] }}</td>
+                                                    <td data-label="vehicle_equipment">{{ report['vehicle_equipment']}}</td>
+                                                    <td data-label="plate_no">{{ report['plate_no'] }}</td>
                                                     <td data-label="Category">{{ report['category'] }}</td>
-                                                    <td data-label="Fuel Type">{{ report['fuel_type'] }}</td>
-                                                    <td data-label="Quantity (Liters)">{{ report['quantity_liters'] }}
-                                                    </td>
-                                                    <td data-label="Total Amount">{{ report['total_amount'] }}</td>
-                                                    <td data-label="CO₂ Emission (kg)">{{ report['co2_emission'] }}</td>
-                                                    <td data-label="NH₄ Emission (kg CO₂-e)">{{ report['nh4_emission']
-                                                        }}
-                                                    </td>
-                                                    <td data-label="N₂O Emission (kg CO₂-e)">{{ report['n2o_emission']
-                                                        }}
-                                                    </td>
-                                                    <td data-label="Total Emission (kg CO₂-e)">{{
-                                                        report['total_emission']
-                                                        }}
-                                                    </td>
-                                                    <td data-label="Total Emission (t CO₂-e)">{{
-                                                        report['total_emission_t']
-                                                        }}
+                                                    <td data-label="fuel_type">{{ report['fuel_type'] }}</td>
+                                                    <td data-label="quantity_liters">{{ report['quantity_liters']}}</td>
+                                                    <td data-label="total_amount">{{ report['total_amount'] }}</td>
+                                                    <td data-label="co2_emission">{{ report['co2_emission'] }}</td>
+                                                    <td data-label="nh4_emission">{{ report['nh4_emission']}}</td>
+                                                    <td data-label="n2o_emission">{{ report['n2o_emission']}}</td>
+                                                    <td data-label="total_emission">{{report['total_emission']}}</td>
+                                                    <td data-label="total_emission_t">{{report['total_emission_t']}}</td>
+                                                    <td>
+                                                        <div style="display: flex; gap: 5px; justify-content: center; align-items: center; position: relative; z-index: 1;">
+                                                            <button class="btn btn-info btn-sm update-btn" title="Update">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            <button class="btn btn-danger btn-sm delete-btn" title="Delete">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 {% endfor %}

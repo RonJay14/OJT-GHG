@@ -104,7 +104,22 @@ body {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+.btn-sm i {
+  font-size: 1rem;
+}
 
+.btn-sm:hover {
+  opacity: 0.8;
+}
+
+.d-flex.gap-2 {
+  gap: 0.5rem !important;
+}
+
+/* Remove button outline on focus */
+.btn:focus {
+  box-shadow: none !important;
+}
 hr {
   margin: 1rem 0;
   color: inherit;
@@ -5337,7 +5352,7 @@ textarea.form-control-lg {
 }
 
 .modal-backdrop {
-  --bs-backdrop-zindex: 1050;
+  --bs-backdrop-zindex: 1;
   --bs-backdrop-bg: #000;
   --bs-backdrop-opacity: 0.5;
   position: fixed;

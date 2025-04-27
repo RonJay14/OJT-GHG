@@ -54,6 +54,30 @@
     </ul>-->
     </nav>
 
+       <!-- Update Modal -->
+       <div id="updateModal" class="modal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Record</h5>
+                    <button type="button" class="close" aria-label="Close">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateForm">
+                        <div id="formFields" style="max-height: 400px; overflow-y: auto;">
+                            <!-- Dynamically generated fields will appear here -->
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/table_actions.js') }}"></script>
+
     <!-- Sidebar and Main Content Layout -->
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
@@ -287,32 +311,41 @@
 
                                 <div class="scrollable-content" id="scrollableContent">
                                     <div class="table-wrapper">
-                                        <table class="table" id="waste_segregation">
+                                        <table class="table" id="waste_segregation" data-table-name="tblsolidwastesegregated">
                                             <thead>
                                                 <tr>
-                                                    <th>Campus</th>
-                                                    <th>Year</th>
-                                                    <th>Quarter</th>
-                                                    <th>Month</th>
-                                                    <th>Main Category</th>
-                                                    <th>Subcategory</th>
-                                                    <th>Quantity (kg)</th>
-                                                    <th>GHG Emission (kg CO₂-e)</th>
-                                                    <th>GHG Emission (t CO₂-e)</th>
+                                                    <th data-column="Campus">Campus</th>
+                                                    <th data-column="Year">Year</th>
+                                                    <th data-column="Quarter">Quarter</th>
+                                                    <th data-column="Month">Month</th>
+                                                    <th data-column="MainCategory">Main Category</th>
+                                                    <th data-column="SubCategory">Subcategory</th>
+                                                    <th data-column="QuantityInKG">Quantity (kg)</th>
+                                                    <th data-column="GHGEmissionKGCO2e">GHG Emission (kg CO₂-e)</th>
+                                                    <th data-column="GHGEmissionTCO2e">GHG Emission (t CO₂-e)</th>
+                                                    <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {% for report in data %}
-                                                <tr>
-                                                    <td>{{ report.Campus }}</td>
-                                                    <td>{{ report.Year }}</td>
-                                                    <td>{{ report.Quarter }}</td>
-                                                    <td>{{ report.Month }}</td>
-                                                    <td>{{ report.MainCategory }}</td>
-                                                    <td>{{ report.SubCategory }}</td>
-                                                    <td>{{ report.QuantityInKG }}</td>
-                                                    <td>{{ report.GHGEmissionKGCO2e }}</td>
-                                                    <td>{{ report.GHGEmissionTCO2e }}</td>
+                                                <tr data-id="{{ report['id'] }}">
+                                                    <td data-column="Campus">{{ report.Campus }}</td>
+                                                    <td data-column="Year">{{ report.Year }}</td>
+                                                    <td data-column="Quarter">{{ report.Quarter }}</td>
+                                                    <td data-column="Month">{{ report.Month }}</td>
+                                                    <td data-column="MainCategory">{{ report.MainCategory }}</td>
+                                                    <td data-column="SubCategory">{{ report.SubCategory }}</td>
+                                                    <td data-column="QuantityInKG">{{ report.QuantityInKG }}</td>
+                                                    <td data-column="GHGEmissionKGCO2e">{{ report.GHGEmissionKGCO2e }}</td>
+                                                    <td data-column="GHGEmissionTCO2e">{{ report.GHGEmissionTCO2e }}</td>
+                                                    <td>
+                                                        <button class="btn btn-info btn-sm update-btn" title="Update">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-danger btn-sm delete-btn" title="Delete">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>

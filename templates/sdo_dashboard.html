@@ -776,7 +776,7 @@
                                                 <div class="ms-4 ps-4" style="border-left: 2px solid rgba(255,255,255,0.2);">
                                                     <strong style="color: rgb(255, 255, 255);">Equivalent to</strong>
                                                     <span style="font-size: 1.5em; font-weight: bold; color: white; display: block;">
-                                                        {{ "{:,.2f}".format(total_emission / 1000) }} tons
+                                                        {{ "{:,.2f}".format(total_emission / 1000) }} tCO₂-e
                                                     </span>
                                                 </div>
                                             </div>
@@ -792,7 +792,7 @@
                                 <div class="card-bodyt">
                                     <div class="card-title">Tree Offset</div>
                                     <div>
-                                        <strong>Total Tree Offset for {{ selected_year }}:</strong>
+                                        <strong>Total no. of trees to offset emissions {{ selected_year }}:</strong>
                                     </div>
                                     <span style="font-size: 1.5em; font-weight: bold; color: white;">
                                         {{ "{:,}".format(current_emission_data['tree_offset']) }} Trees
@@ -1226,7 +1226,7 @@
                                                 <div class="mt-3">
                                                     <strong class="bot-card">Treated Water Records:</strong>
                                                     <span style="font-size: 1rem; font-weight: bold; color: white;">
-                                                        {{ total_treated_water_records }}
+                                                        {{ session['total_treated_water_records'] }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -1928,7 +1928,7 @@
     </script>
 </body>
 
-</html>ref="{{ url_for('static', filename='images/sdo.jpg') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='images/sdo.jpg') }}" type="image/x-icon">
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/emucss.css') }}" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
@@ -2678,7 +2678,7 @@
                                                     <strong style="color: rgb(255, 255, 255);">Equivalent to</strong>
                                                     <span
                                                         style="font-size: 1.5em; font-weight: bold; color: white; display: block;">
-                                                        {{ "{:,.2f}".format(total_emission / 1000) }} tons
+                                                        {{ "{:,.2f}".format(total_emission / 1000) }} tCO₂-e
                                                     </span>
                                                 </div>
                                             </div>
@@ -2694,7 +2694,7 @@
                                 <div class="card-bodyt">
                                     <div class="card-title">Tree Offset</div>
                                     <div>
-                                        <strong>Total Tree Offset for {{ selected_year }}:</strong>
+                                        <strong>Total no. of trees to offset emissions {{ selected_year }}:</strong>
                                     </div>
                                     <span style="font-size: 1.5em; font-weight: bold; color: white;">
                                         {{ "{:,}".format(current_emission_data['tree_offset']) }} Trees

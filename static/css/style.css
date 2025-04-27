@@ -107,7 +107,22 @@ body {
   padding: 10px;
   border: 1px solid #000;
 }
+.btn-sm i {
+  font-size: 1rem;
+}
 
+.btn-sm:hover {
+  opacity: 0.8;
+}
+
+.d-flex.gap-2 {
+  gap: 0.5rem !important;
+}
+
+/* Remove button outline on focus */
+.btn:focus {
+  box-shadow: none !important;
+}
 .modal {
   display: none;
   /* Flexbox to center content */
