@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
+from flask_socketio import SocketIO
 import mysql.connector
 from mysql.connector import Error
 import numpy as np
@@ -18,8 +19,10 @@ from decimal import Decimal
 from reportlab.lib.pagesizes import landscape, A4
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle  # Add this line to import necessary classes
-
 app = Flask(__name__)
+
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = 'your_secret_key'  # Use a strong secret key in production!
 # Add these session configurations
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -59,8 +62,6 @@ def calculate_accommodation_emission(factor, occupied_rooms, nights_per_room):
 @app.route('/')
 def index():
     return render_template('homepage.html')  # Serve the homepage
-
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -182,6 +183,49 @@ def change_password():
 
     return render_template('change_password.html', alert_message=alert_message)
 
+'''@app.route('/log_activity', methods=['POST'])
+def log_activity():
+    if 'loggedIn' not in session:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    try:
+        # Get data from request
+        data = request.json
+        username = session.get('username')
+        campus = session.get('campus')
+        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
+        # Connect to database
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Insert into activity_log table
+        query = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name, timestamp) 
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        
+        cursor.execute(query, (
+            username,
+            campus,
+            data['action'],
+            data['report_type'],
+            current_time
+        ))
+        
+        conn.commit()
+        return jsonify({'success': True})
+        
+    except mysql.connector.Error as e:
+        print(f"Database error: {e}")
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+'''
 
 @app.route('/report', methods=['GET'])
 def report():
@@ -1169,35 +1213,6 @@ def get_water_consumption_data_for_printing():
 
 
 
-@app.route('/delete_water_record/<int:id>', methods=['DELETE'])
-def delete_water_record(id):
-    if 'loggedIn' not in session:
-        return jsonify({'success': False, 'message': 'Unauthorized'}), 401
-
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-
-        # Delete the record based on the ID
-        cursor.execute("DELETE FROM tblwater WHERE id = %s", (id,))
-        conn.commit()
-
-        # Check if any rows were affected (i.e., if the record was deleted)
-        if cursor.rowcount == 0:
-            return jsonify({'success': False, 'message': 'Record not found'}), 404
-
-    except mysql.connector.Error as e:
-        return jsonify({'success': False, 'message': str(e)}), 500
-
-    finally:
-        cursor.close()
-        conn.close()
-
-    # If successful, return a success message
-    return jsonify({'success': True}), 200
-
-
-
 @app.route('/treated_water', methods=['GET', 'POST'])
 def treated_water():
     if 'loggedIn' not in session:
@@ -1574,35 +1589,6 @@ def get_fuel_data_for_printing():
     finally:
         cursor.close()
         conn.close()
-
-@app.route('/delete_fuel_record/<int:id>', methods=['DELETE'])
-def delete_fuel_record(id):
-    if 'loggedIn' not in session:
-        return jsonify({'success': False, 'message': 'User is not logged in.'})
-
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-
-        # SQL query to delete the record
-        sql = "DELETE FROM fuel_emissions WHERE id = %s"
-        cursor.execute(sql, (id,))
-        conn.commit()
-
-        # Return success if deletion was successful
-        if cursor.rowcount > 0:
-            return jsonify({'success': True})
-        else:
-            return jsonify({'success': False, 'message': 'Record not found.'})
-
-    except mysql.connector.Error as e:
-        return jsonify({'success': False, 'message': f"Database error: {e}"})
-
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
 
 @app.route('/waste_segregation', methods=['GET', 'POST'])
 def waste_segregation():
@@ -2056,85 +2042,70 @@ def manage_account():
     activity_logs = []
 
     if request.method == 'POST':
-        # Handle adding a new account
-        if 'new_account' in request.form:  # Check if the form is for adding a new account
+        print("Form submitted:", request.form)
+
+        # Handle adding a new account - check if required fields are present
+        if all(key in request.form for key in ['username', 'campus', 'email', 'password']):
             username = request.form['username']
-            office = request.form.get('office', 'Sustainable Development Office')  # Default to SDO if not provided
+            office = "Sustainable Development Office"  # Hardcoded as per requirement
             campus = request.form['campus']
             email = request.form['email']
+            password = request.form['password']
 
             try:
                 conn = get_db_connection()
                 cursor = conn.cursor()
+                
+                # First check if username already exists
+                cursor.execute("SELECT username FROM tblsignin WHERE username = %s", (username,))
+                if cursor.fetchone():
+                    flash("Username already exists!", "danger")
+                    return redirect(url_for('manage_account'))
+
+                # Insert new account
                 insert_query = """
-                INSERT INTO tblsignin (username, office, campus, email)
-                VALUES (%s, %s, %s, %s)
+                INSERT INTO tblsignin (username, office, campus, email, password)
+                VALUES (%s, %s, %s, %s, %s)
                 """
-                cursor.execute(insert_query, (username, office, campus, email))
+                cursor.execute(insert_query, (username, office, campus, email, password))
                 conn.commit()
+                
+                # Log the activity
+                log_query = """
+                INSERT INTO activity_log (username, campus, action, report_name, timestamp)
+                VALUES (%s, %s, %s, %s, NOW())
+                """
+                cursor.execute(log_query, (username, campus, "Account Created", "Manage Account"))
+                conn.commit()
+                
                 flash("Account created successfully!", "success")
             except Exception as e:
-                flash(f"An error occurred while adding the account: {e}", "danger")
+                print(f"Error: {e}")  # For debugging
+                flash(f"An error occurred while adding the account", "danger")
             finally:
                 cursor.close()
                 conn.close()
 
-        # Handle updating an existing account
+        # Rest of your existing code for update_id and delete_id...
         elif 'update_id' in request.form:
-            account_id = request.form['update_id']
-            username = request.form['username']
-            campus = request.form['campus']
-            email = request.form['email']
-
-            try:
-                conn = get_db_connection()
-                cursor = conn.cursor()
-
-                update_query = """
-                UPDATE tblsignin
-                SET username = %s, campus = %s, email = %s
-                WHERE userID = %s
-                """
-                cursor.execute(update_query, (username, campus, email, account_id))
-                conn.commit()
-                flash("Account updated successfully!", "success")
-
-            except Exception as e:
-                flash(f"An error occurred while updating the account: {e}", "danger")
-            finally:
-                cursor.close()
-                conn.close()
-
-        # Handle deleting an account
+            # Your existing update code...
+            pass
+        
         elif 'delete_id' in request.form:
-            account_id = request.form['delete_id']
+            # Your existing delete code...
+            pass
 
-            try:
-                conn = get_db_connection()
-                cursor = conn.cursor()
-                delete_query = "DELETE FROM tblsignin WHERE userID = %s"
-                cursor.execute(delete_query, (account_id,))
-                conn.commit()
-                flash("Account deleted successfully!", "success")
-            except Exception as e:
-                flash(f"An error occurred while deleting the account: {e}", "danger")
-            finally:
-                cursor.close()
-                conn.close()
-
-        # Redirect to avoid form resubmission
         return redirect(url_for('manage_account'))
 
-    # Fetch accounts only from "Sustainable Development Office"
+    # Fetch existing accounts
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        
-        # Fetch accounts
-        cursor.execute("SELECT userID, username, office, campus, email FROM tblsignin WHERE office = %s", ("Sustainable Development Office",))
+
+        cursor.execute("SELECT userID, username, office, campus, email, password FROM tblsignin WHERE office = %s", 
+                      ("Sustainable Development Office",))
         accounts = cursor.fetchall()
-        
-        # Fetch activity logs
+
         cursor.execute("""
             SELECT username, campus, action, report_name, timestamp 
             FROM activity_log 
@@ -2142,12 +2113,14 @@ def manage_account():
             LIMIT 100
         """)
         activity_logs = cursor.fetchall()
-        
+
     except Exception as e:
         flash(f"Error fetching data: {e}", "danger")
     finally:
-        cursor.close()
-        conn.close()
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
 
     return render_template('manage_account.html', accounts=accounts, activity_logs=activity_logs)
 
@@ -2360,9 +2333,9 @@ def csd_dashboard():
                     cursor.execute(query, (selected_campus, selected_year))
             total_records[category] = cursor.fetchone().get('total_records', 0)
 
-        # Debugging Output
-        print(f"Total Records: {total_records}")  # Check all total records
-
+        # ✅ DEBUG: Log the record totals passed to the template
+        print("DEBUG: Total Records ->", total_records)
+        
     except mysql.connector.Error as e:
         flash(f"Database Error: {e}", "danger")
     finally:
@@ -4722,6 +4695,46 @@ def flight_emissions_report():
                          selected_office=office,
                          selected_year=year)
 
+@app.route('/flight_emissions_report')
+def flight_page_emissions_report():
+    try:
+        page = request.args.get('page', 1, type=int)
+        per_page = 10  # Number of records per page
+        offset = (page - 1) * per_page
+
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Get total count of records
+        cursor.execute("SELECT COUNT(*) as total FROM tblflight")
+        total_records = cursor.fetchone()['total']
+        
+        # Calculate total pages
+        total_pages = (total_records + per_page - 1) // per_page  # Ceiling division
+
+        # Get records for current page with LIMIT and OFFSET
+        cursor.execute("""
+            SELECT * FROM tblflight 
+            ORDER BY ID DESC 
+            LIMIT %s OFFSET %s
+        """, (per_page, offset))
+        
+        data = cursor.fetchall()
+
+        return render_template('flight_emissions_report.html',
+                             data=data,
+                             current_page=page,
+                             total_pages=total_pages)
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return "An error occurred", 500
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
 @app.route('/export_flight_emissions_csv')
 def export_flight_emissions_csv():
     # Retrieve campus from session
@@ -5923,7 +5936,7 @@ def sdo_electricity_report():
 
     # Base query
     base_query = """
-        SELECT campus, category, month, quarter, year, prev_reading, current_reading, multiplier, 
+        SELECT id, campus, category, month, quarter, year, prev_reading, current_reading, multiplier, 
                total_amount, consumption, price_per_kwh, kg_co2_per_kwh, t_co2_per_kwh, tree_offset
         FROM electricity_consumption
         WHERE campus IN ({})
@@ -6276,13 +6289,14 @@ def sdo_fuel_emissions_report():
     offset = (current_page - 1) * per_page
 
     # Query to fetch paginated data
+    # Main data query
     query = f"""
-        SELECT campus, date, driver, type, vehicle_equipment, plate_no, category, fuel_type, 
-               quantity_liters, total_amount, co2_emission, nh4_emission, n2o_emission, 
-               total_emission, total_emission_t
-        FROM fuel_emissions
-        {where_clause}
-        ORDER BY date DESC LIMIT %s OFFSET %s
+    SELECT id, campus, date, driver, type, vehicle_equipment, plate_no, category, fuel_type, 
+           quantity_liters, total_amount, co2_emission, nh4_emission, n2o_emission, 
+           total_emission, total_emission_t
+    FROM fuel_emissions
+    {where_clause}
+    ORDER BY date DESC LIMIT %s OFFSET %s
     """
     cursor.execute(query, tuple(query_params + [per_page, offset]))
     fuel_data = cursor.fetchall()
@@ -6302,6 +6316,13 @@ def sdo_fuel_emissions_report():
         campus_filter=related_campuses,  # Pass related campuses as the filter
         year_filter=year_filter
     )
+# Add these imports at the top of the file
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+
 
 @app.route('/export_fuel_report_pdf')
 def export_fuel_report_pdf():
@@ -6353,40 +6374,94 @@ def export_fuel_report_pdf():
     
     # Create PDF buffer
     buffer = BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=landscape(A4))
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=landscape(A4),
+        leftMargin=0.5*inch,
+        rightMargin=0.5*inch,
+        topMargin=0.5*inch,
+        bottomMargin=0.5*inch
+    )
+
+    # Format data for better presentation
+    data_list = [
+        ['Campus', 'Date', 'Driver', 'Type', 'Vehicle Type', 'Plate No.', 
+         'Category', 'Fuel Type', 'Quantity (L)', 'Amount', 
+         'CO₂ (kg)', 'NH₄ (kg CO₂-e)', 'N₂O (kg CO₂-e)', 
+         'Total (kg CO₂-e)', 'Total (t CO₂-e)']
+    ]
     
-    # Convert DataFrame to list of lists for the table
-    data_list = [df.columns.tolist()] + df.values.tolist()
+    for row in data:
+        formatted_row = [
+            row['campus'],
+            row['date'].strftime('%Y-%m-%d') if row['date'] else 'N/A',  # Handle NULL dates
+            row['driver'],
+            row['type'],
+            row['vehicle_equipment'],
+            row['plate_no'],
+            row['category'],
+            row['fuel_type'],
+            f"{row['quantity_liters']:.2f}",
+            f"{row['total_amount']:.2f}",
+            f"{row['co2_emission']:.2f}",
+            f"{row['nh4_emission']:.2f}", 
+            f"{row['n2o_emission']:.2f}",
+            f"{row['total_emission']:.2f}",
+            f"{row['total_emission_t']:.3f}"
+        ]
+        data_list.append(formatted_row)
+
+    # Create table with adjusted column widths
+    col_widths = [0.8*inch, 0.8*inch, 0.8*inch, 0.6*inch, 1*inch, 0.8*inch,
+                  0.6*inch, 0.6*inch, 0.7*inch, 0.7*inch,
+                  0.7*inch, 0.8*inch, 0.8*inch, 0.8*inch, 0.8*inch]
     
-    # Create table with appropriate styling
-    table = Table(data_list)
+    table = Table(data_list, colWidths=col_widths, repeatRows=1)
+    
+    # Enhanced table style
     table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        # Header style
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2b3e53')),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, -1), 8),  # Smaller font size to fit all columns
+        ('FONTSIZE', (0, 0), (-1, 0), 8),
         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        
+        # Data rows style
         ('BACKGROUND', (0, 1), (-1, -1), colors.white),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+        ('ALIGN', (0, 1), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 1), (-1, -1), 7),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('TOPPADDING', (0, 1), (-1, -1), 4),
+        ('BOTTOMPADDING', (0, 1), (-1, -1), 4),
     ]))
 
-    # Build PDF
-    elements = []
+    # Create title style
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=getSampleStyleSheet()['Heading1'],
+        fontSize=14,
+        spaceAfter=30,
+        alignment=1  # Center alignment
+    )
     
-    # Add title
+    # Build PDF elements
+    elements = []
     title = f"Fuel Emissions Report - {user_campus}"
     if year_filter:
         title += f" ({year_filter})"
     
-    elements.append(Paragraph(title, getSampleStyleSheet()['Heading1']))
-    elements.append(Spacer(1, 12))
+    elements.append(Paragraph(title, title_style))
     elements.append(table)
     
+    # Build and return PDF
     doc.build(elements)
     buffer.seek(0)
-
-    # Return the PDF
+    
     return send_file(
         buffer,
         download_name=f"fuel_emissions_report_{user_campus}.pdf",
@@ -6589,7 +6664,7 @@ def sdo_water_report():
 
     # Fetch paginated data, with dynamic filters
     query = f"""
-        SELECT Campus, Date, Category, PreviousReading, CurrentReading, Consumption, TotalAmount, 
+        SELECT id, Campus, Date, Category, PreviousReading, CurrentReading, Consumption, TotalAmount, 
                PricePerLiter, FactorKGCO2e, FactorTCO2e
         FROM tblwater
         WHERE {' AND '.join(query_conditions)}
@@ -6828,7 +6903,7 @@ def sdo_treated_water_report():
 
     # Base query for fetching paginated data, with filters applied
     query = """
-        SELECT Campus, Month, TreatedWaterVolume, ReusedTreatedWaterVolume, EffluentVolume, 
+        SELECT id, Campus, Month, TreatedWaterVolume, ReusedTreatedWaterVolume, EffluentVolume, 
                PricePerLiter, FactorKGCO2e, FactorTCO2e
         FROM tbltreatedwater
         WHERE Campus IN ({})
@@ -7099,7 +7174,7 @@ def sdo_waste_segregation_report():
 
     # Base query for fetching paginated data with filters applied
     query = """
-        SELECT Campus, Year, Quarter, Month, MainCategory, SubCategory, 
+        SELECT id, Campus, Year, Quarter, Month, MainCategory, SubCategory, 
                QuantityInKG, GHGEmissionKGCO2e, GHGEmissionTCO2e
         FROM tblsolidwastesegregated
         WHERE Campus IN ({})
@@ -7401,7 +7476,7 @@ def sdo_waste_unseg_report():
 
     # Base query for fetching paginated data
     query = """
-        SELECT Campus, Year, Month, WasteType, QuantityInKG, SentToLandfillKG, 
+        SELECT id, Campus, Year, Month, WasteType, QuantityInKG, SentToLandfillKG, 
                SentToLandfillTONS, GHGEmissionKGCO2e, GHGEmissionTCO2e
         FROM tblsolidwasteunsegregated
         WHERE Campus IN ({})
@@ -7711,7 +7786,7 @@ def sdo_food_consumption_report():
 
     # Query for fetching paginated data
     query = f"""
-        SELECT Campus, YearTransaction, Month, Office, TypeOfFoodServed, QuantityOfServing, 
+        SELECT id, Campus, YearTransaction, Month, Office, TypeOfFoodServed, QuantityOfServing, 
                GHGEmissionKGCO2e, GHGEmissionTCO2e
         FROM tblfoodwaste
         {where_clause}
@@ -7986,12 +8061,12 @@ def sdo_lpg_consumption_report():
 
     # Fetch paginated data
     query = f"""
-        SELECT Campus, YearTransact, Month, Office, ConcessionariesType, TankQuantity, 
-               TankWeight, TankVolume, TotalTankVolume, GHGEmissionKGCO2e, GHGEmissionTCO2e
-        FROM tbllpg {where_clause}
-        ORDER BY YearTransact DESC, Month ASC
-        LIMIT %s OFFSET %s
-    """
+    SELECT ID, Campus, YearTransact, Month, Office, ConcessionariesType, TankQuantity, 
+           TankWeight, TankVolume, TotalTankVolume, GHGEmissionKGCO2e, GHGEmissionTCO2e
+    FROM tbllpg {where_clause}
+    ORDER BY YearTransact DESC, Month ASC
+    LIMIT %s OFFSET %s
+"""
     cursor.execute(query, tuple(params + [per_page, offset]))
     lpg_data = cursor.fetchall()
 
@@ -8012,6 +8087,1228 @@ def sdo_lpg_consumption_report():
         month_filter=month_filter,
         office_filter=office_filter
     )
+
+@app.route('/edit_lpg_record/<int:id>', methods=['POST'])
+def edit_lpg_record(id):
+    if 'loggedIn' not in session:
+        return redirect(url_for('login'))
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        year = request.form['year']
+        month = request.form['month']
+        office = request.form['office']
+        concessionaires = request.form['concessionaires']
+        qty = float(request.form['qty'])
+        tank_weight = float(request.form['tankWeight'])
+
+        factor = 2.95795 if concessionaires in ['Fuel', 'Diesel'] else 0
+        tank_volume = 1.96 * tank_weight
+        total_tank_vol = qty * tank_volume
+        kgCO2e = factor * tank_weight
+        tCO2e = kgCO2e / 1000
+
+        cursor.execute("""
+            UPDATE tbllpg
+            SET YearTransact=%s, Month=%s, Office=%s, ConcessionariesType=%s,
+                TankQuantity=%s, TankWeight=%s, TankVolume=%s, TotalTankVolume=%s,
+                GHGEmissionKGCO2e=%s, GHGEmissionTCO2e=%s
+            WHERE ID = %s
+        """, (year, month, office, concessionaires, qty, tank_weight, tank_volume, total_tank_vol, kgCO2e, tCO2e, id))
+
+        conn.commit()
+        flash("edited", "edit_success")
+
+    except mysql.connector.Error as e:
+        flash(f"Database Error: {e}", "danger")
+    finally:
+        cursor.close()
+        conn.close()
+
+    return redirect(url_for('sdo_lpg_consumption_report'))
+
+@app.route('/delete_lpg_record/<int:id>', methods=['POST'])
+def delete_lpg_record(id):
+    if 'loggedIn' not in session:
+        return redirect(url_for('login'))
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM tbllpg WHERE ID = %s", (id,))
+        conn.commit()
+        flash("LPG consumption record deleted successfully.", "success")
+    except mysql.connector.Error as e:
+        flash(f"Database Error: {e}", "danger")
+    finally:
+        cursor.close()
+        conn.close()
+
+    return redirect(url_for('sdo_lpg_consumption_report'))
+#edit for fuel emissions
+@app.route('/edit_fuel_record/<int:id>', methods=['POST'])
+def edit_fuel_record(id):
+    if 'loggedIn' not in session:
+        return redirect(url_for('login'))
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Get form data
+        date = request.form['date']
+        driver = request.form['driver']
+        type_val = request.form['type']
+        vehicle = request.form['vehicle_equipment']
+        plate = request.form['plate_no']
+        category = request.form['category']
+        fuel_type = request.form['fuel_type']
+        quantity = float(request.form['quantity_liters'])
+        amount = float(request.form['total_amount'])
+
+        # Calculate emissions using same factors as emu_fuel
+        if fuel_type == 'Gasoline':
+            # Gasoline emission factors
+            co2_emission = quantity * 2.31  # kg CO2/L
+            nh4_emission = quantity * 0.000033 * 25  # kg CH4/L * GWP
+            n2o_emission = quantity * 0.000032 * 298  # kg N2O/L * GWP
+        elif fuel_type == 'Diesel':
+            # Diesel emission factors  
+            co2_emission = quantity * 2.68  # kg CO2/L
+            nh4_emission = quantity * 0.000039 * 25  # kg CH4/L * GWP  
+            n2o_emission = quantity * 0.000039 * 298  # kg N2O/L * GWP
+        else:
+            raise ValueError(f"Invalid fuel type: {fuel_type}")
+
+        total_emission = co2_emission + nh4_emission + n2o_emission
+        total_emission_t = total_emission / 1000  # Convert kg to tonnes
+
+        # Update the record with all fields
+        cursor.execute("""
+            UPDATE fuel_emissions
+            SET date=%s, driver=%s, type=%s, vehicle_equipment=%s, 
+                plate_no=%s, category=%s, fuel_type=%s,
+                quantity_liters=%s, total_amount=%s,
+                co2_emission=%s, nh4_emission=%s, n2o_emission=%s,
+                total_emission=%s, total_emission_t=%s
+            WHERE id = %s
+        """, (date, driver, type_val, vehicle, plate, category, fuel_type,
+              quantity, amount, co2_emission, nh4_emission, n2o_emission,
+              total_emission, total_emission_t, id))
+
+        conn.commit()
+        flash("Record updated successfully", "edit_success")
+
+    except mysql.connector.Error as e:
+        flash(f"Database Error: {e}", "danger")
+    except ValueError as e:
+        flash(f"Invalid input: {e}", "danger")
+    finally:
+        cursor.close()
+        conn.close()
+
+    return redirect(url_for('sdo_fuel_emissions_report'))
+@app.route('/delete_fuel_record/<int:id>', methods=['POST'])
+def delete_fuel_record(id):
+    if 'loggedIn' not in session:
+        return redirect(url_for('login'))
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM fuel_emissions WHERE id = %s", (id,))
+        conn.commit()
+        flash("Fuel record deleted successfully.", "delete_success")
+    except mysql.connector.Error as e:
+        flash(f"Database Error: {e}", "danger")
+    finally:
+        cursor.close()
+        conn.close()
+
+    return redirect(url_for('sdo_fuel_emissions_report'))
+
+#edit for electricity emissions
+@app.route('/edit_electricity_record/<int:id>', methods=['POST'])
+def edit_electricity_record(id):
+    if 'loggedIn' not in session:
+        return redirect(url_for('login'))
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Get form data
+        campus = request.form.get('campus')
+        category = request.form.get('category')
+        month = request.form.get('month')
+        quarter = request.form.get('quarter')
+        year = request.form.get('year')
+        prev_reading = float(request.form.get('prev_reading'))
+        current_reading = float(request.form.get('current_reading'))
+        multiplier = float(request.form.get('multiplier'))
+        total_amount = float(request.form.get('total_amount'))
+
+        # Calculate derived values
+        consumption = (current_reading - prev_reading) * multiplier
+        
+        # Validate consumption
+        if consumption < 0:
+            flash("Consumption cannot be negative. Please check your readings.", "danger")
+            return redirect(url_for('sdo_electricity_report'))
+
+        # Calculate other fields
+        price_per_kwh = round(total_amount / consumption, 2) if consumption != 0 else 0
+        kg_co2_per_kwh = round(0.7122 * consumption, 2)  # Standard emission factor
+        t_co2_per_kwh = round(kg_co2_per_kwh / 1000, 2)
+        tree_offset = round(t_co2_per_kwh * 242, 2)  # Standard offset factor
+
+        # Update record
+        cursor.execute("""
+            UPDATE electricity_consumption
+            SET campus=%s, category=%s, month=%s, quarter=%s, year=%s,
+                prev_reading=%s, current_reading=%s, multiplier=%s,
+                total_amount=%s, consumption=%s, price_per_kwh=%s,
+                kg_co2_per_kwh=%s, t_co2_per_kwh=%s, tree_offset=%s
+            WHERE id = %s
+        """, (campus, category, month, quarter, year,
+              prev_reading, current_reading, multiplier,
+              total_amount, consumption, price_per_kwh,
+              kg_co2_per_kwh, t_co2_per_kwh, tree_offset, id))
+
+        # Log the activity
+        username = session.get('username', 'Unknown')
+        action = f"Updated Electricity Record for {campus} - {month} {year}"
+        cursor.execute("""
+            INSERT INTO activity_log (username, campus, action, report_name)
+            VALUES (%s, %s, %s, %s)
+        """, (username, campus, action, "Electricity Consumption Report"))
+
+        conn.commit()
+        flash("Record updated successfully", "edit_success")
+
+    except mysql.connector.Error as e:
+        flash(f"Database Error: {e}", "danger")
+    finally:
+        cursor.close()
+        conn.close()
+
+    return redirect(url_for('sdo_electricity_report'))
+app.route('/delete_electricity_record/<int:id>', methods=['POST'])
+def delete_electricity_record(id):
+    if 'loggedIn' not in session:
+        return redirect(url_for('login'))
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM electricity_consumption WHERE id = %s", (id,))
+        conn.commit()
+        flash("Record deleted successfully", "delete_success")
+    except mysql.connector.Error as e:
+        flash(f"Database Error: {e}", "danger")
+    finally:
+        cursor.close()
+        conn.close()
+
+    return redirect(url_for('sdo_electricity_report'))
+
+#for treated water edit
+@app.route('/delete_treated_water_record/<int:id>', methods=['POST'])
+def delete_treated_water_record(id):
+    if 'loggedIn' not in session:
+        return jsonify({'success': False, 'message': 'Not logged in'}), 401
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Delete the record
+        cursor.execute("DELETE FROM tbltreatedwater WHERE id = %s", (id,))
+        
+        # Log the activity
+        username = session.get('username', 'Unknown')
+        campus = session.get('campus', 'Unknown')
+        action = f"Deleted Treated Water Record (ID: {id})"
+        cursor.execute("""
+            INSERT INTO activity_log (username, campus, action, report_name)
+            VALUES (%s, %s, %s, %s)
+        """, (username, campus, action, "Treated Water Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record deleted successfully'})
+
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/edit_treated_water_record/<int:id>', methods=['POST'])
+def edit_treated_water_record(id):
+    if 'loggedIn' not in session:
+        return jsonify({'success': False, 'message': 'Not logged in'}), 401
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Get form data
+        campus = request.form.get('campus')
+        month = request.form.get('month')
+        treated_water_volume = float(request.form.get('treated_water_volume', 0))
+        reused_treated_water_volume = float(request.form.get('reused_treated_water_volume', 0))
+        price_per_liter = float(request.form.get('price_per_liter', 0))
+
+        # Calculate derived values
+        effluent_volume = treated_water_volume - reused_treated_water_volume
+        factor_kg_co2e = effluent_volume * 0.708
+        factor_t_co2e = factor_kg_co2e / 1000
+
+        # Update record
+        cursor.execute("""
+            UPDATE tbltreatedwater 
+            SET Campus = %s, Month = %s, TreatedWaterVolume = %s,
+                ReusedTreatedWaterVolume = %s, EffluentVolume = %s,
+                PricePerLiter = %s, FactorKGCO2e = %s, FactorTCO2e = %s
+            WHERE id = %s
+        """, (campus, month, treated_water_volume, reused_treated_water_volume,
+              effluent_volume, price_per_liter, factor_kg_co2e, factor_t_co2e, id))
+
+        # Log the activity
+        username = session.get('username', 'Unknown')
+        action = f"Updated Treated Water Record for {campus} - {month}"
+        cursor.execute("""
+            INSERT INTO activity_log (username, campus, action, report_name)
+            VALUES (%s, %s, %s, %s)
+        """, (username, campus, action, "Treated Water Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record updated successfully'})
+
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'}), 500
+    except ValueError as e:
+        return jsonify({'success': False, 'message': f'Invalid input: {str(e)}'}), 400
+    finally:
+        cursor.close()
+        conn.close()
+
+#for water report
+@app.route('/edit_water_record/<int:id>', methods=['POST'])
+def edit_water_record(id):
+    if 'loggedIn' not in session:
+        return jsonify({'success': False, 'message': 'Not logged in'}), 401
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Get form data
+        campus = request.form.get('campus')
+        category = request.form.get('category')
+        date = request.form.get('date')
+        prev_reading = float(request.form.get('prevReading', 0))  # Updated field name
+        current_reading = float(request.form.get('currentReading', 0))  # Updated field name
+        total_amount = float(request.form.get('totalAmount', 0))  # Updated field name
+
+        # Calculate consumption
+        consumption = current_reading - prev_reading
+        if consumption < 0:
+            return jsonify({
+                'success': False, 
+                'message': 'Current reading must be greater than previous reading'
+            }), 400
+
+        # Calculate derived values
+        price_per_liter = total_amount / consumption if consumption > 0 else 0
+        factor_kg_co2e = consumption * 0.708  # Standard emission factor for water
+        factor_t_co2e = factor_kg_co2e / 1000
+
+        # Update record
+        cursor.execute("""
+            UPDATE tblwater 
+            SET Campus = %s, Category = %s, Date = %s, PreviousReading = %s,
+                CurrentReading = %s, Consumption = %s, TotalAmount = %s,
+                PricePerLiter = %s, FactorKGCO2e = %s, FactorTCO2e = %s
+            WHERE id = %s
+        """, (campus, category, date, prev_reading, current_reading, consumption,
+              total_amount, price_per_liter, factor_kg_co2e, factor_t_co2e, id))
+
+        # Log the activity
+        username = session.get('username', 'Unknown')
+        action = f"Updated Water Consumption Record for {campus} - {date}"
+        
+        cursor.execute("""
+            INSERT INTO activity_log (username, campus, action, report_name)
+            VALUES (%s, %s, %s, %s)
+        """, (username, campus, action, "Water Consumption Report"))
+
+        conn.commit()
+        
+        # Return success response with updated values
+        return jsonify({
+            'success': True, 
+            'message': 'Record updated successfully',
+            'data': {
+                'consumption': round(consumption, 2),
+                'factorKgCO2': round(factor_kg_co2e, 2),
+                'factorTCO2': round(factor_t_co2e, 4)
+            }
+        })
+
+    except mysql.connector.Error as e:
+        return jsonify({
+            'success': False, 
+            'message': f'Database error: {str(e)}'
+        }), 500
+    except ValueError as e:
+        return jsonify({
+            'success': False, 
+            'message': f'Invalid input: {str(e)}'
+        }), 400
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/delete_water_record/<int:id>', methods=['POST'])
+def delete_water_record(id):
+    if 'loggedIn' not in session:
+        return jsonify({'success': False, 'message': 'Not logged in'}), 401
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Delete the record
+        cursor.execute("DELETE FROM tblwater WHERE id = %s", (id,))
+        
+        # Log the activity
+        username = session.get('username', 'Unknown')
+        campus = session.get('campus', 'Unknown')
+        action = f"Deleted Water Consumption Record (ID: {id})"
+        cursor.execute("""
+            INSERT INTO activity_log (username, campus, action, report_name)
+            VALUES (%s, %s, %s, %s)
+        """, (username, campus, action, "Water Consumption Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record deleted successfully'})
+
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
+#######FOR WASTE SEGREGATION REPORT EDIT#######
+@app.route('/edit_waste_segregation_record/<int:id>', methods=['POST'])
+def edit_waste_segregation_record(id):
+    if 'loggedIn' not in session:
+        return jsonify({'success': False, 'message': 'Not logged in'}), 401
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Get form data
+        campus = request.form.get('campus')
+        year = int(request.form.get('year'))
+        month = request.form.get('month')
+        quarter = request.form.get('quarter')
+        main_category = request.form.get('mainCategory')
+        sub_category = request.form.get('subCategory')
+        quantity = float(request.form.get('quantity', 0))
+        
+        # Define emission factors
+        emission_factors = {
+            'biodegradable': {
+                "Garden Waste": 0.57896,
+                "Food Waste": 0.62687,
+                "Mixed Food & Garden Waste": 0.58734
+            },
+            'recyclable': {
+                "Mixed Plastic": 0.00890,
+                "Mixed Metal": 0.00890,
+                "Mixed Paper": 1.04180,
+                "Mixed Glass": 0.00890
+            },
+            'residual': {
+                "Residual Waste": 0.44624
+            },
+            'special': {
+                "Special Waste": 0.00890
+            }
+        }
+
+        # Calculate emission factors based on category and subcategory
+        emission_factor = emission_factors.get(main_category.lower(), {}).get(sub_category, 0)
+        ghg_emission_kg = quantity * emission_factor
+        ghg_emission_t = ghg_emission_kg / 1000
+
+        # Update record with calculated values
+        cursor.execute("""
+            UPDATE tblsolidwastesegregated 
+            SET Campus = %s, Year = %s, Month = %s, Quarter = %s,
+                MainCategory = %s, SubCategory = %s, QuantityInKG = %s,
+                GHGEmissionKGCO2e = %s, GHGEmissionTCO2e = %s
+            WHERE id = %s
+        """, (campus, year, month, quarter, main_category, sub_category, 
+              quantity, ghg_emission_kg, ghg_emission_t, id))
+
+        # Log the activity
+        username = session.get('username', 'Unknown')
+        action = f"Updated Waste Segregation Record for {campus} - {month} {year}"
+        cursor.execute("""
+            INSERT INTO activity_log (username, campus, action, report_name)
+            VALUES (%s, %s, %s, %s)
+        """, (username, campus, action, "Waste Segregation Report"))
+
+        conn.commit()
+        
+        # Return success response with updated values
+        return jsonify({
+            'success': True, 
+            'message': 'Record updated successfully',
+            'data': {
+                'ghgEmissionKg': round(ghg_emission_kg, 2),
+                'ghgEmissionT': round(ghg_emission_t, 4),
+            }
+        })
+
+    except mysql.connector.Error as e:
+        return jsonify({
+            'success': False, 
+            'message': f'Database error: {str(e)}'
+        }), 500
+    except ValueError as e:
+        return jsonify({
+            'success': False, 
+            'message': f'Invalid input: {str(e)}'
+        }), 400
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/delete_waste_segregation_record/<int:id>', methods=['POST'])
+def delete_waste_segregation_record(id):
+    if 'loggedIn' not in session:
+        return jsonify({'success': False, 'message': 'Not logged in'}), 401
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Get record details before deletion for logging
+        cursor.execute("SELECT Campus, Month, Year FROM tblsolidwastesegregated WHERE id = %s", (id,))
+        record = cursor.fetchone()
+        
+        if not record:
+            return jsonify({'success': False, 'message': 'Record not found'}), 404
+
+        # Delete the record
+        cursor.execute("DELETE FROM tblsolidwastesegregated WHERE id = %s", (id,))
+        
+        # Log the activity
+        username = session.get('username', 'Unknown')
+        campus = record[0]
+        action = f"Deleted Waste Segregation Record for {campus} - {record[1]} {record[2]}"
+        cursor.execute("""
+            INSERT INTO activity_log (username, campus, action, report_name)
+            VALUES (%s, %s, %s, %s)
+        """, (username, campus, action, "Waste Segregation Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record deleted successfully'})
+
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/edit_waste_unsegregated_record/<int:id>', methods=['POST'])
+def edit_waste_unsegregated_record(id):
+    try:
+        # Get form data
+        campus = request.form.get('campus')
+        year = request.form.get('year')
+        month = request.form.get('month')
+        waste_type = request.form.get('wasteType')
+        quantity_kg = float(request.form.get('quantity'))
+        sent_to_landfill_kg = float(request.form.get('sentToLandfill'))
+
+        # Calculate derived values
+        sent_to_landfill_tons = sent_to_landfill_kg / 1000
+        percentage = (sent_to_landfill_kg / quantity_kg * 100) if quantity_kg else 0
+        ghg_emission_kg_co2e = sent_to_landfill_tons * 0.8 * 0.25 * 0.5 * 0.5 * 1.33 * 1000
+        ghg_emission_t_co2e = ghg_emission_kg_co2e / 1000
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Update record
+        sql = """
+            UPDATE tblsolidwasteunsegregated 
+            SET Campus = %s, Year = %s, Month = %s, WasteType = %s, 
+                QuantityInKG = %s, SentToLandfillKG = %s, SentToLandfillTONS = %s,
+                Percentage = %s, GHGEmissionKGCO2e = %s, GHGEmissionTCO2e = %s
+            WHERE id = %s
+        """
+        cursor.execute(sql, (
+            campus, year, month, waste_type, quantity_kg, sent_to_landfill_kg,
+            sent_to_landfill_tons, percentage, ghg_emission_kg_co2e, 
+            ghg_emission_t_co2e, id
+        ))
+
+        # Log the activity
+        username = session.get('username')
+        log_sql = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name) 
+            VALUES (%s, %s, %s, %s)
+        """
+        action = f"Updated waste unsegregation record for {campus} - {month} {year} Record ID: {id}"
+        cursor.execute(log_sql, (username, campus, action, "Waste Unsegregation Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record updated successfully'})
+
+    except (ValueError, TypeError) as e:
+        return jsonify({'success': False, 'message': f'Invalid input data: {str(e)}'})
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'})
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+
+#####for food edit#################
+@app.route('/edit_food_consumption_record/<int:id>', methods=['POST'])
+def edit_food_consumption_record(id):
+    try:
+        # Get form data
+        campus = request.form.get('campus')
+        year = request.form.get('year')
+        month = request.form.get('month')
+        office = request.form.get('office')
+        food_type = request.form.get('foodType')
+        servings = float(request.form.get('servings'))
+
+        # Food type emission factors
+        food_factors = {
+            "1 Standard Breakfast": 0.84,
+            "1 Gourmet Breakfast": 2.33,
+            "1 Hot Snack (burger and fries)": 2.77,
+            "1 Cold or Hot Snack": 2.02,
+            "1 Sandwich": 1.27,
+            "1 Average Meal": 4.70,
+            "Meal,Vegan": 1.69,
+            "Meal,Vegetarian": 2.85,
+            "Meal with Beef": 6.93,
+            "Meal with Chicken": 3.39
+        }
+
+        # Calculate emissions
+        factor = food_factors.get(food_type, 0)
+        kgCO2e = servings * factor
+        tCO2e = kgCO2e / 1000
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Update record
+        sql = """
+            UPDATE tblfoodwaste 
+            SET Campus = %s, YearTransaction = %s, Month = %s, Office = %s,
+                TypeOfFoodServed = %s, QuantityOfServing = %s, 
+                GHGEmissionKGCO2e = %s, GHGEmissionTCO2e = %s
+            WHERE id = %s
+        """
+        cursor.execute(sql, (
+            campus, year, month, office, food_type, servings,
+            kgCO2e, tCO2e, id
+        ))
+
+        # Log the activity
+        username = session.get('username')
+        log_sql = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name) 
+            VALUES (%s, %s, %s, %s)
+        """
+        action = f"Updated food consumption record for {campus} - {month} {year}"
+        cursor.execute(log_sql, (username, campus, action, "Food Consumption Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record updated successfully'})
+
+    except (ValueError, TypeError) as e:
+        return jsonify({'success': False, 'message': f'Invalid input data: {str(e)}'})
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'})
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+@app.route('/delete_food_consumption_record/<int:id>', methods=['POST'])
+def delete_food_consumption_record(id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Get record info before deletion for logging
+        cursor.execute("SELECT Campus, Month, YearTransaction FROM tblfoodwaste WHERE id = %s", (id,))
+        record = cursor.fetchone()
+
+        if not record:
+            return jsonify({'success': False, 'message': 'Record not found'})
+
+        # Delete the record
+        cursor.execute("DELETE FROM tblfoodwaste WHERE id = %s", (id,))
+
+        # Log the activity
+        username = session.get('username')
+        campus = record[0]
+        month = record[1]
+        year = record[2]
+        
+        log_sql = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name) 
+            VALUES (%s, %s, %s, %s)
+        """
+        action = f"Deleted food consumption record for {campus} - {month} {year}"
+        cursor.execute(log_sql, (username, campus, action, "Food Consumption Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record deleted successfully'})
+
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'})
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+
+@app.route('/delete_waste_unsegregated_record/<int:id>', methods=['POST'])
+def delete_waste_unsegregated_record(id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Get record info before deletion for logging
+        cursor.execute("SELECT Campus, Month, Year FROM tblsolidwasteunsegregated WHERE id = %s", (id,))
+        record = cursor.fetchone()
+
+        if not record:
+            return jsonify({'success': False, 'message': 'Record not found'})
+
+        # Delete the record
+        cursor.execute("DELETE FROM tblsolidwasteunsegregated WHERE id = %s", (id,))
+
+        # Log the activity
+        username = session.get('username')
+        campus = record[0]
+        month = record[1]
+        year = record[2]
+        
+        log_sql = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name) 
+            VALUES (%s, %s, %s, %s)
+        """
+        action = f"Deleted waste unsegregation record for {campus} - {month} {year} Record ID: {id}"
+        cursor.execute(log_sql, (username, campus, action, "Waste Unsegregation Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record deleted successfully'})
+
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'})
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+
+####FOR FLIGHT EDIT#######
+@app.route('/edit_flight_record/<int:id>', methods=['POST'])
+def edit_flight_record(id):
+    try:
+        # Get form data
+        campus = request.form.get('campus')
+        office = request.form.get('office')
+        year = request.form.get('year')
+        traveller_name = request.form.get('travellerName')
+        travel_purpose = request.form.get('travelPurpose')
+        travel_date = request.form.get('travelDate')
+        domestic_international = request.form.get('domesticInternational')
+        origin = request.form.get('origin')
+        destination = request.form.get('destination')
+        flight_class = request.form.get('class')
+        oneway_roundtrip = request.form.get('onewayRoundTrip')
+        ghg_emission_kg_co2e = float(request.form.get('ghgEmissionKGC02e', 0))
+        ghg_emission_t_co2e = float(request.form.get('ghgEmissionTC02e', 0))
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Update the record
+        sql = """
+            UPDATE tblflight 
+            SET Campus = %s, Office = %s, Year = %s, TravellerName = %s, 
+                TravelPurpose = %s, TravelDate = %s, DomesticInternational = %s,
+                Origin = %s, Destination = %s, Class = %s, OnewayRoundTrip = %s,
+                GHGEmissionKGC02e = %s, GHGEmissionTC02e = %s
+            WHERE ID = %s
+        """
+        cursor.execute(sql, (
+            campus, office, year, traveller_name, travel_purpose, travel_date,
+            domestic_international, origin, destination, flight_class,
+            oneway_roundtrip, ghg_emission_kg_co2e, ghg_emission_t_co2e, id
+        ))
+
+        # Log the activity
+        username = session.get('username')
+        log_sql = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name) 
+            VALUES (%s, %s, %s, %s)
+        """
+        action = f"Updated flight record for {campus} - {travel_date} Record ID: {id}"
+        cursor.execute(log_sql, (username, campus, action, "Flight Emissions Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record updated successfully'})
+
+    except (ValueError, TypeError) as e:
+        return jsonify({'success': False, 'message': f'Invalid input data: {str(e)}'})
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'})
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+@app.route('/delete_flight_record/<int:id>', methods=['POST'])
+def delete_flight_record(id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Get record info before deletion for logging
+        cursor.execute("SELECT Campus, TravelDate FROM tblflight WHERE ID = %s", (id,))
+        record = cursor.fetchone()
+
+        if not record:
+            return jsonify({'success': False, 'message': 'Record not found'})
+
+        # Delete the record
+        cursor.execute("DELETE FROM tblflight WHERE ID = %s", (id,))
+
+        # Log the activity
+        username = session.get('username')
+        campus = record[0]
+        travel_date = record[1]
+        
+        log_sql = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name) 
+            VALUES (%s, %s, %s, %s)
+        """
+        action = f"Deleted flight record for {campus} - {travel_date} Report ID: {id}"
+        cursor.execute(log_sql, (username, campus, action, "Flight Emissions Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record deleted successfully'})
+
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'})
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+
+#######FOR accommodation#####
+@app.route('/edit_accommodation_record/<int:id>', methods=['POST'])
+def edit_accommodation_record(id):
+    try:
+        # Get form data
+        campus = request.form.get('campus')
+        office = request.form.get('office')
+        year = request.form.get('year')
+        traveller_name = request.form.get('travellerName')
+        event_name = request.form.get('eventName')
+        travel_date_from = request.form.get('travelDateFrom')
+        travel_date_to = request.form.get('travelDateTo')
+        country = request.form.get('country')
+        local_or_international = request.form.get('localOrInternational')
+        occupied_rooms = float(request.form.get('occupiedRooms'))
+        nights_per_room = float(request.form.get('nightsPerRoom'))
+
+        # Calculate emissions
+        factor = get_factor(country, local_or_international)
+        kg_co2 = occupied_rooms * nights_per_room * factor
+        t_co2 = kg_co2 / 1000
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Update record
+        sql = """
+            UPDATE tblaccommodation 
+            SET Campus = %s, Office = %s, YearTransact = %s, 
+                TravellerName = %s, TravelPurpose = %s, TravelDateFrom = %s,
+                TravelDateTo = %s, Country = %s, TravelType = %s,
+                NumOccupiedRoom = %s, NumNightPerRoom = %s, Factor = %s,
+                GHGEmissionKGC02e = %s, GHGEmissionTC02e = %s
+            WHERE id = %s
+        """
+        cursor.execute(sql, (
+            campus, office, year, traveller_name, event_name,
+            travel_date_from, travel_date_to, country, local_or_international,
+            occupied_rooms, nights_per_room, factor, kg_co2, t_co2, id
+        ))
+
+        # Log the activity
+        username = session.get('username')
+        log_sql = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name) 
+            VALUES (%s, %s, %s, %s)
+        """
+        action = f"Updated accommodation record for {campus} - {travel_date_from}"
+        cursor.execute(log_sql, (username, campus, action, "Accommodation Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record updated successfully'})
+
+    except (ValueError, TypeError) as e:
+        return jsonify({'success': False, 'message': f'Invalid input data: {str(e)}'})
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'})
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+@app.route('/delete_accommodation_record/<int:id>', methods=['POST'])
+def delete_accommodation_record(id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Get record info before deletion for logging
+        cursor.execute("SELECT Campus, TravelDateFrom FROM tblaccommodation WHERE id = %s", (id,))
+        record = cursor.fetchone()
+
+        if not record:
+            return jsonify({'success': False, 'message': 'Record not found'})
+
+        # Delete the record
+        cursor.execute("DELETE FROM tblaccommodation WHERE id = %s", (id,))
+
+        # Log the activity
+        username = session.get('username')
+        campus = record[0]
+        travel_date = record[1]
+        
+        log_sql = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name) 
+            VALUES (%s, %s, %s, %s)
+        """
+        action = f"Deleted accommodation record for {campus} - {travel_date}"
+        cursor.execute(log_sql, (username, campus, action, "Accommodation Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record deleted successfully'})
+
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'})
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+#######FOR emission accommodation#####
+@app.route('/edit_emission_accommodation_record/<int:id>', methods=['POST'])
+def edit_emission_accommodation_record(id):
+    try:
+        # Get form data
+        campus = request.form.get('campus')
+        office = request.form.get('office')
+        year = request.form.get('year')
+        traveller_name = request.form.get('travellerName')
+        event_name = request.form.get('eventName')
+        travel_date_from = request.form.get('travelDateFrom')
+        travel_date_to = request.form.get('travelDateTo')
+        country = request.form.get('country')
+        local_or_international = request.form.get('localOrInternational')
+        occupied_rooms = float(request.form.get('occupiedRooms'))
+        nights_per_room = float(request.form.get('nightsPerRoom'))
+
+        # Calculate emissions
+        factor = get_factor(country, local_or_international)
+        kg_co2 = occupied_rooms * nights_per_room * factor
+        t_co2 = kg_co2 / 1000
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Update record
+        sql = """
+            UPDATE tblaccommodation 
+            SET Campus = %s, Office = %s, YearTransact = %s, 
+                TravellerName = %s, TravelPurpose = %s, TravelDateFrom = %s,
+                TravelDateTo = %s, Country = %s, TravelType = %s,
+                NumOccupiedRoom = %s, NumNightPerRoom = %s, Factor = %s,
+                GHGEmissionKGC02e = %s, GHGEmissionTC02e = %s
+            WHERE id = %s
+        """
+        cursor.execute(sql, (
+            campus, office, year, traveller_name, event_name,
+            travel_date_from, travel_date_to, country, local_or_international,
+            occupied_rooms, nights_per_room, factor, kg_co2, t_co2, id
+        ))
+
+        # Log the activity
+        username = session.get('username')
+        log_sql = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name) 
+            VALUES (%s, %s, %s, %s)
+        """
+        action = f"Updated accommodation record for {campus} - {travel_date_from}"
+        cursor.execute(log_sql, (username, campus, action, "Accommodation Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record updated successfully'})
+
+    except (ValueError, TypeError) as e:
+        return jsonify({'success': False, 'message': f'Invalid input data: {str(e)}'})
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'})
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+@app.route('/delete_emission_accommodation_record/<int:id>', methods=['POST'])
+def delete_emission_accommodation_record(id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Get record info before deletion for logging
+        cursor.execute("SELECT Campus, TravelDateFrom FROM tblaccommodation WHERE id = %s", (id,))
+        record = cursor.fetchone()
+
+        if not record:
+            return jsonify({'success': False, 'message': 'Record not found'})
+
+        # Delete the record
+        cursor.execute("DELETE FROM tblaccommodation WHERE id = %s", (id,))
+
+        # Log the activity
+        username = session.get('username')
+        campus = record[0]
+        travel_date = record[1]
+        
+        log_sql = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name) 
+            VALUES (%s, %s, %s, %s)
+        """
+        action = f"Deleted accommodation record for {campus} - {travel_date}"
+        cursor.execute(log_sql, (username, campus, action, "Accommodation Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record deleted successfully'})
+
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'})
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+####FOR FLIGHT EMISSION EDIT#######
+@app.route('/edit_emission_flight_record/<int:id>', methods=['POST'])
+def edit_emission_flight_record(id):
+    try:
+        # Get form data
+        campus = request.form.get('campus')
+        office = request.form.get('office')
+        year = request.form.get('year')
+        traveller_name = request.form.get('travellerName')
+        travel_purpose = request.form.get('travelPurpose')
+        travel_date = request.form.get('travelDate')
+        domestic_international = request.form.get('domesticInternational')
+        origin = request.form.get('origin')
+        destination = request.form.get('destination')
+        flight_class = request.form.get('class')
+        oneway_roundtrip = request.form.get('onewayRoundTrip')
+        ghg_emission_kg_co2e = float(request.form.get('ghgEmissionKGC02e', 0))
+        ghg_emission_t_co2e = float(request.form.get('ghgEmissionTC02e', 0))
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Update the record
+        sql = """
+            UPDATE tblflight 
+            SET Campus = %s, Office = %s, Year = %s, TravellerName = %s, 
+                TravelPurpose = %s, TravelDate = %s, DomesticInternational = %s,
+                Origin = %s, Destination = %s, Class = %s, OnewayRoundTrip = %s,
+                GHGEmissionKGC02e = %s, GHGEmissionTC02e = %s
+            WHERE ID = %s
+        """
+        cursor.execute(sql, (
+            campus, office, year, traveller_name, travel_purpose, travel_date,
+            domestic_international, origin, destination, flight_class,
+            oneway_roundtrip, ghg_emission_kg_co2e, ghg_emission_t_co2e, id
+        ))
+
+        # Log the activity
+        username = session.get('username')
+        log_sql = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name) 
+            VALUES (%s, %s, %s, %s)
+        """
+        action = f"Updated flight record for {campus} - {travel_date} Record ID: {id}"
+        cursor.execute(log_sql, (username, campus, action, "Flight Emissions Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record updated successfully'})
+
+    except (ValueError, TypeError) as e:
+        return jsonify({'success': False, 'message': f'Invalid input data: {str(e)}'})
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'})
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+@app.route('/delete_emission_flight_record/<int:id>', methods=['POST'])
+def delete_emission_flight_record(id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Get record info before deletion for logging
+        cursor.execute("SELECT Campus, TravelDate FROM tblflight WHERE ID = %s", (id,))
+        record = cursor.fetchone()
+
+        if not record:
+            return jsonify({'success': False, 'message': 'Record not found'})
+
+        # Delete the record
+        cursor.execute("DELETE FROM tblflight WHERE ID = %s", (id,))
+
+        # Log the activity
+        username = session.get('username')
+        campus = record[0]
+        travel_date = record[1]
+        
+        log_sql = """
+            INSERT INTO activity_log 
+            (username, campus, action, report_name) 
+            VALUES (%s, %s, %s, %s)
+        """
+        action = f"Deleted flight record for {campus} - {travel_date} Report ID: {id}"
+        cursor.execute(log_sql, (username, campus, action, "Flight Emissions Report"))
+
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Record deleted successfully'})
+
+    except mysql.connector.Error as e:
+        return jsonify({'success': False, 'message': f'Database error: {str(e)}'})
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+@app.route('/edit_emission_lpg_record/<int:id>', methods=['POST'])
+def edit_emission_lpg_record(id):
+    if 'loggedIn' not in session:
+        return redirect(url_for('login'))
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        year = request.form['year']
+        month = request.form['month']
+        office = request.form['office']
+        concessionaires = request.form['concessionaires']
+        qty = float(request.form['qty'])
+        tank_weight = float(request.form['tankWeight'])
+
+        factor = 2.95795 if concessionaires in ['Fuel', 'Diesel'] else 0
+        tank_volume = 1.96 * tank_weight
+        total_tank_vol = qty * tank_volume
+        kgCO2e = factor * tank_weight
+        tCO2e = kgCO2e / 1000
+
+        cursor.execute("""
+            UPDATE tbllpg
+            SET YearTransact=%s, Month=%s, Office=%s, ConcessionariesType=%s,
+                TankQuantity=%s, TankWeight=%s, TankVolume=%s, TotalTankVolume=%s,
+                GHGEmissionKGCO2e=%s, GHGEmissionTCO2e=%s
+            WHERE ID = %s
+        """, (year, month, office, concessionaires, qty, tank_weight, tank_volume, total_tank_vol, kgCO2e, tCO2e, id))
+
+        conn.commit()
+        flash("edited", "edit_success")
+
+    except mysql.connector.Error as e:
+        flash(f"Database Error: {e}", "danger")
+    finally:
+        cursor.close()
+        conn.close()
+
+    return redirect(url_for('lpg_consumption_report'))
+
+@app.route('/delete_emission_lpg_record/<int:id>', methods=['POST'])
+def delete_emission_lpg_record(id):
+    if 'loggedIn' not in session:
+        return redirect(url_for('login'))
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM tbllpg WHERE ID = %s", (id,))
+        conn.commit()
+        flash("LPG consumption record deleted successfully.", "success")
+    except mysql.connector.Error as e:
+        flash(f"Database Error: {e}", "danger")
+    finally:
+        cursor.close()
+        conn.close()
+
+    return redirect(url_for('sdo_lpg_consumption_report'))
 
 @app.route('/sdo_lpg_consumption_pdf')
 def sdo_lpg_consumption_pdf():
@@ -8318,7 +9615,7 @@ def sdo_flight_emissions_report():
 
     # Query to fetch paginated data based on the filters
     query = """
-        SELECT Campus, Office, Year, TravellerName, TravelPurpose, TravelDate, 
+        SELECT ID, Campus, Office, Year, TravellerName, TravelPurpose, TravelDate, 
                DomesticInternational, Origin, Destination, Class, OnewayRoundTrip, 
                GHGEmissionKGC02e, GHGEmissionTC02e
         FROM tblflight
@@ -8577,7 +9874,7 @@ def sdo_accommodation_emissions_report():
 
     # Query for paginated data, applying filters if provided
     query = """
-        SELECT Campus, Office, YearTransact, TravellerName, TravelPurpose, TravelDateFrom, 
+        SELECT id, Campus, Office, YearTransact, TravellerName, TravelPurpose, TravelDateFrom, 
                TravelDateTo, Country, TravelType, NumOccupiedRoom, NumNightPerRoom, 
                GHGEmissionKGC02e, GHGEmissionTC02e
         FROM tblaccommodation
@@ -9064,36 +10361,52 @@ def external_dashboard():
         flash("You must be logged in to access this page.", "warning")
         return redirect(url_for('login'))
 
-    # Get the campus from the session
     campus = session.get('campus')
     if not campus:
         flash("Invalid session. Please log in again.", "danger")
         return redirect(url_for('login'))
 
-    # Define the current year and selected year
     current_year = datetime.now().year
-    selected_year = int(request.args.get('year', current_year))
+
+    # Fetch available years from DB
+    available_years = []
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT DISTINCT Year as year FROM tblflight 
+            UNION 
+            SELECT DISTINCT YearTransact as year FROM tblaccommodation 
+            ORDER BY year DESC
+        """)
+        available_years = [row[0] for row in cursor.fetchall()]
+    except mysql.connector.Error as e:
+        flash(f"Database error: {e}", "error")
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+    if not available_years:
+        available_years = [current_year]
+
+    selected_year = int(request.args.get('year', available_years[0]))
 
     # Initialize data structures
-    flight_data = [0] * 5  # Data for 2020-2024
-    accommodation_data = [0] * 5  # Data for 2020-2024
+    flight_data = [0] * 5  # Historical: 2020–2024
+    accommodation_data = [0] * 5
     current_emission_data = {"flight": 0, "accommodation": 0}
-    previous_emission_data = {"flight": 0, "accommodation": 0}  # Add previous emission data
-
-    # Initialize total records
+    previous_emission_data = {"flight": 0, "accommodation": 0}
     total_flight_records = 0
     total_accommodation_records = 0
 
     try:
-        # Establish database connection
         conn = get_db_connection()
-        if conn is None:
-            raise Exception("Could not establish database connection.")
-
         cursor = conn.cursor(dictionary=True)
 
-        # Queries for fetching current and previous year data
-        queries = [
+        # Historical data (2020–2024)
+        historical_queries = [
             (
                 "SELECT Year, SUM(GHGEmissionKGC02e) AS total_emission "
                 "FROM tblflight "
@@ -9106,14 +10419,13 @@ def external_dashboard():
                 "SELECT YearTransact AS Year, SUM(GHGEmissionKGC02e) AS total_emission "
                 "FROM tblaccommodation "
                 "WHERE Campus = %s AND YearTransact BETWEEN 2020 AND 2024 "
-                "GROUP BY YearTransact ORDER BY YearTransact ASC",
+                "GROUP BY YearTransact ORDER BY YearTransact",
                 accommodation_data,
                 "accommodation"
             )
         ]
 
-        # Execute queries and populate data
-        for query, data_list, category in queries:
+        for query, data_list, category in historical_queries:
             cursor.execute(query, (campus,))
             for row in cursor.fetchall():
                 year_index = row['Year'] - 2020
@@ -9121,38 +10433,55 @@ def external_dashboard():
                     emission_value = float(row['total_emission'])
                     data_list[year_index] = emission_value
                     current_emission_data[category] += emission_value
-                    if year_index < 4:  # Add previous year data (up to 2023)
+                    if year_index < 4:  # Up to 2023
                         previous_emission_data[category] += emission_value
 
-        # Count total records for flight
-        cursor.execute(
-            "SELECT COUNT(*) AS total_records FROM ghg_database.tblflight WHERE campus = %s;",
-            (campus,)
-        )
-        total_flight_records = cursor.fetchone().get('total_records', 0)
+        # Selected year totals
+        selected_year_queries = [
+            (
+                "SELECT Year, COALESCE(SUM(GHGEmissionKGC02e), 0) AS total_emission "
+                "FROM tblflight WHERE campus = %s AND Year = %s",
+                "flight"
+            ),
+            (
+                "SELECT YearTransact AS Year, COALESCE(SUM(GHGEmissionKGC02e), 0) AS total_emission "
+                "FROM tblaccommodation WHERE Campus = %s AND YearTransact = %s",
+                "accommodation"
+            )
+        ]
 
-        # Count total records for accommodation
+        for query, category in selected_year_queries:
+            cursor.execute(query, (campus, selected_year))
+            result = cursor.fetchone()
+            if result:
+                current_emission_data[category] = max(float(result['total_emission']), 0)
+
+        # Count records FOR SELECTED YEAR
         cursor.execute(
-            "SELECT COUNT(*) AS total_records FROM ghg_database.tblaccommodation WHERE campus = %s;",
-            (campus,)
+            "SELECT COUNT(*) AS total_records FROM tblflight WHERE campus = %s AND Year = %s",
+            (campus, selected_year)
         )
-        total_accommodation_records = cursor.fetchone().get('total_records', 0)
+        total_flight_records = cursor.fetchone()['total_records']
+
+        cursor.execute(
+            "SELECT COUNT(*) AS total_records FROM tblaccommodation WHERE campus = %s AND YearTransact = %s",
+            (campus, selected_year)
+        )
+        total_accommodation_records = cursor.fetchone()['total_records']
 
     except mysql.connector.Error as e:
         app.logger.error(f"Database error for campus {campus}: {e}")
         flash("There was a problem fetching the data. Please try again later.", "danger")
     finally:
-        # Close the database connection
-        if cursor:
+        if 'cursor' in locals():
             cursor.close()
-        if conn:
+        if 'conn' in locals():
             conn.close()
 
-    # Forecast function using Prophet, with one future year forecast
+    # Forecasting with Prophet
     def forecast_prophet(data, periods):
         if all(v == 0 for v in data):
             return [0] * periods, 0
-
         try:
             df = pd.DataFrame({'ds': pd.date_range(start='2020-01-01', periods=len(data), freq='Y'), 'y': data})
             df = df[df['y'] > 0]
@@ -9165,51 +10494,44 @@ def external_dashboard():
             flash(f"Forecast Error: {e}", "danger")
             return [0] * periods, 0
 
-    # Forecast data with R² scores, including one future year (2025)
-    forecast_periods = 6  # Forecast up to 2025 (5 historical + 1 future)
     forecast_data = {
         "flight_forecast": {
             "prophet": {
-                "forecast": forecast_prophet(flight_data, periods=forecast_periods)[0],
+                "forecast": forecast_prophet(flight_data, periods=6)[0],
                 "r2_score": forecast_prophet(flight_data, periods=5)[1],
             }
         },
         "accommodation_forecast": {
             "prophet": {
-                "forecast": forecast_prophet(accommodation_data, periods=forecast_periods)[0],
+                "forecast": forecast_prophet(accommodation_data, periods=6)[0],
                 "r2_score": forecast_prophet(accommodation_data, periods=5)[1],
             }
-        },
+        }
     }
 
-    # Emit real-time data for line graphs
+    # Emit real-time updates
     socketio.emit('update_emissions', {
         "flight": flight_data,
         "accommodation": accommodation_data
     })
-
-    # Emit forecast data for real-time updates
     socketio.emit('update_forecast', {
         "flight_forecast": forecast_data["flight_forecast"]["prophet"]["forecast"],
-        "accommodation_forecast": forecast_data["accommodation_forecast"]["prophet"]["forecast"],
+        "accommodation_forecast": forecast_data["accommodation_forecast"]["prophet"]["forecast"]
     })
-
-    # Print R² scores for validation
-    for key, value in forecast_data.items():
-        print(f"{key.replace('_forecast', '').title()} Prophet R² Score:", value["prophet"]["r2_score"])
 
     return render_template(
         'external_dashboard.html',
         campus=campus,
+        available_years=available_years,  # Now passed to template
+        selected_year=selected_year,
+        current_year=current_year,
         flight_data=flight_data,
         accommodation_data=accommodation_data,
         forecast_data=forecast_data,
         current_emission_data=current_emission_data,
-        previous_emission_data=previous_emission_data,  # Include previous emission data
-        selected_year=selected_year,
-        current_year=current_year,
-        total_flight_records=total_flight_records,          # Total flight records
-        total_accommodation_records=total_accommodation_records  # Total accommodation records
+        previous_emission_data=previous_emission_data,
+        total_flight_records=total_flight_records,
+        total_accommodation_records=total_accommodation_records
     )
 
 
@@ -9898,7 +11220,6 @@ def delete_accommodation(id):
     
 
 
-# Procurement dashboard route
 @app.route('/procurement_dashboard', methods=['GET', 'POST'])
 def procurement_dashboard():
     # Ensure the user is logged in and session contains campus
@@ -9985,17 +11306,17 @@ def procurement_dashboard():
                 if emission_value is not None:
                     data_totals[category] += float(emission_value)
 
-        # Count total records for food waste
+        # Count total records for food waste for selected year
         cursor.execute(
-            "SELECT COUNT(*) AS total_records FROM ghg_database.tblfoodwaste WHERE campus = %s;",
-            (campus,)
+            "SELECT COUNT(*) AS total_records FROM ghg_database.tblfoodwaste WHERE campus = %s AND YearTransaction = %s;",
+            (campus, selected_year)
         )
         total_food_waste_records = cursor.fetchone().get('total_records', 0)
 
-        # Count total records for LPG
+        # Count total records for LPG for selected year
         cursor.execute(
-            "SELECT COUNT(*) AS total_records FROM ghg_database.tbllpg WHERE campus = %s;",
-            (campus,)
+            "SELECT COUNT(*) AS total_records FROM ghg_database.tbllpg WHERE campus = %s AND YearTransact = %s;",
+            (campus, selected_year)
         )
         total_lpg_records = cursor.fetchone().get('total_records', 0)
 
@@ -10022,17 +11343,14 @@ def procurement_dashboard():
         food_waste_data=food_waste_data,
         lpg_data=lpg_data,
         current_emission_data=current_emission_data,
-        previous_emission_data=previous_emission_data,  # Include previous data
+        previous_emission_data=previous_emission_data,
         selected_year=selected_year,
         current_year=current_year,
         campus=campus,
         labels=labels,
-        total_food_waste_records=total_food_waste_records,  # Total food waste records
-        total_lpg_records=total_lpg_records                 # Total LPG records
+        total_food_waste_records=total_food_waste_records,
+        total_lpg_records=total_lpg_records
     )
-
-
-
 
 @app.route('/poanalytics', methods=['GET'])
 def poanalytics():
@@ -10950,6 +12268,64 @@ def logout():
     session.clear()
     # Redirect to login page
     return redirect(url_for('login'))
+
+@app.route('/update_record', methods=['POST'])
+def update_record():
+    try:
+        data = request.json
+        table_name = data.get('tableName')
+        record_id = data.get('id')
+        updated_values = data.get('updatedValues')
+
+        # Validate input data
+        if not table_name or not record_id or not updated_values:
+            return jsonify({"error": "Invalid data"}), 400
+
+        # Establish database connection
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Dynamically generate the SQL query
+        set_clause = ", ".join([f"{key} = %s" for key in updated_values.keys()])
+        query = f"UPDATE {table_name} SET {set_clause} WHERE id = %s"
+        params = list(updated_values.values()) + [record_id]
+
+        # Execute the query
+        cursor.execute(query, params)
+        conn.commit()
+
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        # Log the error for debugging
+        print(f"Error in /update_record: {e}")
+        return jsonify({"error": str(e)}), 500
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
+
+
+    @app.route('/delete_record', methods=['DELETE'])
+    def delete_record():
+        data = request.json
+        table_name = data.get('tableName')
+        record_id = data.get('id')
+
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+
+            query = f"DELETE FROM {table_name} WHERE id = %s"
+            cursor.execute(query, (record_id,))
+            conn.commit()
+            return jsonify({'success': True}), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        finally:
+            cursor.close()
+            conn.close()
+
 
 # Run the application
 if __name__ == '__main__':

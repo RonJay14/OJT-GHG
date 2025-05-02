@@ -2042,85 +2042,70 @@ def manage_account():
     activity_logs = []
 
     if request.method == 'POST':
-        # Handle adding a new account
-        if 'new_account' in request.form:  # Check if the form is for adding a new account
+        print("Form submitted:", request.form)
+
+        # Handle adding a new account - check if required fields are present
+        if all(key in request.form for key in ['username', 'campus', 'email', 'password']):
             username = request.form['username']
-            office = request.form.get('office', 'Sustainable Development Office')  # Default to SDO if not provided
+            office = "Sustainable Development Office"  # Hardcoded as per requirement
             campus = request.form['campus']
             email = request.form['email']
+            password = request.form['password']
 
             try:
                 conn = get_db_connection()
                 cursor = conn.cursor()
+                
+                # First check if username already exists
+                cursor.execute("SELECT username FROM tblsignin WHERE username = %s", (username,))
+                if cursor.fetchone():
+                    flash("Username already exists!", "danger")
+                    return redirect(url_for('manage_account'))
+
+                # Insert new account
                 insert_query = """
-                INSERT INTO tblsignin (username, office, campus, email)
-                VALUES (%s, %s, %s, %s)
+                INSERT INTO tblsignin (username, office, campus, email, password)
+                VALUES (%s, %s, %s, %s, %s)
                 """
-                cursor.execute(insert_query, (username, office, campus, email))
+                cursor.execute(insert_query, (username, office, campus, email, password))
                 conn.commit()
+                
+                # Log the activity
+                log_query = """
+                INSERT INTO activity_log (username, campus, action, report_name, timestamp)
+                VALUES (%s, %s, %s, %s, NOW())
+                """
+                cursor.execute(log_query, (username, campus, "Account Created", "Manage Account"))
+                conn.commit()
+                
                 flash("Account created successfully!", "success")
             except Exception as e:
-                flash(f"An error occurred while adding the account: {e}", "danger")
+                print(f"Error: {e}")  # For debugging
+                flash(f"An error occurred while adding the account", "danger")
             finally:
                 cursor.close()
                 conn.close()
 
-        # Handle updating an existing account
+        # Rest of your existing code for update_id and delete_id...
         elif 'update_id' in request.form:
-            account_id = request.form['update_id']
-            username = request.form['username']
-            campus = request.form['campus']
-            email = request.form['email']
-
-            try:
-                conn = get_db_connection()
-                cursor = conn.cursor()
-
-                update_query = """
-                UPDATE tblsignin
-                SET username = %s, campus = %s, email = %s
-                WHERE userID = %s
-                """
-                cursor.execute(update_query, (username, campus, email, account_id))
-                conn.commit()
-                flash("Account updated successfully!", "success")
-
-            except Exception as e:
-                flash(f"An error occurred while updating the account: {e}", "danger")
-            finally:
-                cursor.close()
-                conn.close()
-
-        # Handle deleting an account
+            # Your existing update code...
+            pass
+        
         elif 'delete_id' in request.form:
-            account_id = request.form['delete_id']
+            # Your existing delete code...
+            pass
 
-            try:
-                conn = get_db_connection()
-                cursor = conn.cursor()
-                delete_query = "DELETE FROM tblsignin WHERE userID = %s"
-                cursor.execute(delete_query, (account_id,))
-                conn.commit()
-                flash("Account deleted successfully!", "success")
-            except Exception as e:
-                flash(f"An error occurred while deleting the account: {e}", "danger")
-            finally:
-                cursor.close()
-                conn.close()
-
-        # Redirect to avoid form resubmission
         return redirect(url_for('manage_account'))
 
-    # Fetch accounts only from "Sustainable Development Office"
+    # Fetch existing accounts
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        
-        # Fetch accounts
-        cursor.execute("SELECT userID, username, office, campus, email FROM tblsignin WHERE office = %s", ("Sustainable Development Office",))
+
+        cursor.execute("SELECT userID, username, office, campus, email, password FROM tblsignin WHERE office = %s", 
+                      ("Sustainable Development Office",))
         accounts = cursor.fetchall()
-        
-        # Fetch activity logs
+
         cursor.execute("""
             SELECT username, campus, action, report_name, timestamp 
             FROM activity_log 
@@ -2128,12 +2113,14 @@ def manage_account():
             LIMIT 100
         """)
         activity_logs = cursor.fetchall()
-        
+
     except Exception as e:
         flash(f"Error fetching data: {e}", "danger")
     finally:
-        cursor.close()
-        conn.close()
+        if 'cursor' in locals():
+            cursor.close()
+        if 'conn' in locals():
+            conn.close()
 
     return render_template('manage_account.html', accounts=accounts, activity_logs=activity_logs)
 

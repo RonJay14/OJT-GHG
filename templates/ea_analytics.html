@@ -449,7 +449,7 @@
                                 </button>
                                 <div class="dropdown-year-content">
                                     {% for year in range(current_year, 2019, -1) %}
-                                        <a href="{{ url_for('poanalytics', year=year) }}"
+                                        <a href="{{ url_for('ea_analytics', year=year) }}"
                                            {% if year == selected_year %}class="active"{% endif %}>
                                             {{ year }}
                                         </a>
